@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("ColorMixer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Dmitry Makarov")]
 [assembly: AssemblyProduct("ColorMixer")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCopyright("Copyright © Dmitry Makarov 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
