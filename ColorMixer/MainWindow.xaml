@@ -4,11 +4,12 @@
                      xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:rx="clr-namespace:ReactiveUI;assembly=ReactiveUI"
                      Title="Color Mixer"
                      Width="800"
                      Height="500"
                      BorderThickness="1"
                      GlowBrush="{DynamicResource AccentColorBrush}"
                      mc:Ignorable="d">
-    <Canvas />
+    <rx:RoutedViewHost Router="{Binding Router}" />
 </MahApps:MetroWindow>

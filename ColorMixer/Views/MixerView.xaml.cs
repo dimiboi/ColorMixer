@@ -1,20 +1,21 @@
-﻿using MahApps.Metro.Controls;
+﻿using ColorMixer.ViewModels;
 using ReactiveUI;
 using System;
 using System.Reactive.Disposables;
 using System.Windows;
+using System.Windows.Controls;
 
-namespace ColorMixer
+namespace ColorMixer.Views
 {
-    public partial class MainWindow : MetroWindow, IViewFor<IAppBootstrapper>
+    public partial class MixerView : UserControl, IViewFor<IMixerViewModel>
     {
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel",
-                                        typeof(IAppBootstrapper),
-                                        typeof(MainWindow),
+                                        typeof(IMixerViewModel),
+                                        typeof(MixerView),
                                         new PropertyMetadata(null));
 
-        public MainWindow()
+        public MixerView()
         {
             InitializeComponent();
 
@@ -29,20 +30,18 @@ namespace ColorMixer
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
             });
-
-            ViewModel = new AppBootstrapper();
         }
 
-        public IAppBootstrapper ViewModel
+        public IMixerViewModel ViewModel
         {
-            get { return (IAppBootstrapper)GetValue(ViewModelProperty); }
+            get { return (IMixerViewModel)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
         object IViewFor.ViewModel
         {
             get { return ViewModel; }
-            set { ViewModel = (IAppBootstrapper)value; }
+            set { ViewModel = (IMixerViewModel)value; }
         }
     }
 }
