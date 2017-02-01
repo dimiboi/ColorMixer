@@ -29,6 +29,12 @@ namespace ColorMixer.Views
                     .WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
+
+                this // ViewModel.Rectangles -> Rectangles.ItemsSource
+                    .OneWayBind(ViewModel,
+                        vm => vm.Rectangles,
+                        v => v.Rectangles.ItemsSource)
+                    .DisposeWith(disposables);
             });
         }
 

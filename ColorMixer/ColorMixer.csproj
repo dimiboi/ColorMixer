@@ -90,7 +90,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\ColorToBrushConverter.cs" />
     <Compile Include="ViewModels\MixerViewModel.cs" />
+    <Compile Include="ViewModels\RectangleViewModel.cs" />
     <Compile Include="Views\MixerView.xaml.cs">
       <DependentUpon>MixerView.xaml</DependentUpon>
     </Compile>
@@ -107,6 +109,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Templates\RectangleTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MixerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
