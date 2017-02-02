@@ -16,6 +16,18 @@ namespace ColorMixer.Views
                                         typeof(RectangleView),
                                         new PropertyMetadata(null));
 
+        public static readonly DependencyProperty ContainerWidthProperty =
+            DependencyProperty.Register("ContainerWidth",
+                                        typeof(double),
+                                        typeof(RectangleView),
+                                        new PropertyMetadata(null));
+
+        public static readonly DependencyProperty ContainerHeightProperty =
+            DependencyProperty.Register("ContainerHeight",
+                                        typeof(double),
+                                        typeof(RectangleView),
+                                        new PropertyMetadata(null));
+
         public RectangleView()
         {
             InitializeComponent();
@@ -31,12 +43,24 @@ namespace ColorMixer.Views
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                Thumb
+                Thumb // Thumb.DragDelta -> OnThumbDragDelta()
                     .Events()
                     .DragDelta
-                    .InvokeCommand(this, v => v.ViewModel.DragDelta)
+                    .Subscribe(e => OnThumbDragDelta(e))
                     .DisposeWith(disposables);
             });
+        }
+
+        public double ContainerWidth
+        {
+            get { return (double)GetValue(ContainerWidthProperty); }
+            set { SetValue(ContainerWidthProperty, value); }
+        }
+
+        public double ContainerHeight
+        {
+            get { return (double)GetValue(ContainerHeightProperty); }
+            set { SetValue(ContainerHeightProperty, value); }
         }
 
         public IRectangleViewModel ViewModel
@@ -49,6 +73,21 @@ namespace ColorMixer.Views
         {
             get { return ViewModel; }
             set { ViewModel = (IRectangleViewModel)value; }
+        }
+
+        private void OnThumbDragDelta(DragDeltaEventArgs e)
+        {
+            var x = ViewModel.X + e.HorizontalChange;
+            var y = ViewModel.Y + e.VerticalChange;
+
+            x = x < 0 ? 0 : x;
+            y = y < 0 ? 0 : y;
+
+            x = x + ViewModel.Width > ContainerWidth ? ContainerWidth - ViewModel.Width : x;
+            y = y + ViewModel.Height > ContainerHeight ? ContainerHeight - ViewModel.Height : y;
+
+            ViewModel.X = x;
+            ViewModel.Y = y;
         }
     }
 }

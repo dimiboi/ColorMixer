@@ -1,6 +1,5 @@
 ﻿using ReactiveUI;
 using System.Reactive.Disposables;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -13,8 +12,6 @@ namespace ColorMixer.ViewModels
         double Width { get; set; }
         double Height { get; set; }
         Color Color { get; set; }
-
-        ICommand DragDelta { get; }
     }
 
     public class RectangleViewModel : ReactiveObject, IRectangleViewModel
@@ -31,12 +28,7 @@ namespace ColorMixer.ViewModels
 
             this.WhenActivated(disposables =>
             {
-                DragDelta = ReactiveCommand.Create<DragDeltaEventArgs>(e =>
-                {
-                    X += e.HorizontalChange;
-                    Y += e.VerticalChange;
-                }
-                ).DisposeWith(disposables);
+                Disposable.Empty.DisposeWith(disposables);
             });
         }
 
