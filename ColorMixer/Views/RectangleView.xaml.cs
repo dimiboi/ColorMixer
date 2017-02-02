@@ -48,6 +48,16 @@ namespace ColorMixer.Views
                     .DragDelta
                     .Subscribe(e => OnThumbDragDelta(e))
                     .DisposeWith(disposables);
+
+                this // ContainerWidth -> OnContainerWidthChanged()
+                    .WhenAnyValue(v => v.ContainerWidth)
+                    .Subscribe(w => OnContainerWidthChanged(w))
+                    .DisposeWith(disposables);
+
+                this // ContainerHeight -> OnContainerHeightChanged()
+                    .WhenAnyValue(v => v.ContainerHeight)
+                    .Subscribe(h => OnContainerHeightChanged(h))
+                    .DisposeWith(disposables);
             });
         }
 
@@ -83,11 +93,30 @@ namespace ColorMixer.Views
             x = x < 0 ? 0 : x;
             y = y < 0 ? 0 : y;
 
-            x = x + ViewModel.Width > ContainerWidth ? ContainerWidth - ViewModel.Width : x;
-            y = y + ViewModel.Height > ContainerHeight ? ContainerHeight - ViewModel.Height : y;
+            x = x + ViewModel.Width > ContainerWidth
+                    ? ContainerWidth - ViewModel.Width
+                    : x;
+
+            y = y + ViewModel.Height > ContainerHeight
+                    ? ContainerHeight - ViewModel.Height
+                    : y;
 
             ViewModel.X = x;
             ViewModel.Y = y;
+        }
+
+        private void OnContainerWidthChanged(double containerWidth)
+        {
+            ViewModel.X = ViewModel.X + ViewModel.Width > containerWidth
+                          ? containerWidth - ViewModel.Width
+                          : ViewModel.X;
+        }
+
+        private void OnContainerHeightChanged(double containerHeight)
+        {
+            ViewModel.Y = ViewModel.Y + ViewModel.Width > containerHeight
+                          ? containerHeight - ViewModel.Height
+                          : ViewModel.Y;
         }
     }
 }
