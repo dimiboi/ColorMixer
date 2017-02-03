@@ -34,10 +34,22 @@ namespace ColorMixer
 
             resolver.Register(() => new MixerViewModel(),
                                     typeof(IMixerViewModel));
+
+            resolver.Register(() => new RectangleViewModel(),
+                                    typeof(IRectangleViewModel));
+
+            resolver.Register(() => new ConnectorViewModel(),
+                                    typeof(IConnectorViewModel));
             // Views
 
             resolver.Register(() => new MixerView(),
                                     typeof(IViewFor<MixerViewModel>));
+
+            resolver.Register(() => new RectangleView(),
+                                    typeof(IViewFor<RectangleViewModel>));
+
+            resolver.Register(() => new ConnectorView(),
+                                    typeof(IViewFor<ConnectorViewModel>));
         }
     }
 }

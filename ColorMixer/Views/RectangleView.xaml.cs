@@ -16,15 +16,9 @@ namespace ColorMixer.Views
                                         typeof(RectangleView),
                                         new PropertyMetadata(null));
 
-        public static readonly DependencyProperty ContainerWidthProperty =
-            DependencyProperty.Register("ContainerWidth",
-                                        typeof(double),
-                                        typeof(RectangleView),
-                                        new PropertyMetadata(null));
-
-        public static readonly DependencyProperty ContainerHeightProperty =
-            DependencyProperty.Register("ContainerHeight",
-                                        typeof(double),
+        public static readonly DependencyProperty ContainerProperty =
+            DependencyProperty.Register("Container",
+                                        typeof(FrameworkElement),
                                         typeof(RectangleView),
                                         new PropertyMetadata(null));
 
@@ -43,34 +37,44 @@ namespace ColorMixer.Views
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
+                this // ViewModel.Width -> Thumb.Width
+                    .Bind(ViewModel,
+                        vm => vm.Width,
+                        v => v.Thumb.Width)
+                    .DisposeWith(disposables);
+
+                this // ViewModel.Height -> Thumb.Height
+                    .Bind(ViewModel,
+                        vm => vm.Height,
+                        v => v.Thumb.Height)
+                    .DisposeWith(disposables);
+
+                this // Container -> Connector.Container
+                    .WhenAnyValue(v => v.Container)
+                    .BindTo(this, v => v.Connector.Container)
+                    .DisposeWith(disposables);
+
+                this // ViewModel.Connector -> Connector.ViewModel
+                    .WhenAnyValue(v => v.ViewModel.Connector)
+                    .BindTo(this, v => v.Connector.ViewModel)
+                    .DisposeWith(disposables);
+
                 Thumb // Thumb.DragDelta -> OnThumbDragDelta()
                     .Events()
                     .DragDelta
                     .Subscribe(e => OnThumbDragDelta(e))
                     .DisposeWith(disposables);
 
-                this // ContainerWidth -> OnContainerWidthChanged()
-                    .WhenAnyValue(v => v.ContainerWidth)
+                this // Container.ActualWidth -> OnContainerWidthChanged()
+                    .WhenAnyValue(v => v.Container.ActualWidth)
                     .Subscribe(w => OnContainerWidthChanged(w))
                     .DisposeWith(disposables);
 
-                this // ContainerHeight -> OnContainerHeightChanged()
-                    .WhenAnyValue(v => v.ContainerHeight)
+                this // Container.Height -> OnContainerHeightChanged()
+                    .WhenAnyValue(v => v.Container.ActualHeight)
                     .Subscribe(h => OnContainerHeightChanged(h))
                     .DisposeWith(disposables);
             });
-        }
-
-        public double ContainerWidth
-        {
-            get { return (double)GetValue(ContainerWidthProperty); }
-            set { SetValue(ContainerWidthProperty, value); }
-        }
-
-        public double ContainerHeight
-        {
-            get { return (double)GetValue(ContainerHeightProperty); }
-            set { SetValue(ContainerHeightProperty, value); }
         }
 
         public IRectangleViewModel ViewModel
@@ -85,6 +89,12 @@ namespace ColorMixer.Views
             set { ViewModel = (IRectangleViewModel)value; }
         }
 
+        public FrameworkElement Container
+        {
+            get { return (FrameworkElement)GetValue(ContainerProperty); }
+            set { SetValue(ContainerProperty, value); }
+        }
+
         private void OnThumbDragDelta(DragDeltaEventArgs e)
         {
             var x = ViewModel.X + e.HorizontalChange;
@@ -93,12 +103,12 @@ namespace ColorMixer.Views
             x = x < 0 ? 0 : x;
             y = y < 0 ? 0 : y;
 
-            x = x + ViewModel.Width > ContainerWidth
-                    ? ContainerWidth - ViewModel.Width
+            x = x + ViewModel.Width > Container.ActualWidth
+                    ? Container.ActualWidth - ViewModel.Width
                     : x;
 
-            y = y + ViewModel.Height > ContainerHeight
-                    ? ContainerHeight - ViewModel.Height
+            y = y + ViewModel.Height > Container.ActualHeight
+                    ? Container.ActualHeight - ViewModel.Height
                     : y;
 
             ViewModel.X = x;

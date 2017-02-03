@@ -15,8 +15,9 @@ namespace ColorMixer.ViewModels
 
         public MixerViewModel(IScreen screen = null)
         {
-            Activator = new ViewModelActivator();
             HostScreen = screen ?? Locator.Current.GetService<IScreen>();
+
+            Activator = new ViewModelActivator();
 
             rectangles = new ReactiveList<RectangleViewModel>();
 

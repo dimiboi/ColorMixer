@@ -1,4 +1,5 @@
 ﻿using ReactiveUI;
+using Splat;
 using System.Reactive.Disposables;
 using System.Windows.Media;
 
@@ -11,6 +12,7 @@ namespace ColorMixer.ViewModels
         double Width { get; set; }
         double Height { get; set; }
         Color Color { get; set; }
+        IConnectorViewModel Connector { get; }
     }
 
     public class RectangleViewModel : ReactiveObject, IRectangleViewModel
@@ -21,8 +23,10 @@ namespace ColorMixer.ViewModels
         private double height;
         private Color color;
 
-        public RectangleViewModel()
+        public RectangleViewModel(IConnectorViewModel connector = null)
         {
+            Connector = connector ?? Locator.Current.GetService<IConnectorViewModel>();
+
             Activator = new ViewModelActivator();
 
             this.WhenActivated(disposables =>
@@ -62,5 +66,7 @@ namespace ColorMixer.ViewModels
             get { return color; }
             set { this.RaiseAndSetIfChanged(ref color, value); }
         }
+
+        public IConnectorViewModel Connector { get; private set; }
     }
 }

@@ -1,0 +1,59 @@
+﻿using ColorMixer.ViewModels;
+using ReactiveUI;
+using System;
+using System.Reactive.Disposables;
+using System.Windows;
+using System.Windows.Controls;
+
+namespace ColorMixer.Views
+{
+    public partial class ConnectorView : UserControl, IViewFor<IConnectorViewModel>
+    {
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.Register("ViewModel",
+                                        typeof(IConnectorViewModel),
+                                        typeof(ConnectorView),
+                                        new PropertyMetadata(null));
+
+        public static readonly DependencyProperty ContainerProperty =
+            DependencyProperty.Register("Container",
+                                        typeof(FrameworkElement),
+                                        typeof(ConnectorView),
+                                        new PropertyMetadata(null));
+
+        public ConnectorView()
+        {
+            InitializeComponent();
+
+            IDisposable activation = null;
+            activation = this.WhenActivated(disposables =>
+            {
+                activation
+                    .DisposeWith(disposables);
+
+                this // ViewModel -> DataContext
+                    .WhenAnyValue(v => v.ViewModel)
+                    .BindTo(this, v => v.DataContext)
+                    .DisposeWith(disposables);
+            });
+        }
+
+        public IConnectorViewModel ViewModel
+        {
+            get { return (IConnectorViewModel)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
+
+        object IViewFor.ViewModel
+        {
+            get { return ViewModel; }
+            set { ViewModel = (IConnectorViewModel)value; }
+        }
+
+        public FrameworkElement Container
+        {
+            get { return (FrameworkElement)GetValue(ContainerProperty); }
+            set { SetValue(ContainerProperty, value); }
+        }
+    }
+}
