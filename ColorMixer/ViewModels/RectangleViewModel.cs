@@ -1,6 +1,5 @@
 ﻿using ReactiveUI;
 using System.Reactive.Disposables;
-using System.Windows.Input;
 using System.Windows.Media;
 
 namespace ColorMixer.ViewModels
@@ -63,7 +62,5 @@ namespace ColorMixer.ViewModels
             get { return color; }
             set { this.RaiseAndSetIfChanged(ref color, value); }
         }
-
-        public ICommand DragDelta { get; private set; }
     }
 }

@@ -24,8 +24,8 @@ namespace ColorMixer.ViewModels
             {
                 X = 10,
                 Y = 10,
-                Width = 50,
-                Height = 40,
+                Width = 100,
+                Height = 100,
                 Color = Colors.Red
             });
         }

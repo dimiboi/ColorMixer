@@ -10,7 +10,6 @@
                      Height="500"
                      MinWidth="400"
                      MinHeight="250"
-                     BorderThickness="1"
                      mc:Ignorable="d">
     <rx:RoutedViewHost Router="{Binding Router}" />
 </MahApps:MetroWindow>
