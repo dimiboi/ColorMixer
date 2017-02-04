@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ColorMixer.Views.RectangleView"
+﻿<UserControl x:Class="ColorMixer.Views.NodeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Views="clr-namespace:ColorMixer.Views"

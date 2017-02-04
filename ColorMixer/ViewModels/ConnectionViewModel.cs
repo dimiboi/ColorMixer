@@ -5,14 +5,14 @@ namespace ColorMixer.ViewModels
 {
     public interface IConnectionViewModel : IReactiveObject, ISupportsActivation
     {
-        IRectangleViewModel From { get; set; }
-        IRectangleViewModel To { get; set; }
+        INodeViewModel From { get; set; }
+        INodeViewModel To { get; set; }
     }
 
     public class ConnectionViewModel : ReactiveObject, IConnectionViewModel
     {
-        private IRectangleViewModel from;
-        private IRectangleViewModel to;
+        private INodeViewModel from;
+        private INodeViewModel to;
 
         public ConnectionViewModel()
         {
@@ -26,13 +26,13 @@ namespace ColorMixer.ViewModels
 
         public ViewModelActivator Activator { get; private set; }
 
-        public IRectangleViewModel From
+        public INodeViewModel From
         {
             get { return from; }
             set { this.RaiseAndSetIfChanged(ref from, value); }
         }
 
-        public IRectangleViewModel To
+        public INodeViewModel To
         {
             get { return to; }
             set { this.RaiseAndSetIfChanged(ref to, value); }

@@ -5,7 +5,7 @@ using System.Windows.Media;
 
 namespace ColorMixer.ViewModels
 {
-    public interface IRectangleViewModel : IReactiveObject, ISupportsActivation
+    public interface INodeViewModel : IReactiveObject, ISupportsActivation
     {
         double X { get; set; }
         double Y { get; set; }
@@ -15,7 +15,7 @@ namespace ColorMixer.ViewModels
         IConnectorViewModel Connector { get; }
     }
 
-    public class RectangleViewModel : ReactiveObject, IRectangleViewModel
+    public class NodeViewModel : ReactiveObject, INodeViewModel
     {
         private double x;
         private double y;
@@ -23,7 +23,7 @@ namespace ColorMixer.ViewModels
         private double height;
         private Color color;
 
-        public RectangleViewModel(IConnectorViewModel connector = null)
+        public NodeViewModel(IConnectorViewModel connector = null)
         {
             Connector = connector ?? Locator.Current.GetService<IConnectorViewModel>();
 

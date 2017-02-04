@@ -7,9 +7,9 @@
              d:DesignHeight="300"
              d:DesignWidth="300"
              mc:Ignorable="d">
-    <!--<Ellipse Width="20"
+    <Ellipse Width="20"
              Height="20"
              Fill="White"
              Stroke="{DynamicResource BlackBrush}"
-             StrokeThickness="1" />-->
+             StrokeThickness="1" />
 </UserControl>

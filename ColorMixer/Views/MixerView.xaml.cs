@@ -30,13 +30,13 @@ namespace ColorMixer.Views
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                this // ViewModel.Rectangles -> Rectangles.ItemsSource
+                this // ViewModel.Nodes -> Nodes.ItemsSource
                     .OneWayBind(ViewModel,
-                        vm => vm.Rectangles,
-                        v => v.Rectangles.ItemsSource)
+                        vm => vm.Nodes,
+                        v => v.Nodes.ItemsSource)
                     .DisposeWith(disposables);
 
-                this // ViewModel.Rectangles -> Rectangles.ItemsSource
+                this // ViewModel.Connections -> Connections.ItemsSource
                     .OneWayBind(ViewModel,
                         vm => vm.Connections,
                         v => v.Connections.ItemsSource)

@@ -7,20 +7,20 @@ namespace ColorMixer.ViewModels
 {
     public interface IMixerViewModel : IReactiveObject, IRoutableViewModel, ISupportsActivation
     {
-        IReadOnlyReactiveList<IRectangleViewModel> Rectangles { get; }
+        IReadOnlyReactiveList<INodeViewModel> Nodes { get; }
         IReadOnlyReactiveList<IConnectionViewModel> Connections { get; }
     }
 
     public class MixerViewModel : ReactiveObject, IMixerViewModel
     {
-        private readonly ReactiveList<RectangleViewModel> rectangles;
+        private readonly ReactiveList<NodeViewModel> nodes;
         private readonly ReactiveList<ConnectionViewModel> connections;
 
         public MixerViewModel(IScreen screen = null)
         {
             HostScreen = screen ?? Locator.Current.GetService<IScreen>();
 
-            rectangles = new ReactiveList<RectangleViewModel>();
+            nodes = new ReactiveList<NodeViewModel>();
             connections = new ReactiveList<ConnectionViewModel>();
 
             Activator = new ViewModelActivator();
@@ -30,7 +30,7 @@ namespace ColorMixer.ViewModels
                 Disposable.Empty.DisposeWith(disposables);
             });
 
-            var from = new RectangleViewModel
+            var from = new NodeViewModel
             {
                 X = 10,
                 Y = 10,
@@ -39,7 +39,7 @@ namespace ColorMixer.ViewModels
                 Color = Colors.Red
             };
 
-            var to = new RectangleViewModel
+            var to = new NodeViewModel
             {
                 X = 150,
                 Y = 150,
@@ -48,8 +48,8 @@ namespace ColorMixer.ViewModels
                 Color = Colors.Red
             };
 
-            rectangles.Add(from);
-            rectangles.Add(to);
+            nodes.Add(from);
+            nodes.Add(to);
 
             connections.Add(new ConnectionViewModel
             {
@@ -64,7 +64,7 @@ namespace ColorMixer.ViewModels
 
         public string UrlPathSegment => "Mixer";
 
-        public IReadOnlyReactiveList<IRectangleViewModel> Rectangles => rectangles;
+        public IReadOnlyReactiveList<INodeViewModel> Nodes => nodes;
 
         public IReadOnlyReactiveList<IConnectionViewModel> Connections => connections;
     }

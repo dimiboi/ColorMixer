@@ -8,21 +8,21 @@ using System.Windows.Controls.Primitives;
 
 namespace ColorMixer.Views
 {
-    public partial class RectangleView : UserControl, IViewFor<IRectangleViewModel>
+    public partial class NodeView : UserControl, IViewFor<INodeViewModel>
     {
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel",
-                                        typeof(IRectangleViewModel),
-                                        typeof(RectangleView),
+                                        typeof(INodeViewModel),
+                                        typeof(NodeView),
                                         new PropertyMetadata(null));
 
         public static readonly DependencyProperty ContainerProperty =
             DependencyProperty.Register("Container",
                                         typeof(FrameworkElement),
-                                        typeof(RectangleView),
+                                        typeof(NodeView),
                                         new PropertyMetadata(null));
 
-        public RectangleView()
+        public NodeView()
         {
             InitializeComponent();
 
@@ -77,16 +77,16 @@ namespace ColorMixer.Views
             });
         }
 
-        public IRectangleViewModel ViewModel
+        public INodeViewModel ViewModel
         {
-            get { return (IRectangleViewModel)GetValue(ViewModelProperty); }
+            get { return (INodeViewModel)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
         object IViewFor.ViewModel
         {
             get { return ViewModel; }
-            set { ViewModel = (IRectangleViewModel)value; }
+            set { ViewModel = (INodeViewModel)value; }
         }
 
         public FrameworkElement Container

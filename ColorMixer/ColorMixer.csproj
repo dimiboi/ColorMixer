@@ -98,15 +98,15 @@
     <Compile Include="ViewModels\ConnectionViewModel.cs" />
     <Compile Include="ViewModels\ConnectorViewModel.cs" />
     <Compile Include="ViewModels\MixerViewModel.cs" />
-    <Compile Include="ViewModels\RectangleViewModel.cs" />
+    <Compile Include="ViewModels\NodeViewModel.cs" />
     <Compile Include="Views\ConnectorView.xaml.cs">
       <DependentUpon>ConnectorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MixerView.xaml.cs">
       <DependentUpon>MixerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RectangleView.xaml.cs">
-      <DependentUpon>RectangleView.xaml</DependentUpon>
+    <Compile Include="Views\NodeView.xaml.cs">
+      <DependentUpon>NodeView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -129,7 +129,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\RectangleView.xaml">
+    <Page Include="Views\NodeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
