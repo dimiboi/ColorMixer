@@ -10,6 +10,23 @@
              d:DesignWidth="300"
              mc:Ignorable="d">
     <Grid>
+        <ItemsControl x:Name="Connections">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type ViewModels:ConnectionViewModel}">
+                    <Line Stroke="{DynamicResource BlackBrush}"
+                          StrokeThickness="2"
+                          X1="{Binding From.Connector.ConnectionPoint.X}"
+                          X2="{Binding To.Connector.ConnectionPoint.X}"
+                          Y1="{Binding From.Connector.ConnectionPoint.Y}"
+                          Y2="{Binding To.Connector.ConnectionPoint.Y}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
         <ItemsControl x:Name="Rectangles">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -28,6 +45,5 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <ItemsControl x:Name="Connections" />
     </Grid>
 </UserControl>

@@ -35,6 +35,12 @@ namespace ColorMixer.Views
                         vm => vm.Rectangles,
                         v => v.Rectangles.ItemsSource)
                     .DisposeWith(disposables);
+
+                this // ViewModel.Rectangles -> Rectangles.ItemsSource
+                    .OneWayBind(ViewModel,
+                        vm => vm.Connections,
+                        v => v.Connections.ItemsSource)
+                    .DisposeWith(disposables);
             });
         }
 

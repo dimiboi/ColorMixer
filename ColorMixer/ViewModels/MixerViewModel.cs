@@ -1,5 +1,6 @@
 ﻿using ReactiveUI;
 using Splat;
+using System.Reactive.Disposables;
 using System.Windows.Media;
 
 namespace ColorMixer.ViewModels
@@ -7,27 +8,53 @@ namespace ColorMixer.ViewModels
     public interface IMixerViewModel : IReactiveObject, IRoutableViewModel, ISupportsActivation
     {
         IReadOnlyReactiveList<IRectangleViewModel> Rectangles { get; }
+        IReadOnlyReactiveList<IConnectionViewModel> Connections { get; }
     }
 
     public class MixerViewModel : ReactiveObject, IMixerViewModel
     {
         private readonly ReactiveList<RectangleViewModel> rectangles;
+        private readonly ReactiveList<ConnectionViewModel> connections;
 
         public MixerViewModel(IScreen screen = null)
         {
             HostScreen = screen ?? Locator.Current.GetService<IScreen>();
 
+            rectangles = new ReactiveList<RectangleViewModel>();
+            connections = new ReactiveList<ConnectionViewModel>();
+
             Activator = new ViewModelActivator();
 
-            rectangles = new ReactiveList<RectangleViewModel>();
+            this.WhenActivated(disposables =>
+            {
+                Disposable.Empty.DisposeWith(disposables);
+            });
 
-            rectangles.Add(new RectangleViewModel
+            var from = new RectangleViewModel
             {
                 X = 10,
                 Y = 10,
                 Width = 100,
                 Height = 100,
                 Color = Colors.Red
+            };
+
+            var to = new RectangleViewModel
+            {
+                X = 150,
+                Y = 150,
+                Width = 100,
+                Height = 100,
+                Color = Colors.Red
+            };
+
+            rectangles.Add(from);
+            rectangles.Add(to);
+
+            connections.Add(new ConnectionViewModel
+            {
+                From = from,
+                To = to
             });
         }
 
@@ -38,5 +65,7 @@ namespace ColorMixer.ViewModels
         public string UrlPathSegment => "Mixer";
 
         public IReadOnlyReactiveList<IRectangleViewModel> Rectangles => rectangles;
+
+        public IReadOnlyReactiveList<IConnectionViewModel> Connections => connections;
     }
 }
