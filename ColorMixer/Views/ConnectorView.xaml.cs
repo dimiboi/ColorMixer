@@ -2,6 +2,7 @@
 using ReactiveUI;
 using System;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,6 +13,12 @@ namespace ColorMixer.Views
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel",
                                         typeof(IConnectorViewModel),
+                                        typeof(ConnectorView),
+                                        new PropertyMetadata(null));
+
+        public static readonly DependencyProperty ConnectionPointProperty =
+            DependencyProperty.Register("ConnectionPoint",
+                                        typeof(Point),
                                         typeof(ConnectorView),
                                         new PropertyMetadata(null));
 
@@ -35,6 +42,20 @@ namespace ColorMixer.Views
                     .WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
+
+                this // ViewModel.ConnectionPoint <-> ConnectionPoint
+                    .Bind(ViewModel,
+                        vm => vm.ConnectionPoint,
+                        v => v.ConnectionPoint)
+                    .DisposeWith(disposables);
+
+                this // LayoutUpdated -> ConnectionPoint
+                    .Events()
+                    .LayoutUpdated
+                    .Select(_ => this.TransformToAncestor(Container)
+                                     .Transform(new Point(ActualWidth / 2, ActualHeight / 2)))
+                    .BindTo(this, v => v.ConnectionPoint)
+                    .DisposeWith(disposables);
             });
         }
 
@@ -48,6 +69,12 @@ namespace ColorMixer.Views
         {
             get { return ViewModel; }
             set { ViewModel = (IConnectorViewModel)value; }
+        }
+
+        public Point ConnectionPoint
+        {
+            get { return (Point)GetValue(ConnectionPointProperty); }
+            set { SetValue(ConnectionPointProperty, value); }
         }
 
         public FrameworkElement Container

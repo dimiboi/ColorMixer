@@ -37,13 +37,13 @@ namespace ColorMixer.Views
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                this // ViewModel.Width -> Thumb.Width
+                this // ViewModel.Width <-> Thumb.Width
                     .Bind(ViewModel,
                         vm => vm.Width,
                         v => v.Thumb.Width)
                     .DisposeWith(disposables);
 
-                this // ViewModel.Height -> Thumb.Height
+                this // ViewModel.Height <-> Thumb.Height
                     .Bind(ViewModel,
                         vm => vm.Height,
                         v => v.Thumb.Height)
