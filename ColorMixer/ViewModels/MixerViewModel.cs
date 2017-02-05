@@ -34,8 +34,8 @@ namespace ColorMixer.ViewModels
             {
                 X = 10,
                 Y = 10,
-                Width = 100,
-                Height = 100,
+                Width = 150,
+                Height = 150,
                 Color = Colors.Red
             };
 
@@ -43,8 +43,8 @@ namespace ColorMixer.ViewModels
             {
                 X = 150,
                 Y = 150,
-                Width = 100,
-                Height = 100,
+                Width = 150,
+                Height = 150,
                 Color = Colors.Red
             };
 
@@ -52,8 +52,8 @@ namespace ColorMixer.ViewModels
             {
                 X = 300,
                 Y = 100,
-                Width = 100,
-                Height = 100,
+                Width = 150,
+                Height = 150,
                 Color = Colors.Red
             };
 

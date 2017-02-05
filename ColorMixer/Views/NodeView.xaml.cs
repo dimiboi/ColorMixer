@@ -103,13 +103,13 @@ namespace ColorMixer.Views
             x = x < 0 ? 0 : x;
             y = y < 0 ? 0 : y;
 
-            x = x + ViewModel.Width > Container.ActualWidth
-                    ? Container.ActualWidth - ViewModel.Width
-                    : x;
+            x = x + ActualWidth > Container.ActualWidth
+                ? Container.ActualWidth - ActualWidth
+                : x;
 
-            y = y + ViewModel.Height > Container.ActualHeight
-                    ? Container.ActualHeight - ViewModel.Height
-                    : y;
+            y = y + ActualHeight > Container.ActualHeight
+                ? Container.ActualHeight - ActualHeight
+                : y;
 
             ViewModel.X = x;
             ViewModel.Y = y;
@@ -117,15 +117,15 @@ namespace ColorMixer.Views
 
         private void OnContainerWidthChanged(double containerWidth)
         {
-            ViewModel.X = ViewModel.X + ViewModel.Width > containerWidth
-                          ? containerWidth - ViewModel.Width
+            ViewModel.X = ViewModel.X + ActualWidth > containerWidth
+                          ? containerWidth - ActualWidth
                           : ViewModel.X;
         }
 
         private void OnContainerHeightChanged(double containerHeight)
         {
-            ViewModel.Y = ViewModel.Y + ViewModel.Width > containerHeight
-                          ? containerHeight - ViewModel.Height
+            ViewModel.Y = ViewModel.Y + ActualHeight > containerHeight
+                          ? containerHeight - ActualHeight
                           : ViewModel.Y;
         }
     }

@@ -8,7 +8,20 @@
              d:DesignWidth="300"
              mc:Ignorable="d">
     <Grid>
-        <Thumb Name="Thumb">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0"
+                   Padding="5"
+                   HorizontalAlignment="Left"
+                   Background="{DynamicResource WhiteBrush}"
+                   FontFamily="Segoe UI Light"
+                   FontSize="20">
+            Addition
+        </TextBlock>
+        <Thumb Name="Thumb" Grid.Row="1">
             <Thumb.Template>
                 <ControlTemplate>
                     <Rectangle Cursor="" Fill="{Binding Color, Converter={StaticResource ColorToBrushConverter}}" />
@@ -16,7 +29,27 @@
             </Thumb.Template>
         </Thumb>
         <Views:ConnectorView x:Name="Connector"
+                             Grid.Row="1"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Center" />
+        <StackPanel Grid.Row="2"
+                    HorizontalAlignment="Right"
+                    Background="{DynamicResource WhiteBrush}"
+                    Orientation="Horizontal">
+            <StackPanel.Resources>
+                <Style BasedOn="{StaticResource MenuButtonStyle}" TargetType="Button">
+                    <Setter Property="Width" Value="36" />
+                    <Setter Property="Height" Value="36" />
+                    <Setter Property="FontFamily" Value="{StaticResource Segoe MDL2 Assets}" />
+                    <Setter Property="FontSize" Value="15" />
+                </Style>
+            </StackPanel.Resources>
+            <Button x:Name="EditNodeButton"
+                    Content="&#xE70F;"
+                    ToolTip="Edit Node" />
+            <Button x:Name="DeleteNodeButton"
+                    Content="&#xE74D;"
+                    ToolTip="Delete Node" />
+        </StackPanel>
     </Grid>
 </UserControl>
