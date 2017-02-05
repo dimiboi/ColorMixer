@@ -60,55 +60,29 @@ namespace ColorMixer.Views
                     .BindTo(this, v => v.Connector.ViewModel)
                     .DisposeWith(disposables);
 
-                this // Make sure the node X stays within limits
+                this // Make sure node X stays within bounds
                     .WhenAnyValue(v => v.ViewModel.X,
                                   v => v.ActualWidth,
                                   v => v.Container.ActualWidth,
                                   (a, b, c) => new { X = a, Width = b, ContainerWidth = c })
-                    .Select(e =>
-                    {
-                        if (e.X > 0)
-                        {
-                            if (e.X + e.Width > e.ContainerWidth)
-                            {
-                                return e.ContainerWidth - e.Width;
-                            }
-                            else
-                            {
-                                return e.X;
-                            }
-                        }
-                        else
-                        {
-                            return 0;
-                        }
-                    })
+                    .Select(e => e.X > 0
+                                 ? e.X + e.Width > e.ContainerWidth
+                                   ? e.ContainerWidth - e.Width
+                                   : e.X
+                                 : 0)
                     .BindTo(ViewModel, vm => vm.X)
                     .DisposeWith(disposables);
 
-                this // Make sure the node Y stays within limits
+                this // Make sure node Y stays within bounds
                     .WhenAnyValue(v => v.ViewModel.Y,
                                   v => v.ActualHeight,
                                   v => v.Container.ActualHeight,
                                   (a, b, c) => new { Y = a, Height = b, ContainerHeight = c })
-                    .Select(e =>
-                    {
-                        if (e.Y > 0)
-                        {
-                            if (e.Y + e.Height > e.ContainerHeight)
-                            {
-                                return e.ContainerHeight - e.Height;
-                            }
-                            else
-                            {
-                                return e.Y;
-                            }
-                        }
-                        else
-                        {
-                            return 0;
-                        }
-                    })
+                    .Select(e => e.Y > 0
+                                 ? e.Y + e.Height > e.ContainerHeight
+                                   ? e.ContainerHeight - e.Height
+                                   : e.Y
+                                 : 0)
                     .BindTo(ViewModel, vm => vm.Y)
                     .DisposeWith(disposables);
 
