@@ -30,7 +30,7 @@ namespace ColorMixer.ViewModels
                 Disposable.Empty.DisposeWith(disposables);
             });
 
-            var from = new NodeViewModel
+            var node1 = new NodeViewModel
             {
                 X = 10,
                 Y = 10,
@@ -39,7 +39,7 @@ namespace ColorMixer.ViewModels
                 Color = Colors.Red
             };
 
-            var to = new NodeViewModel
+            var node2 = new NodeViewModel
             {
                 X = 150,
                 Y = 150,
@@ -48,13 +48,35 @@ namespace ColorMixer.ViewModels
                 Color = Colors.Red
             };
 
-            nodes.Add(from);
-            nodes.Add(to);
+            var node3 = new NodeViewModel
+            {
+                X = 300,
+                Y = 100,
+                Width = 100,
+                Height = 100,
+                Color = Colors.Red
+            };
+
+            nodes.Add(node1);
+            nodes.Add(node2);
+            nodes.Add(node3);
 
             connections.Add(new ConnectionViewModel
             {
-                From = from,
-                To = to
+                From = node1,
+                To = node2
+            });
+
+            connections.Add(new ConnectionViewModel
+            {
+                From = node2,
+                To = node3
+            });
+
+            connections.Add(new ConnectionViewModel
+            {
+                From = node3,
+                To = node1
             });
         }
 

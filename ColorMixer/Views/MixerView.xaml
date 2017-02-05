@@ -1,16 +1,43 @@
 ﻿<UserControl x:Class="ColorMixer.Views.MixerView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Shapes="clr-namespace:ColorMixer.Shapes"
              xmlns:ViewModels="clr-namespace:ColorMixer.ViewModels"
              xmlns:Views="clr-namespace:ColorMixer.Views"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              d:DesignHeight="300"
              d:DesignWidth="300"
              mc:Ignorable="d">
     <Grid>
-        <ItemsControl x:Name="Nodes">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="48" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Background="Black">
+            <Grid.Resources>
+                <Style BasedOn="{StaticResource MenuButtonStyle}" TargetType="Button">
+                    <Setter Property="Width" Value="48" />
+                    <Setter Property="Height" Value="48" />
+                    <Setter Property="FontSize" Value="20" />
+                </Style>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!--  Open Report  -->
+            <Button>
+                <fa:FontAwesome Icon="Plus" />
+            </Button>
+        </Grid>
+        <ItemsControl x:Name="Nodes" Grid.Column="1">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas />
@@ -28,7 +55,7 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <ItemsControl x:Name="Connections">
+        <ItemsControl x:Name="Connections" Grid.Column="1">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas />
@@ -36,12 +63,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type ViewModels:ConnectionViewModel}">
-                    <Line Stroke="{DynamicResource BlackBrush}"
-                          StrokeThickness="2"
-                          X1="{Binding From.Connector.ConnectionPoint.X}"
-                          X2="{Binding To.Connector.ConnectionPoint.X}"
-                          Y1="{Binding From.Connector.ConnectionPoint.Y}"
-                          Y2="{Binding To.Connector.ConnectionPoint.Y}" />
+                    <Views:ConnectionView ViewModel="{Binding}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

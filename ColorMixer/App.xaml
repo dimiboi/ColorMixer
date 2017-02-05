@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Green.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
+                <ResourceDictionary Source="/Resources/MenuButtonStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
         </ResourceDictionary>

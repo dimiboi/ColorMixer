@@ -11,7 +11,7 @@
         <Thumb Name="Thumb">
             <Thumb.Template>
                 <ControlTemplate>
-                    <Rectangle Cursor="Hand" Fill="{Binding Color, Converter={StaticResource ColorToBrushConverter}}" />
+                    <Rectangle Cursor="" Fill="{Binding Color, Converter={StaticResource ColorToBrushConverter}}" />
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>
