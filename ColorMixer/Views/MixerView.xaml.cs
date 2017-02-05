@@ -5,7 +5,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace ColorMixer.Views
 {
@@ -44,38 +43,28 @@ namespace ColorMixer.Views
                         v => v.Connections.ItemsSource)
                     .DisposeWith(disposables);
 
-                this // IsAddingNode -> Nodes.Cursor
-                    .WhenAnyValue(v => v.ViewModel.IsAddingNode,
-                                  v => v ? Cursors.Cross : Cursors.Arrow)
-                    .BindTo(this, v => v.Nodes.Cursor)
-                    .DisposeWith(disposables);
-
-                this // IsAddingNode -> Nodes.Opacity
-                    .WhenAnyValue(v => v.ViewModel.IsAddingNode,
-                                  v => v ? 0.5 : 1)
-                    .BindTo(this, v => v.Nodes.Opacity)
-                    .DisposeWith(disposables);
-
-                this // ViewModel.AddColorNodeCommand -> StartAddingColorNodeCommand.Command
+                this // ViewModel.AddColorNodeCommand -> AddColorNodeButton.Command
                     .OneWayBind(ViewModel,
-                        vm => vm.StartAddingColorNodeCommand,
+                        vm => vm.AddColorNodeCommand,
                         v => v.AddColorNodeButton.Command)
                     .DisposeWith(disposables);
 
-                Nodes // Invoke EndAddingColorNodeCommand when Nodes canvas clicked in adding mode
-                    .Events()
-                    .MouseLeftButtonDown
-                    .Where(_ => ViewModel.IsAddingNode)
-                    .Select(e => e.GetPosition(Nodes))
-                    .InvokeCommand(ViewModel.EndAddingColorNodeCommand)
-                    .DisposeWith(disposables);
+                ViewModel // Handle new node point request by ViewModel
+                    .GetNewNodePoint
+                    .RegisterHandler(async interation =>
+                    {
+                        var sequence = Observable.Merge(
+                            Nodes.Events()
+                                 .MouseLeftButtonDown // left button selects a point
+                                 .Select(e => new Point?(e.GetPosition(Nodes))),
+                            Nodes.Events()
+                                 .MouseRightButtonDown // right button cancels selection
+                                 .Select(e => default(Point?)));
 
-                Nodes // Cancel adding on right click on Nodes canvas
-                    .Events()
-                    .MouseRightButtonDown
-                    .Where(_ => ViewModel.IsAddingNode)
-                    .Select(_ => false)
-                    .BindTo(ViewModel, vm => vm.IsAddingNode)
+                        var point = await sequence.FirstAsync();
+
+                        interation.SetOutput(point);
+                    })
                     .DisposeWith(disposables);
             });
         }

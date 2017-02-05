@@ -1,7 +1,9 @@
 ﻿using ReactiveUI;
 using Splat;
+using System;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Media;
 
@@ -11,17 +13,14 @@ namespace ColorMixer.ViewModels
     {
         IReadOnlyReactiveList<INodeViewModel> Nodes { get; }
         IReadOnlyReactiveList<IConnectionViewModel> Connections { get; }
-        ReactiveCommand<Unit, Unit> StartAddingColorNodeCommand { get; }
-        ReactiveCommand<Point, Unit> EndAddingColorNodeCommand { get; }
-        bool IsAddingNode { get; set; }
+        ReactiveCommand<Unit, Unit> AddColorNodeCommand { get; }
+        Interaction<Unit, Point?> GetNewNodePoint { get; }
     }
 
     public class MixerViewModel : ReactiveObject, IMixerViewModel
     {
         private readonly ReactiveList<NodeViewModel> nodes;
         private readonly ReactiveList<ConnectionViewModel> connections;
-
-        private bool isAddingNode;
 
         public MixerViewModel(IScreen screen = null)
         {
@@ -31,79 +30,33 @@ namespace ColorMixer.ViewModels
             connections = new ReactiveList<ConnectionViewModel>();
 
             Activator = new ViewModelActivator();
+            GetNewNodePoint = new Interaction<Unit, Point?>();
 
             this.WhenActivated(disposables =>
             {
-                StartAddingColorNodeCommand = ReactiveCommand.Create(() =>
+                AddColorNodeCommand = ReactiveCommand.CreateFromTask(async () =>
                 {
-                    IsAddingNode = true;
-                },
-                this.WhenAnyValue(vm => vm.IsAddingNode, b => !b)).DisposeWith(disposables);
+                    var point = await GetNewNodePoint.Handle(Unit.Default);
 
-                EndAddingColorNodeCommand = ReactiveCommand.Create<Point>(p =>
-                {
-                    nodes.Add(new NodeViewModel
+                    if (point.HasValue)
                     {
-                        X = p.X,
-                        Y = p.Y,
-                        Width = 150,
-                        Height = 150,
-                        Color = Colors.Red
-                    });
-
-                    IsAddingNode = false;
-                },
-                this.WhenAnyValue(vm => vm.IsAddingNode)).DisposeWith(disposables);
+                        nodes.Add(new NodeViewModel
+                        {
+                            X = point.Value.X,
+                            Y = point.Value.Y,
+                            Width = 150,
+                            Height = 150,
+                            Color = Colors.Red
+                        });
+                    }
+                })
+                .DisposeWith(disposables);
             });
+        }
 
-            /*var node1 = new NodeViewModel
-            {
-                X = 10,
-                Y = 10,
-                Width = 150,
-                Height = 150,
-                Color = Colors.Red
-            };
-
-            var node2 = new NodeViewModel
-            {
-                X = 150,
-                Y = 150,
-                Width = 150,
-                Height = 150,
-                Color = Colors.Red
-            };
-
-            var node3 = new NodeViewModel
-            {
-                X = 300,
-                Y = 100,
-                Width = 150,
-                Height = 150,
-                Color = Colors.Red
-            };
-
-            nodes.Add(node1);
-            nodes.Add(node2);
-            nodes.Add(node3);
-
-            connections.Add(new ConnectionViewModel
-            {
-                From = node1,
-                To = node2
-            });
-
-            connections.Add(new ConnectionViewModel
-            {
-                From = node2,
-                To = node3
-            });
-
-            connections.Add(new ConnectionViewModel
-            {
-                From = node3,
-                To = node1
-            });*/
+        private void WhenActivated(Action<Action<IDisposable>> p)
+        {
+            throw new NotImplementedException();
         }
 
         public ViewModelActivator Activator { get; private set; }
@@ -116,14 +69,8 @@ namespace ColorMixer.ViewModels
 
         public IReadOnlyReactiveList<IConnectionViewModel> Connections => connections;
 
-        public ReactiveCommand<Unit, Unit> StartAddingColorNodeCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> AddColorNodeCommand { get; private set; }
 
-        public ReactiveCommand<Point, Unit> EndAddingColorNodeCommand { get; private set; }
-
-        public bool IsAddingNode
-        {
-            get { return isAddingNode; }
-            set { this.RaiseAndSetIfChanged(ref isAddingNode, value); }
-        }
+        public Interaction<Unit, Point?> GetNewNodePoint { get; private set; }
     }
 }
