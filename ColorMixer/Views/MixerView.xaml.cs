@@ -52,10 +52,8 @@ namespace ColorMixer.Views
 
                 ViewModel // Handle new node point request by ViewModel
                     .GetNewNodePoint
-                    .RegisterHandler(async interation =>
+                    .RegisterHandler(async interaction =>
                     {
-                        var oldCursor = Nodes.Cursor;
-
                         try
                         {
                             Nodes.Cursor = Cursors.Cross;
@@ -68,13 +66,13 @@ namespace ColorMixer.Views
                                      .MouseRightButtonDown // right button cancels selection
                                      .Select(e => default(Point?)));
 
-                            var point = await sequence.FirstAsync();
+                            var point = await sequence.FirstAsync(); // whichever comes first
 
-                            interation.SetOutput(point);
+                            interaction.SetOutput(point);
                         }
                         finally
                         {
-                            Nodes.Cursor = oldCursor;
+                            Nodes.Cursor = Cursors.Arrow;
                         }
                     })
                     .DisposeWith(disposables);

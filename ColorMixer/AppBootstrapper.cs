@@ -40,6 +40,9 @@ namespace ColorMixer
 
             resolver.Register(() => new ConnectorViewModel(),
                                     typeof(IConnectorViewModel));
+
+            resolver.Register(() => new ConnectionViewModel(),
+                                    typeof(IConnectionViewModel));
             // Views
 
             resolver.RegisterConstant(new MixerView(),
@@ -50,6 +53,9 @@ namespace ColorMixer
 
             resolver.Register(() => new ConnectorView(),
                                     typeof(IViewFor<ConnectorViewModel>));
+
+            resolver.Register(() => new ConnectionView(),
+                                    typeof(IViewFor<ConnectionViewModel>));
         }
     }
 }
