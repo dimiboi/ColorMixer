@@ -5,6 +5,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace ColorMixer.Views
 {
@@ -16,12 +17,6 @@ namespace ColorMixer.Views
                                         typeof(MixerView),
                                         new PropertyMetadata(null));
 
-        public static readonly DependencyProperty IsAddingNodeProperty =
-            DependencyProperty.Register("IsAddingNode",
-                                        typeof(bool),
-                                        typeof(MixerView),
-                                        new PropertyMetadata(null));
-
         public MixerView()
         {
             InitializeComponent();
@@ -30,14 +25,6 @@ namespace ColorMixer.Views
             activation = this.WhenActivated(disposables =>
             {
                 activation
-                    .DisposeWith(disposables);
-
-                Nodes
-                    .Events()
-                    .MouseLeftButtonDown
-                    //.Where(_ => IsAddingNode)
-                    .Select(e => e.GetPosition(Nodes))
-                    .InvokeCommand(ViewModel.AddColorNodeCommand)
                     .DisposeWith(disposables);
 
                 this // ViewModel -> DataContext
@@ -57,11 +44,39 @@ namespace ColorMixer.Views
                         v => v.Connections.ItemsSource)
                     .DisposeWith(disposables);
 
-                /*this // ViewModel.AddColorNodeCommand -> AddColorNodeButton.Command
+                this // IsAddingNode -> Nodes.Cursor
+                    .WhenAnyValue(v => v.ViewModel.IsAddingNode,
+                                  v => v ? Cursors.Cross : Cursors.Arrow)
+                    .BindTo(this, v => v.Nodes.Cursor)
+                    .DisposeWith(disposables);
+
+                this // IsAddingNode -> Nodes.Opacity
+                    .WhenAnyValue(v => v.ViewModel.IsAddingNode,
+                                  v => v ? 0.5 : 1)
+                    .BindTo(this, v => v.Nodes.Opacity)
+                    .DisposeWith(disposables);
+
+                this // ViewModel.AddColorNodeCommand -> StartAddingColorNodeCommand.Command
                     .OneWayBind(ViewModel,
-                        vm => vm.AddColorNodeCommand,
+                        vm => vm.StartAddingColorNodeCommand,
                         v => v.AddColorNodeButton.Command)
-                    .DisposeWith(disposables);*/
+                    .DisposeWith(disposables);
+
+                Nodes // Invoke EndAddingColorNodeCommand when Nodes canvas clicked in adding mode
+                    .Events()
+                    .MouseLeftButtonDown
+                    .Where(_ => ViewModel.IsAddingNode)
+                    .Select(e => e.GetPosition(Nodes))
+                    .InvokeCommand(ViewModel.EndAddingColorNodeCommand)
+                    .DisposeWith(disposables);
+
+                Nodes // Cancel adding on right click on Nodes canvas
+                    .Events()
+                    .MouseRightButtonDown
+                    .Where(_ => ViewModel.IsAddingNode)
+                    .Select(_ => false)
+                    .BindTo(ViewModel, vm => vm.IsAddingNode)
+                    .DisposeWith(disposables);
             });
         }
 
@@ -75,12 +90,6 @@ namespace ColorMixer.Views
         {
             get { return ViewModel; }
             set { ViewModel = (IMixerViewModel)value; }
-        }
-
-        public bool IsAddingNode
-        {
-            get { return (bool)GetValue(IsAddingNodeProperty); }
-            set { SetValue(IsAddingNodeProperty, value); }
         }
     }
 }

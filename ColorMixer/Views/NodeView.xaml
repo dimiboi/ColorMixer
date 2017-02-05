@@ -16,7 +16,6 @@
         <TextBlock Grid.Row="0"
                    Padding="5"
                    HorizontalAlignment="Left"
-                   Background="{DynamicResource WhiteBrush}"
                    FontFamily="Segoe UI Light"
                    FontSize="20">
             Addition
@@ -34,7 +33,6 @@
                              VerticalAlignment="Center" />
         <StackPanel Grid.Row="2"
                     HorizontalAlignment="Right"
-                    Background="{DynamicResource WhiteBrush}"
                     Orientation="Horizontal">
             <StackPanel.Resources>
                 <Style BasedOn="{StaticResource MenuButtonStyle}" TargetType="Button">
@@ -44,6 +42,9 @@
                     <Setter Property="FontSize" Value="15" />
                 </Style>
             </StackPanel.Resources>
+            <Button x:Name="LinkNodeButton"
+                    Content="&#xE71B;"
+                    ToolTip="Link Node" />
             <Button x:Name="EditNodeButton"
                     Content="&#xE70F;"
                     ToolTip="Edit Node" />

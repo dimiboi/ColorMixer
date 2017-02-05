@@ -11,13 +11,17 @@ namespace ColorMixer.ViewModels
     {
         IReadOnlyReactiveList<INodeViewModel> Nodes { get; }
         IReadOnlyReactiveList<IConnectionViewModel> Connections { get; }
-        ReactiveCommand<Point, Unit> AddColorNodeCommand { get; }
+        ReactiveCommand<Unit, Unit> StartAddingColorNodeCommand { get; }
+        ReactiveCommand<Point, Unit> EndAddingColorNodeCommand { get; }
+        bool IsAddingNode { get; set; }
     }
 
     public class MixerViewModel : ReactiveObject, IMixerViewModel
     {
         private readonly ReactiveList<NodeViewModel> nodes;
         private readonly ReactiveList<ConnectionViewModel> connections;
+
+        private bool isAddingNode;
 
         public MixerViewModel(IScreen screen = null)
         {
@@ -30,7 +34,13 @@ namespace ColorMixer.ViewModels
 
             this.WhenActivated(disposables =>
             {
-                AddColorNodeCommand = ReactiveCommand.Create<Point>(p =>
+                StartAddingColorNodeCommand = ReactiveCommand.Create(() =>
+                {
+                    IsAddingNode = true;
+                },
+                this.WhenAnyValue(vm => vm.IsAddingNode, b => !b)).DisposeWith(disposables);
+
+                EndAddingColorNodeCommand = ReactiveCommand.Create<Point>(p =>
                 {
                     nodes.Add(new NodeViewModel
                     {
@@ -40,8 +50,10 @@ namespace ColorMixer.ViewModels
                         Height = 150,
                         Color = Colors.Red
                     });
-                }
-                ).DisposeWith(disposables);
+
+                    IsAddingNode = false;
+                },
+                this.WhenAnyValue(vm => vm.IsAddingNode)).DisposeWith(disposables);
             });
 
             /*var node1 = new NodeViewModel
@@ -104,6 +116,14 @@ namespace ColorMixer.ViewModels
 
         public IReadOnlyReactiveList<IConnectionViewModel> Connections => connections;
 
-        public ReactiveCommand<Point, Unit> AddColorNodeCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> StartAddingColorNodeCommand { get; private set; }
+
+        public ReactiveCommand<Point, Unit> EndAddingColorNodeCommand { get; private set; }
+
+        public bool IsAddingNode
+        {
+            get { return isAddingNode; }
+            set { this.RaiseAndSetIfChanged(ref isAddingNode, value); }
+        }
     }
 }
