@@ -2,6 +2,7 @@
 using ReactiveUI;
 using System;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,6 +16,12 @@ namespace ColorMixer.Views
                                         typeof(MixerView),
                                         new PropertyMetadata(null));
 
+        public static readonly DependencyProperty IsAddingNodeProperty =
+            DependencyProperty.Register("IsAddingNode",
+                                        typeof(bool),
+                                        typeof(MixerView),
+                                        new PropertyMetadata(null));
+
         public MixerView()
         {
             InitializeComponent();
@@ -23,6 +30,14 @@ namespace ColorMixer.Views
             activation = this.WhenActivated(disposables =>
             {
                 activation
+                    .DisposeWith(disposables);
+
+                Nodes
+                    .Events()
+                    .MouseLeftButtonDown
+                    //.Where(_ => IsAddingNode)
+                    .Select(e => e.GetPosition(Nodes))
+                    .InvokeCommand(ViewModel.AddColorNodeCommand)
                     .DisposeWith(disposables);
 
                 this // ViewModel -> DataContext
@@ -41,6 +56,12 @@ namespace ColorMixer.Views
                         vm => vm.Connections,
                         v => v.Connections.ItemsSource)
                     .DisposeWith(disposables);
+
+                /*this // ViewModel.AddColorNodeCommand -> AddColorNodeButton.Command
+                    .OneWayBind(ViewModel,
+                        vm => vm.AddColorNodeCommand,
+                        v => v.AddColorNodeButton.Command)
+                    .DisposeWith(disposables);*/
             });
         }
 
@@ -54,6 +75,12 @@ namespace ColorMixer.Views
         {
             get { return ViewModel; }
             set { ViewModel = (IMixerViewModel)value; }
+        }
+
+        public bool IsAddingNode
+        {
+            get { return (bool)GetValue(IsAddingNodeProperty); }
+            set { SetValue(IsAddingNodeProperty, value); }
         }
     }
 }

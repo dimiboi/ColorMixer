@@ -2,6 +2,7 @@
 using ReactiveUI;
 using System;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -59,20 +60,70 @@ namespace ColorMixer.Views
                     .BindTo(this, v => v.Connector.ViewModel)
                     .DisposeWith(disposables);
 
-                Thumb // Thumb.DragDelta -> OnThumbDragDelta()
+                this // Make sure the node X stays within limits
+                    .WhenAnyValue(v => v.ViewModel.X,
+                                  v => v.ActualWidth,
+                                  v => v.Container.ActualWidth,
+                                  (a, b, c) => new { X = a, Width = b, ContainerWidth = c })
+                    .Select(e =>
+                    {
+                        if (e.X > 0)
+                        {
+                            if (e.X + e.Width > e.ContainerWidth)
+                            {
+                                return e.ContainerWidth - e.Width;
+                            }
+                            else
+                            {
+                                return e.X;
+                            }
+                        }
+                        else
+                        {
+                            return 0;
+                        }
+                    })
+                    .BindTo(ViewModel, vm => vm.X)
+                    .DisposeWith(disposables);
+
+                this // Make sure the node Y stays within limits
+                    .WhenAnyValue(v => v.ViewModel.Y,
+                                  v => v.ActualHeight,
+                                  v => v.Container.ActualHeight,
+                                  (a, b, c) => new { Y = a, Height = b, ContainerHeight = c })
+                    .Select(e =>
+                    {
+                        if (e.Y > 0)
+                        {
+                            if (e.Y + e.Height > e.ContainerHeight)
+                            {
+                                return e.ContainerHeight - e.Height;
+                            }
+                            else
+                            {
+                                return e.Y;
+                            }
+                        }
+                        else
+                        {
+                            return 0;
+                        }
+                    })
+                    .BindTo(ViewModel, vm => vm.Y)
+                    .DisposeWith(disposables);
+
+                Thumb // Thumb.DragDelta.HorizontalChange -> ViewModel.X
                     .Events()
                     .DragDelta
-                    .Subscribe(e => OnThumbDragDelta(e))
+                    .Select(e => ViewModel.X + e.HorizontalChange)
+                    .BindTo(ViewModel, vm => vm.X)
                     .DisposeWith(disposables);
 
-                this // Container.ActualWidth -> OnContainerWidthChanged()
-                    .WhenAnyValue(v => v.Container.ActualWidth)
-                    .Subscribe(w => OnContainerWidthChanged(w))
-                    .DisposeWith(disposables);
-
-                this // Container.Height -> OnContainerHeightChanged()
-                    .WhenAnyValue(v => v.Container.ActualHeight)
-                    .Subscribe(h => OnContainerHeightChanged(h))
+                Thumb // Thumb.DragDelta.VerticalChange -> ViewModel.Y
+                    .Events()
+                    .DragDelta
+                    .Select(e => ViewModel.Y + e.VerticalChange)
+                    .BindTo(ViewModel, vm => vm.Y)
                     .DisposeWith(disposables);
             });
         }
@@ -93,40 +144,6 @@ namespace ColorMixer.Views
         {
             get { return (FrameworkElement)GetValue(ContainerProperty); }
             set { SetValue(ContainerProperty, value); }
-        }
-
-        private void OnThumbDragDelta(DragDeltaEventArgs e)
-        {
-            var x = ViewModel.X + e.HorizontalChange;
-            var y = ViewModel.Y + e.VerticalChange;
-
-            x = x < 0 ? 0 : x;
-            y = y < 0 ? 0 : y;
-
-            x = x + ActualWidth > Container.ActualWidth
-                ? Container.ActualWidth - ActualWidth
-                : x;
-
-            y = y + ActualHeight > Container.ActualHeight
-                ? Container.ActualHeight - ActualHeight
-                : y;
-
-            ViewModel.X = x;
-            ViewModel.Y = y;
-        }
-
-        private void OnContainerWidthChanged(double containerWidth)
-        {
-            ViewModel.X = ViewModel.X + ActualWidth > containerWidth
-                          ? containerWidth - ActualWidth
-                          : ViewModel.X;
-        }
-
-        private void OnContainerHeightChanged(double containerHeight)
-        {
-            ViewModel.Y = ViewModel.Y + ActualHeight > containerHeight
-                          ? containerHeight - ActualHeight
-                          : ViewModel.Y;
         }
     }
 }

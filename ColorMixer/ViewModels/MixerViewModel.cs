@@ -1,6 +1,8 @@
 ﻿using ReactiveUI;
 using Splat;
+using System.Reactive;
 using System.Reactive.Disposables;
+using System.Windows;
 using System.Windows.Media;
 
 namespace ColorMixer.ViewModels
@@ -9,6 +11,7 @@ namespace ColorMixer.ViewModels
     {
         IReadOnlyReactiveList<INodeViewModel> Nodes { get; }
         IReadOnlyReactiveList<IConnectionViewModel> Connections { get; }
+        ReactiveCommand<Point, Unit> AddColorNodeCommand { get; }
     }
 
     public class MixerViewModel : ReactiveObject, IMixerViewModel
@@ -27,10 +30,21 @@ namespace ColorMixer.ViewModels
 
             this.WhenActivated(disposables =>
             {
-                Disposable.Empty.DisposeWith(disposables);
+                AddColorNodeCommand = ReactiveCommand.Create<Point>(p =>
+                {
+                    nodes.Add(new NodeViewModel
+                    {
+                        X = p.X,
+                        Y = p.Y,
+                        Width = 150,
+                        Height = 150,
+                        Color = Colors.Red
+                    });
+                }
+                ).DisposeWith(disposables);
             });
 
-            var node1 = new NodeViewModel
+            /*var node1 = new NodeViewModel
             {
                 X = 10,
                 Y = 10,
@@ -77,7 +91,7 @@ namespace ColorMixer.ViewModels
             {
                 From = node3,
                 To = node1
-            });
+            });*/
         }
 
         public ViewModelActivator Activator { get; private set; }
@@ -89,5 +103,7 @@ namespace ColorMixer.ViewModels
         public IReadOnlyReactiveList<INodeViewModel> Nodes => nodes;
 
         public IReadOnlyReactiveList<IConnectionViewModel> Connections => connections;
+
+        public ReactiveCommand<Point, Unit> AddColorNodeCommand { get; private set; }
     }
 }

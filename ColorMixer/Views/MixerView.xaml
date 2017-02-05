@@ -33,7 +33,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Button x:Name="AddColorButton"
+            <Button x:Name="AddColorNodeButton"
                     Grid.Row="0"
                     Content="&#xE2B1;"
                     ToolTip="Add Color" />
@@ -41,7 +41,7 @@
         <ItemsControl x:Name="Nodes" Grid.Column="1">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas />
+                    <Canvas Background="Transparent" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemContainerStyle>
