@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
                 <ResourceDictionary Source="/Resources/MenuButtonStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <FontFamily x:Key="Segoe MDL2 Assets">pack://application:,,,/resources/#Segoe MDL2 Assets</FontFamily>
             <Converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
         </ResourceDictionary>
     </Application.Resources>
