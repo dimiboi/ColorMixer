@@ -105,6 +105,18 @@ namespace ColorMixer.Views
                     .Select(e => ViewModel.Y + e.VerticalChange)
                     .BindTo(ViewModel, vm => vm.Y)
                     .DisposeWith(disposables);
+
+                this // ViewModel.DeleteNodeCommand -> DeleteNodeButton.Command
+                    .OneWayBind(ViewModel,
+                        vm => vm.DeleteNodeCommand,
+                        v => v.DeleteNodeButton.Command)
+                    .DisposeWith(disposables);
+
+                this // Clear Container when node is deleted
+                    .WhenAnyValue(v => v.ViewModel.DeleteNodeCommand)
+                    .Select(_ => default(FrameworkElement))
+                    .BindTo(this, v => v.Container)
+                    .DisposeWith(disposables);
             });
         }
 

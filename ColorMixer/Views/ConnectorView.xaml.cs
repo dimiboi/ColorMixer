@@ -5,6 +5,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace ColorMixer.Views
 {
@@ -52,6 +53,7 @@ namespace ColorMixer.Views
                 this // LayoutUpdated -> ConnectionPoint
                     .Events()
                     .LayoutUpdated
+                    .Where(_ => Container != null)
                     .Select(_ => this.TransformToAncestor(Container)
                                      .Transform(new Point(ActualWidth / 2, ActualHeight / 2)))
                     .BindTo(this, v => v.ConnectionPoint)

@@ -32,8 +32,8 @@ namespace ColorMixer
                                       typeof(IScreen));
             // ViewModels
 
-            resolver.Register(() => new MixerViewModel(),
-                                    typeof(IMixerViewModel));
+            resolver.RegisterConstant(new MixerViewModel(),
+                                      typeof(IMixerViewModel));
 
             resolver.Register(() => new NodeViewModel(),
                                     typeof(INodeViewModel));
@@ -42,8 +42,8 @@ namespace ColorMixer
                                     typeof(IConnectorViewModel));
             // Views
 
-            resolver.Register(() => new MixerView(),
-                                    typeof(IViewFor<MixerViewModel>));
+            resolver.RegisterConstant(new MixerView(),
+                                      typeof(IViewFor<MixerViewModel>));
 
             resolver.Register(() => new NodeView(),
                                     typeof(IViewFor<NodeViewModel>));

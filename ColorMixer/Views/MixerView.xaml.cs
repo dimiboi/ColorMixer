@@ -5,6 +5,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace ColorMixer.Views
 {
@@ -53,17 +54,28 @@ namespace ColorMixer.Views
                     .GetNewNodePoint
                     .RegisterHandler(async interation =>
                     {
-                        var sequence = Observable.Merge(
-                            Nodes.Events()
-                                 .MouseLeftButtonDown // left button selects a point
-                                 .Select(e => new Point?(e.GetPosition(Nodes))),
-                            Nodes.Events()
-                                 .MouseRightButtonDown // right button cancels selection
-                                 .Select(e => default(Point?)));
+                        var oldCursor = Nodes.Cursor;
 
-                        var point = await sequence.FirstAsync();
+                        try
+                        {
+                            Nodes.Cursor = Cursors.Cross;
 
-                        interation.SetOutput(point);
+                            var sequence = Observable.Merge(
+                                Nodes.Events()
+                                     .MouseLeftButtonDown // left button selects a point
+                                     .Select(e => new Point?(e.GetPosition(Nodes))),
+                                Nodes.Events()
+                                     .MouseRightButtonDown // right button cancels selection
+                                     .Select(e => default(Point?)));
+
+                            var point = await sequence.FirstAsync();
+
+                            interation.SetOutput(point);
+                        }
+                        finally
+                        {
+                            Nodes.Cursor = oldCursor;
+                        }
                     })
                     .DisposeWith(disposables);
             });
