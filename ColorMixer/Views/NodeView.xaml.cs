@@ -38,6 +38,12 @@ namespace ColorMixer.Views
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
+                this // ViewModel.Title -> TitleTextBlock.Text
+                    .OneWayBind(ViewModel,
+                        vm => vm.Title,
+                        v => v.TitleTextBlock.Text)
+                    .DisposeWith(disposables);
+
                 this // ViewModel.Width <-> Thumb.Width
                     .Bind(ViewModel,
                         vm => vm.Width,

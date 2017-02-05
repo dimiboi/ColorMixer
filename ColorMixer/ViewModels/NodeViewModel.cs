@@ -13,6 +13,7 @@ namespace ColorMixer.ViewModels
         double Height { get; set; }
         Color Color { get; set; }
         IConnectorViewModel Connector { get; }
+        string Title { get; }
     }
 
     public class NodeViewModel : ReactiveObject, INodeViewModel
@@ -23,6 +24,8 @@ namespace ColorMixer.ViewModels
         private double height;
         private Color color;
 
+        private ObservableAsPropertyHelper<string> title;
+
         public NodeViewModel(IConnectorViewModel connector = null)
         {
             Connector = connector ?? Locator.Current.GetService<IConnectorViewModel>();
@@ -31,7 +34,11 @@ namespace ColorMixer.ViewModels
 
             this.WhenActivated(disposables =>
             {
-                Disposable.Empty.DisposeWith(disposables);
+                title = this
+                    .WhenAnyValue(vm => vm.Color,
+                                  c => $"R: {c.R} | G: {c.G} | B {c.B}")
+                    .ToProperty(this, vm => vm.Title)
+                    .DisposeWith(disposables);
             });
         }
 
@@ -66,6 +73,8 @@ namespace ColorMixer.ViewModels
             get { return color; }
             set { this.RaiseAndSetIfChanged(ref color, value); }
         }
+
+        public string Title => title.Value;
 
         public IConnectorViewModel Connector { get; private set; }
     }
