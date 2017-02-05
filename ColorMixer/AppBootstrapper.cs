@@ -2,15 +2,20 @@
 using ColorMixer.Views;
 using ReactiveUI;
 using Splat;
+using System;
+using System.Windows.Input;
 
 namespace ColorMixer
 {
-    public interface IAppBootstrapper : IReactiveObject, IScreen
+    public interface IMainWindowViewModel : IReactiveObject, IScreen
     {
+        IObservable<KeyEventArgs> KeyDown { get; set; }
     }
 
-    public class AppBootstrapper : ReactiveObject, IAppBootstrapper
+    public class AppBootstrapper : ReactiveObject, IMainWindowViewModel
     {
+        private IObservable<KeyEventArgs> keyDown;
+
         public AppBootstrapper(IMutableDependencyResolver resolver = null,
                                RoutingState router = null)
         {
@@ -30,6 +35,9 @@ namespace ColorMixer
 
             resolver.RegisterConstant(this,
                                       typeof(IScreen));
+
+            resolver.RegisterConstant(this,
+                                      typeof(IMainWindowViewModel));
             // ViewModels
 
             resolver.RegisterConstant(new MixerViewModel(),
@@ -56,6 +64,12 @@ namespace ColorMixer
 
             resolver.Register(() => new ConnectionView(),
                                     typeof(IViewFor<ConnectionViewModel>));
+        }
+
+        public IObservable<KeyEventArgs> KeyDown
+        {
+            get { return keyDown; }
+            set { this.RaiseAndSetIfChanged(ref keyDown, value); }
         }
     }
 }

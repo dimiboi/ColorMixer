@@ -6,12 +6,14 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace ColorMixer.ViewModels
 {
     public interface IMixerViewModel : IReactiveObject, IRoutableViewModel, ISupportsActivation
     {
+        IObservable<KeyEventArgs> MainWindowKeyDown { get; }
         IReadOnlyReactiveList<INodeViewModel> Nodes { get; }
         IReadOnlyReactiveList<IConnectionViewModel> Connections { get; }
         ReactiveCommand<Unit, Unit> AddColorNodeCommand { get; }
@@ -24,13 +26,16 @@ namespace ColorMixer.ViewModels
         private readonly ReactiveList<INodeViewModel> nodes;
         private readonly ReactiveList<IConnectionViewModel> connections;
 
-        public MixerViewModel(IScreen screen = null)
+        private readonly IMainWindowViewModel mainWindow;
+
+        public MixerViewModel(IMainWindowViewModel mainWindow = null)
         {
-            HostScreen = screen ?? Locator.Current.GetService<IScreen>();
+            this.mainWindow = mainWindow ?? Locator.Current.GetService<IMainWindowViewModel>();
 
             nodes = new ReactiveList<INodeViewModel>();
             connections = new ReactiveList<IConnectionViewModel>();
 
+            HostScreen = this.mainWindow;
             Activator = new ViewModelActivator();
             GetNewNodePoint = new Interaction<Unit, Point?>();
 
@@ -69,16 +74,13 @@ namespace ColorMixer.ViewModels
             });
         }
 
-        private void WhenActivated(Action<Action<IDisposable>> p)
-        {
-            throw new NotImplementedException();
-        }
-
         public ViewModelActivator Activator { get; private set; }
 
         public IScreen HostScreen { get; private set; }
 
         public string UrlPathSegment => "Mixer";
+
+        public IObservable<KeyEventArgs> MainWindowKeyDown => mainWindow.KeyDown;
 
         public IReadOnlyReactiveList<INodeViewModel> Nodes => nodes;
 

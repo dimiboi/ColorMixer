@@ -64,7 +64,10 @@ namespace ColorMixer.Views
                                      .Select(e => new Point?(e.GetPosition(Nodes))),
                                 Nodes.Events()
                                      .MouseRightButtonDown // right button cancels selection
-                                     .Select(e => default(Point?)));
+                                     .Select(e => default(Point?)),
+                                ViewModel.MainWindowKeyDown
+                                         .Where(e => e.Key == Key.Escape) // Esc cancels selection
+                                         .Select(e => default(Point?)));
 
                             var point = await sequence.FirstAsync(); // whichever comes first
 
