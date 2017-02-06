@@ -10,6 +10,7 @@
                      Height="500"
                      MinWidth="400"
                      MinHeight="250"
+                     SnapsToDevicePixels="True"
                      mc:Ignorable="d">
     <rx:RoutedViewHost Router="{Binding Router}" />
 </MahApps:MetroWindow>
