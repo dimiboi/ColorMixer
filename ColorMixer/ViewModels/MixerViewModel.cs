@@ -16,7 +16,7 @@ namespace ColorMixer.ViewModels
     public interface IMixerViewModel : IReactiveObject, IRoutableViewModel, ISupportsActivation
     {
         IObservable<KeyEventArgs> MainWindowKeyDown { get; }
-        IReadOnlyReactiveList<INodeViewModel> Nodes { get; }
+        IReadOnlyReactiveList<IColorNodeViewModel> Nodes { get; }
         IReadOnlyReactiveList<IConnectionViewModel> Connections { get; }
         ReactiveCommand<Unit, Unit> AddColorNodeCommand { get; }
         Interaction<Unit, Point?> GetNewNodePoint { get; }
@@ -27,7 +27,7 @@ namespace ColorMixer.ViewModels
         private readonly IInteractionService interactions;
         private readonly IMainWindowViewModel mainWindow;
 
-        private readonly ReactiveList<INodeViewModel> nodes;
+        private readonly ReactiveList<IColorNodeViewModel> nodes;
         private readonly ReactiveList<IConnectionViewModel> connections;
 
         public MixerViewModel(IInteractionService interactions = null,
@@ -36,7 +36,7 @@ namespace ColorMixer.ViewModels
             this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
             this.mainWindow = mainWindow ?? Locator.Current.GetService<IMainWindowViewModel>();
 
-            nodes = new ReactiveList<INodeViewModel>();
+            nodes = new ReactiveList<IColorNodeViewModel>();
             connections = new ReactiveList<IConnectionViewModel>();
 
             HostScreen = this.mainWindow;
@@ -63,7 +63,7 @@ namespace ColorMixer.ViewModels
 
                     if (point.HasValue) // a point has been selected
                     {
-                        nodes.Add(new NodeViewModel
+                        nodes.Add(new ColorNodeViewModel
                         {
                             X = point.Value.X,
                             Y = point.Value.Y,
@@ -79,7 +79,7 @@ namespace ColorMixer.ViewModels
 
         private void CreateData()
         {
-            nodes.Add(new NodeViewModel
+            nodes.Add(new ColorNodeViewModel
             {
                 X = 10,
                 Y = 10,
@@ -88,7 +88,7 @@ namespace ColorMixer.ViewModels
                 Color = Colors.SteelBlue
             });
 
-            nodes.Add(new NodeViewModel
+            nodes.Add(new ColorNodeViewModel
             {
                 X = 200,
                 Y = 200,
@@ -112,7 +112,7 @@ namespace ColorMixer.ViewModels
 
         public IObservable<KeyEventArgs> MainWindowKeyDown => mainWindow.KeyDown;
 
-        public IReadOnlyReactiveList<INodeViewModel> Nodes => nodes;
+        public IReadOnlyReactiveList<IColorNodeViewModel> Nodes => nodes;
 
         public IReadOnlyReactiveList<IConnectionViewModel> Connections => connections;
 

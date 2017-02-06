@@ -1,7 +1,6 @@
 ﻿using ColorMixer.ViewModels;
 using ReactiveUI;
 using System;
-using System.Diagnostics;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -10,21 +9,21 @@ using System.Windows.Controls.Primitives;
 
 namespace ColorMixer.Views
 {
-    public partial class NodeView : UserControl, IViewFor<INodeViewModel>
+    public partial class ColorNodeView : UserControl, IViewFor<IColorNodeViewModel>
     {
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel",
-                                        typeof(INodeViewModel),
-                                        typeof(NodeView),
+                                        typeof(IColorNodeViewModel),
+                                        typeof(ColorNodeView),
                                         new PropertyMetadata(null));
 
         public static readonly DependencyProperty ContainerProperty =
             DependencyProperty.Register("Container",
                                         typeof(FrameworkElement),
-                                        typeof(NodeView),
+                                        typeof(ColorNodeView),
                                         new PropertyMetadata(null));
 
-        public NodeView()
+        public ColorNodeView()
         {
             InitializeComponent();
 
@@ -121,16 +120,16 @@ namespace ColorMixer.Views
             });
         }
 
-        public INodeViewModel ViewModel
+        public IColorNodeViewModel ViewModel
         {
-            get { return (INodeViewModel)GetValue(ViewModelProperty); }
+            get { return (IColorNodeViewModel)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
         object IViewFor.ViewModel
         {
             get { return ViewModel; }
-            set { ViewModel = (INodeViewModel)value; }
+            set { ViewModel = (IColorNodeViewModel)value; }
         }
 
         public FrameworkElement Container

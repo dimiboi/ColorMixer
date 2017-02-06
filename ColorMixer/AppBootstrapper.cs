@@ -55,8 +55,8 @@ namespace ColorMixer
             resolver.Register(() => new ConnectorViewModel(),
                                     typeof(IConnectorViewModel));
 
-            resolver.Register(() => new NodeViewModel(),
-                                    typeof(INodeViewModel));
+            resolver.Register(() => new ColorNodeViewModel(),
+                                    typeof(IColorNodeViewModel));
 
             resolver.Register(() => new MixerViewModel(),
                                     typeof(IMixerViewModel));
@@ -68,8 +68,8 @@ namespace ColorMixer
             resolver.Register(() => new ConnectorView(),
                                     typeof(IViewFor<ConnectorViewModel>));
 
-            resolver.Register(() => new NodeView(),
-                                    typeof(IViewFor<NodeViewModel>));
+            resolver.Register(() => new ColorNodeView(),
+                                    typeof(IViewFor<ColorNodeViewModel>));
 
             resolver.Register(() => new MixerView(),
                                     typeof(IViewFor<MixerViewModel>));

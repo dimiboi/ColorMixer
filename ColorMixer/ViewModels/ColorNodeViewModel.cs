@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace ColorMixer.ViewModels
 {
-    public interface INodeViewModel : IReactiveObject, ISupportsActivation
+    public interface IColorNodeViewModel : IReactiveObject, ISupportsActivation
     {
         string Title { get; }
         double X { get; set; }
@@ -22,7 +22,7 @@ namespace ColorMixer.ViewModels
         ReactiveCommand<Unit, Unit> DeleteNodeCommand { get; }
     }
 
-    public class NodeViewModel : ReactiveObject, INodeViewModel
+    public class ColorNodeViewModel : ReactiveObject, IColorNodeViewModel
     {
         private readonly IInteractionService interactions;
         private readonly IConnectorViewModel connector;
@@ -35,7 +35,7 @@ namespace ColorMixer.ViewModels
 
         private ObservableAsPropertyHelper<string> title;
 
-        public NodeViewModel(IInteractionService interactions = null,
+        public ColorNodeViewModel(IInteractionService interactions = null,
                              IConnectorViewModel connector = null)
         {
             this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();

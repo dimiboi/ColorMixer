@@ -6,12 +6,12 @@ namespace ColorMixer.Services
 {
     public interface IInteractionService
     {
-        Interaction<INodeViewModel, Unit> DeleteNode { get; }
+        Interaction<IColorNodeViewModel, Unit> DeleteNode { get; }
     }
 
     public class InteractionService : IInteractionService
     {
-        public Interaction<INodeViewModel, Unit> DeleteNode { get; }
-            = new Interaction<INodeViewModel, Unit>();
+        public Interaction<IColorNodeViewModel, Unit> DeleteNode { get; }
+            = new Interaction<IColorNodeViewModel, Unit>();
     }
 }
