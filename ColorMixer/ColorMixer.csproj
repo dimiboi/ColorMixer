@@ -105,6 +105,7 @@
     <Compile Include="ViewModels\ConnectorViewModel.cs" />
     <Compile Include="ViewModels\MixerViewModel.cs" />
     <Compile Include="ViewModels\ColorNodeViewModel.cs" />
+    <Compile Include="ViewModels\NodeViewModelBase.cs" />
     <Compile Include="Views\ConnectionView.xaml.cs">
       <DependentUpon>ConnectionView.xaml</DependentUpon>
     </Compile>
@@ -117,6 +118,7 @@
     <Compile Include="Views\ColorNodeView.xaml.cs">
       <DependentUpon>ColorNodeView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\NodeViewBase.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
