@@ -80,14 +80,6 @@ namespace ColorMixer.Views
                     .BindTo(ViewModel, vm => vm.X)
                     .DisposeWith(disposables);
 
-                this
-                    .WhenAnyValue(v => v.Container.ActualHeight)
-                    .Subscribe(h =>
-                    {
-                        Debug.WriteLine(h);
-                    })
-                    .DisposeWith(disposables);
-
                 this // Make sure node Y stays within bounds
                     .WhenAnyValue(v => v.ViewModel.Y, // node Y changed
                                   v => v.ActualHeight, // node height changed
@@ -98,11 +90,6 @@ namespace ColorMixer.Views
                                    ? e.ContainerHeight - e.Height
                                    : e.Y
                                  : 0)
-                    .Select(y =>
-                    {
-                        Debug.WriteLine(y);
-                        return y;
-                    })
                     .BindTo(ViewModel, vm => vm.Y)
                     .DisposeWith(disposables);
 
