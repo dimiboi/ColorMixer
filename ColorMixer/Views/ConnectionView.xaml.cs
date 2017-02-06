@@ -32,8 +32,8 @@ namespace ColorMixer.Views
                     .DisposeWith(disposables);
 
                 this // Sets the margin of the arrow box
-                    .WhenAnyValue(v => v.ViewModel.From.Connector.ConnectionPoint,
-                                  v => v.ViewModel.To.Connector.ConnectionPoint,
+                    .WhenAnyValue(v => v.ViewModel.From.ConnectionPoint,
+                                  v => v.ViewModel.To.ConnectionPoint,
                                   (from, to) => new Thickness
                                   {
                                       Left = Math.Min(from.X, to.X),
@@ -45,8 +45,8 @@ namespace ColorMixer.Views
                     .DisposeWith(disposables);
 
                 this // Sets the start corner of the arrow
-                    .WhenAnyValue(v => v.ViewModel.From.Connector.ConnectionPoint,
-                                  v => v.ViewModel.To.Connector.ConnectionPoint,
+                    .WhenAnyValue(v => v.ViewModel.From.ConnectionPoint,
+                                  v => v.ViewModel.To.ConnectionPoint,
                                   (from, to) => from.X > to.X
                                                 ? from.Y > to.Y
                                                   ? CornerType.BottomRight
@@ -58,15 +58,15 @@ namespace ColorMixer.Views
                     .DisposeWith(disposables);
 
                 this // Sets the width of the arrow box
-                    .WhenAnyValue(v => v.ViewModel.From.Connector.ConnectionPoint,
-                                  v => v.ViewModel.To.Connector.ConnectionPoint,
+                    .WhenAnyValue(v => v.ViewModel.From.ConnectionPoint,
+                                  v => v.ViewModel.To.ConnectionPoint,
                                   (from, to) => Math.Abs(to.X - from.X))
                     .BindTo(this, v => v.Arrow.Width)
                     .DisposeWith(disposables);
 
                 this // Sets the height of the arrow box
-                    .WhenAnyValue(v => v.ViewModel.From.Connector.ConnectionPoint,
-                                  v => v.ViewModel.To.Connector.ConnectionPoint,
+                    .WhenAnyValue(v => v.ViewModel.From.ConnectionPoint,
+                                  v => v.ViewModel.To.ConnectionPoint,
                                   (from, to) => Math.Abs(to.Y - from.Y))
                     .BindTo(this, v => v.Arrow.Height)
                     .DisposeWith(disposables);

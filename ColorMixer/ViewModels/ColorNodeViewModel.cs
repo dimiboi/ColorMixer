@@ -8,18 +8,9 @@ using System.Windows.Media;
 
 namespace ColorMixer.ViewModels
 {
-    public interface IColorNodeViewModel : IReactiveObject, ISupportsActivation
+    public interface IColorNodeViewModel : INodeViewModel
     {
-        string Title { get; }
-        double X { get; set; }
-        double Y { get; set; }
-        double Width { get; set; }
-        double Height { get; set; }
-        Color Color { get; set; }
-
         IConnectorViewModel Connector { get; }
-
-        ReactiveCommand<Unit, Unit> DeleteNodeCommand { get; }
     }
 
     public class ColorNodeViewModel : ReactiveObject, IColorNodeViewModel

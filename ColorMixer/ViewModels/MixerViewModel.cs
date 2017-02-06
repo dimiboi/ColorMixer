@@ -16,7 +16,7 @@ namespace ColorMixer.ViewModels
     public interface IMixerViewModel : IReactiveObject, IRoutableViewModel, ISupportsActivation
     {
         IObservable<KeyEventArgs> MainWindowKeyDown { get; }
-        IReadOnlyReactiveList<IColorNodeViewModel> Nodes { get; }
+        IReadOnlyReactiveList<INodeViewModel> Nodes { get; }
         IReadOnlyReactiveList<IConnectionViewModel> Connections { get; }
         ReactiveCommand<Unit, Unit> AddColorNodeCommand { get; }
         Interaction<Unit, Point?> GetNewNodePoint { get; }
@@ -27,7 +27,7 @@ namespace ColorMixer.ViewModels
         private readonly IInteractionService interactions;
         private readonly IMainWindowViewModel mainWindow;
 
-        private readonly ReactiveList<IColorNodeViewModel> nodes;
+        private readonly ReactiveList<INodeViewModel> nodes;
         private readonly ReactiveList<IConnectionViewModel> connections;
 
         public MixerViewModel(IInteractionService interactions = null,
@@ -36,7 +36,7 @@ namespace ColorMixer.ViewModels
             this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
             this.mainWindow = mainWindow ?? Locator.Current.GetService<IMainWindowViewModel>();
 
-            nodes = new ReactiveList<IColorNodeViewModel>();
+            nodes = new ReactiveList<INodeViewModel>();
             connections = new ReactiveList<IConnectionViewModel>();
 
             HostScreen = this.mainWindow;
@@ -74,6 +74,8 @@ namespace ColorMixer.ViewModels
                     }
                 })
                 .DisposeWith(disposables);
+
+                CreateData();
             });
         }
 
@@ -99,8 +101,8 @@ namespace ColorMixer.ViewModels
 
             connections.Add(new ConnectionViewModel
             {
-                From = nodes.First(),
-                To = nodes.Last()
+                From = (nodes.First() as IColorNodeViewModel).Connector,
+                To = (nodes.Last() as IColorNodeViewModel).Connector
             });
         }
 
@@ -112,7 +114,7 @@ namespace ColorMixer.ViewModels
 
         public IObservable<KeyEventArgs> MainWindowKeyDown => mainWindow.KeyDown;
 
-        public IReadOnlyReactiveList<IColorNodeViewModel> Nodes => nodes;
+        public IReadOnlyReactiveList<INodeViewModel> Nodes => nodes;
 
         public IReadOnlyReactiveList<IConnectionViewModel> Connections => connections;
 
