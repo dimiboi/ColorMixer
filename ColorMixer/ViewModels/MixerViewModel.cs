@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using ColorMixer.Services;
+using ReactiveUI;
 using Splat;
 using System;
 using System.Linq;
@@ -17,19 +18,21 @@ namespace ColorMixer.ViewModels
         IReadOnlyReactiveList<INodeViewModel> Nodes { get; }
         IReadOnlyReactiveList<IConnectionViewModel> Connections { get; }
         ReactiveCommand<Unit, Unit> AddColorNodeCommand { get; }
-        ReactiveCommand<INodeViewModel, Unit> DeleteNodeCommand { get; }
         Interaction<Unit, Point?> GetNewNodePoint { get; }
     }
 
     public class MixerViewModel : ReactiveObject, IMixerViewModel
     {
+        private readonly IInteractionService interactions;
+        private readonly IMainWindowViewModel mainWindow;
+
         private readonly ReactiveList<INodeViewModel> nodes;
         private readonly ReactiveList<IConnectionViewModel> connections;
 
-        private readonly IMainWindowViewModel mainWindow;
-
-        public MixerViewModel(IMainWindowViewModel mainWindow = null)
+        public MixerViewModel(IInteractionService interactions = null,
+                              IMainWindowViewModel mainWindow = null)
         {
+            this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
             this.mainWindow = mainWindow ?? Locator.Current.GetService<IMainWindowViewModel>();
 
             nodes = new ReactiveList<INodeViewModel>();
@@ -41,6 +44,22 @@ namespace ColorMixer.ViewModels
 
             this.WhenActivated(disposables =>
             {
+                this.interactions.DeleteNode.RegisterHandler(interaction =>
+                {
+                    var node = interaction.Input;
+
+                    foreach (var connection in connections.Where(c => c.To == node ||
+                                                                      c.From == node)
+                                                          .ToArray())
+                    {
+                        connections.Remove(connection);
+                    }
+
+                    nodes.Remove(node);
+                    interaction.SetOutput(Unit.Default);
+                })
+                .DisposeWith(disposables);
+
                 AddColorNodeCommand = ReactiveCommand.CreateFromTask(async () =>
                 {
                     var point = await GetNewNodePoint.Handle(Unit.Default);
@@ -58,19 +77,33 @@ namespace ColorMixer.ViewModels
                     }
                 })
                 .DisposeWith(disposables);
+            });
+        }
 
-                DeleteNodeCommand = ReactiveCommand.Create<INodeViewModel>(node =>
-                {
-                    foreach (var connection in connections.Where(c => c.To == node ||
-                                                                      c.From == node)
-                                                          .ToArray())
-                    {
-                        connections.Remove(connection);
-                    }
+        private void CreateData()
+        {
+            nodes.Add(new NodeViewModel
+            {
+                X = 10,
+                Y = 10,
+                Width = 150,
+                Height = 150,
+                Color = Colors.SteelBlue
+            });
 
-                    nodes.Remove(node);
-                })
-                .DisposeWith(disposables);
+            nodes.Add(new NodeViewModel
+            {
+                X = 200,
+                Y = 200,
+                Width = 150,
+                Height = 150,
+                Color = Colors.SteelBlue
+            });
+
+            connections.Add(new ConnectionViewModel
+            {
+                From = nodes.First(),
+                To = nodes.Last()
             });
         }
 
@@ -87,8 +120,6 @@ namespace ColorMixer.ViewModels
         public IReadOnlyReactiveList<IConnectionViewModel> Connections => connections;
 
         public ReactiveCommand<Unit, Unit> AddColorNodeCommand { get; private set; }
-
-        public ReactiveCommand<INodeViewModel, Unit> DeleteNodeCommand { get; private set; }
 
         public Interaction<Unit, Point?> GetNewNodePoint { get; private set; }
     }

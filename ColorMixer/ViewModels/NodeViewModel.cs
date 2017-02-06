@@ -1,7 +1,9 @@
-﻿using ReactiveUI;
+﻿using ColorMixer.Services;
+using ReactiveUI;
 using Splat;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows.Media;
 
 namespace ColorMixer.ViewModels
@@ -15,7 +17,6 @@ namespace ColorMixer.ViewModels
         double Height { get; set; }
         Color Color { get; set; }
 
-        IMixerViewModel Mixer { get; }
         IConnectorViewModel Connector { get; }
 
         ReactiveCommand<Unit, Unit> DeleteNodeCommand { get; }
@@ -23,38 +24,36 @@ namespace ColorMixer.ViewModels
 
     public class NodeViewModel : ReactiveObject, INodeViewModel
     {
+        private readonly IInteractionService interactions;
+        private readonly IConnectorViewModel connector;
+
         private double x;
         private double y;
         private double width;
         private double height;
         private Color color;
 
-        private readonly IMixerViewModel mixer;
-        private readonly IConnectorViewModel connector;
-
         private ObservableAsPropertyHelper<string> title;
 
-        public NodeViewModel(IMixerViewModel mixer = null,
+        public NodeViewModel(IInteractionService interactions = null,
                              IConnectorViewModel connector = null)
         {
-            this.mixer = mixer ?? Locator.Current.GetService<IMixerViewModel>();
+            this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
             this.connector = connector ?? Locator.Current.GetService<IConnectorViewModel>();
 
             Activator = new ViewModelActivator();
 
             this.WhenActivated(disposables =>
             {
-                title = this
+                title = this // Color -> Title
                     .WhenAnyValue(vm => vm.Color,
                                   c => $"R: {c.R} / G: {c.G} / B {c.B}")
                     .ToProperty(this, vm => vm.Title)
                     .DisposeWith(disposables);
 
-                DeleteNodeCommand = ReactiveCommand.Create(() =>
+                DeleteNodeCommand = ReactiveCommand.CreateFromTask(async () =>
                 {
-                    Mixer
-                        .DeleteNodeCommand
-                        .Execute(this);
+                    await this.interactions.DeleteNode.Handle(this);
                 })
                 .DisposeWith(disposables);
             });
@@ -93,8 +92,6 @@ namespace ColorMixer.ViewModels
         }
 
         public string Title => title.Value;
-
-        public IMixerViewModel Mixer => mixer;
 
         public IConnectorViewModel Connector => connector;
 

@@ -1,4 +1,5 @@
-﻿using ColorMixer.ViewModels;
+﻿using ColorMixer.Services;
+using ColorMixer.ViewModels;
 using ColorMixer.Views;
 using ReactiveUI;
 using Splat;
@@ -35,6 +36,10 @@ namespace ColorMixer
 
         private void RegisterDependencies(IMutableDependencyResolver resolver)
         {
+            // Services
+
+            resolver.RegisterLazySingleton(() => new InteractionService(),
+                                                 typeof(IInteractionService));
             // Screen
 
             resolver.RegisterConstant(this,
