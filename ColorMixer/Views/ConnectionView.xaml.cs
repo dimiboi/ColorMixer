@@ -44,6 +44,19 @@ namespace ColorMixer.Views
                     .BindTo(this, v => v.Arrow.Margin)
                     .DisposeWith(disposables);
 
+                this // Sets the bend amount of the arrow
+                    .WhenAnyValue(v => v.ViewModel.From.ConnectionPoint,
+                                  v => v.ViewModel.To.ConnectionPoint,
+                                  (from, to) => from.X > to.X
+                                                ? from.Y > to.Y
+                                                  ? -0.5
+                                                  : 0.5
+                                                : from.Y > to.Y
+                                                  ? 0.5
+                                                  : -0.5)
+                    .BindTo(this, v => v.Arrow.BendAmount)
+                    .DisposeWith(disposables);
+
                 this // Sets the start corner of the arrow
                     .WhenAnyValue(v => v.ViewModel.From.ConnectionPoint,
                                   v => v.ViewModel.To.ConnectionPoint,
