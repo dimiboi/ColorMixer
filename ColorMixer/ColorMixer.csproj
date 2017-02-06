@@ -99,6 +99,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\ColorToBrushConverter.cs" />
+    <Compile Include="Extensions\ReactiveListExtensions.cs" />
     <Compile Include="Services\InteractionService.cs" />
     <Compile Include="ViewModels\ConnectionViewModel.cs" />
     <Compile Include="ViewModels\ConnectorViewModel.cs" />

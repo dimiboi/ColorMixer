@@ -1,4 +1,5 @@
-﻿using ColorMixer.Services;
+﻿using ColorMixer.Extensions;
+using ColorMixer.Services;
 using ReactiveUI;
 using Splat;
 using System;
@@ -48,14 +49,10 @@ namespace ColorMixer.ViewModels
                 {
                     var node = interaction.Input;
 
-                    foreach (var connection in connections.Where(c => c.To == node ||
-                                                                      c.From == node)
-                                                          .ToArray())
-                    {
-                        connections.Remove(connection);
-                    }
-
+                    connections.RemoveRange(connections.Where(c => c.To == node ||
+                                                                   c.From == node));
                     nodes.Remove(node);
+
                     interaction.SetOutput(Unit.Default);
                 })
                 .DisposeWith(disposables);
