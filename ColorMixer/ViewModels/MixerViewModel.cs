@@ -53,7 +53,7 @@ namespace ColorMixer.ViewModels
                             Y = point.Value.Y,
                             Width = 150,
                             Height = 150,
-                            Color = Colors.Red
+                            Color = Colors.SteelBlue
                         });
                     }
                 })
