@@ -12,15 +12,19 @@ namespace ColorMixer
         IObservable<KeyEventArgs> KeyDown { get; set; }
     }
 
-    public class MainWindowViewModel : ReactiveObject, IMainWindowViewModel
+    public class AppBootstrapper : ReactiveObject, IMainWindowViewModel
     {
         private IObservable<KeyEventArgs> keyDown;
 
-        public MainWindowViewModel(IMutableDependencyResolver resolver = null,
-                                   RoutingState router = null)
+        public AppBootstrapper() : this(null, null)
         {
-            Router = router ?? new RoutingState();
+        }
+
+        public AppBootstrapper(IMutableDependencyResolver resolver = null,
+                               RoutingState router = null)
+        {
             resolver = resolver ?? Locator.CurrentMutable;
+            Router = router ?? new RoutingState();
 
             RegisterDependencies(resolver);
 
@@ -40,30 +44,30 @@ namespace ColorMixer
                                       typeof(IMainWindowViewModel));
             // ViewModels
 
-            resolver.RegisterConstant(new MixerViewModel(),
-                                      typeof(IMixerViewModel));
-
-            resolver.Register(() => new NodeViewModel(),
-                                    typeof(INodeViewModel));
+            resolver.Register(() => new ConnectionViewModel(),
+                                    typeof(IConnectionViewModel));
 
             resolver.Register(() => new ConnectorViewModel(),
                                     typeof(IConnectorViewModel));
 
-            resolver.Register(() => new ConnectionViewModel(),
-                                    typeof(IConnectionViewModel));
+            resolver.Register(() => new NodeViewModel(),
+                                    typeof(INodeViewModel));
+
+            resolver.Register(() => new MixerViewModel(),
+                                    typeof(IMixerViewModel));
             // Views
 
-            resolver.RegisterConstant(new MixerView(),
-                                      typeof(IViewFor<MixerViewModel>));
-
-            resolver.Register(() => new NodeView(),
-                                    typeof(IViewFor<NodeViewModel>));
+            resolver.Register(() => new ConnectionView(),
+                                    typeof(IViewFor<ConnectionViewModel>));
 
             resolver.Register(() => new ConnectorView(),
                                     typeof(IViewFor<ConnectorViewModel>));
 
-            resolver.Register(() => new ConnectionView(),
-                                    typeof(IViewFor<ConnectionViewModel>));
+            resolver.Register(() => new NodeView(),
+                                    typeof(IViewFor<NodeViewModel>));
+
+            resolver.Register(() => new MixerView(),
+                                    typeof(IViewFor<MixerViewModel>));
         }
 
         public IObservable<KeyEventArgs> KeyDown
