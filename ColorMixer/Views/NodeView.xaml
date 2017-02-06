@@ -18,12 +18,6 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <Views:ConnectorView x:Name="Connector"
-                             Grid.Row="1"
-                             Grid.Column="2"
-                             Margin="-5,0,0,0"
-                             HorizontalAlignment="Center"
-                             VerticalAlignment="Center" />
         <TextBlock x:Name="TitleTextBlock"
                    Grid.Row="0"
                    Grid.Column="1"
@@ -36,11 +30,10 @@
                Grid.Column="1">
             <Thumb.Template>
                 <ControlTemplate>
-                    <Rectangle Cursor="" Fill="{Binding Color, Converter={StaticResource ColorToBrushConverter}}" />
+                    <Rectangle Fill="{Binding Color, Converter={StaticResource ColorToBrushConverter}}" StrokeThickness="0" />
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>
-
         <StackPanel Grid.Row="2"
                     Grid.Column="1"
                     HorizontalAlignment="Right"
@@ -53,9 +46,6 @@
                     <Setter Property="FontSize" Value="15" />
                 </Style>
             </StackPanel.Resources>
-            <Button x:Name="LinkNodeButton"
-                    Content="&#xE71B;"
-                    ToolTip="Link Node" />
             <Button x:Name="EditNodeButton"
                     Content="&#xE70F;"
                     ToolTip="Edit Node" />
@@ -63,5 +53,13 @@
                     Content="&#xE74D;"
                     ToolTip="Delete Node" />
         </StackPanel>
+        <Views:ConnectorView x:Name="Connector"
+                             Grid.Row="1"
+                             Grid.Column="2"
+                             Width="25"
+                             Height="25"
+                             Margin="-12.5,0,0,0"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center" />
     </Grid>
 </UserControl>
