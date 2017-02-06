@@ -60,13 +60,13 @@ namespace ColorMixer.Views
 
                             var sequence = Observable.Merge(
                                 Nodes.Events()
-                                     .MouseLeftButtonDown // left button selects a point
+                                     .MouseLeftButtonDown // left button picks a point
                                      .Select(e => new Point?(e.GetPosition(Nodes))),
                                 Nodes.Events()
-                                     .MouseRightButtonDown // right button cancels selection
+                                     .MouseRightButtonDown // right button cancels addition
                                      .Select(e => default(Point?)),
                                 ViewModel.MainWindowKeyDown
-                                         .Where(e => e.Key == Key.Escape) // Esc cancels selection
+                                         .Where(e => e.Key == Key.Escape) // Esc cancels addition
                                          .Select(e => default(Point?)));
 
                             var point = await sequence.FirstAsync(); // whichever comes first

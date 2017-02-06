@@ -37,7 +37,7 @@ namespace ColorMixer
                     .DisposeWith(disposables);
             });
 
-            ViewModel = new AppBootstrapper();
+            ViewModel = new MainWindowViewModel();
         }
 
         public IMainWindowViewModel ViewModel

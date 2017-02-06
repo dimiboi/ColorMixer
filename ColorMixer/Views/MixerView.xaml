@@ -16,27 +16,23 @@
             <ColumnDefinition Width="48" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Background="Black">
-            <Grid.Resources>
+        <StackPanel Grid.Column="0" Background="Black">
+            <StackPanel.Resources>
                 <Style BasedOn="{StaticResource MenuButtonStyle}" TargetType="Button">
                     <Setter Property="Width" Value="48" />
                     <Setter Property="Height" Value="48" />
                     <Setter Property="FontFamily" Value="{StaticResource Segoe MDL2 Assets}" />
                     <Setter Property="FontSize" Value="20" />
                 </Style>
-            </Grid.Resources>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+            </StackPanel.Resources>
             <Button x:Name="AddColorNodeButton"
-                    Grid.Row="0"
                     Content="&#xE2B1;"
                     ToolTip="Add Color" />
-        </Grid>
+            <Button x:Name="AddOperationNodeButton"
+                    Content="&#xE94D;"
+                    ToolTip="Add Operation" />
+            <Button Content="&#xEA4E;" ToolTip="Add Result" />
+        </StackPanel>
         <ItemsControl x:Name="Nodes" Grid.Column="1">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

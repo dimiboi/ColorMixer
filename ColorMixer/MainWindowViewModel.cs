@@ -12,12 +12,12 @@ namespace ColorMixer
         IObservable<KeyEventArgs> KeyDown { get; set; }
     }
 
-    public class AppBootstrapper : ReactiveObject, IMainWindowViewModel
+    public class MainWindowViewModel : ReactiveObject, IMainWindowViewModel
     {
         private IObservable<KeyEventArgs> keyDown;
 
-        public AppBootstrapper(IMutableDependencyResolver resolver = null,
-                               RoutingState router = null)
+        public MainWindowViewModel(IMutableDependencyResolver resolver = null,
+                                   RoutingState router = null)
         {
             Router = router ?? new RoutingState();
             resolver = resolver ?? Locator.CurrentMutable;

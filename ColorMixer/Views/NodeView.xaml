@@ -13,24 +13,36 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Views:ConnectorView x:Name="Connector"
+                             Grid.Row="1"
+                             Grid.Column="2"
+                             Margin="-5,0,0,0"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center" />
         <TextBlock x:Name="TitleTextBlock"
                    Grid.Row="0"
+                   Grid.Column="1"
                    Padding="0,0,0,2.5"
                    HorizontalAlignment="Left"
                    FontFamily="Segoe UI Light"
                    FontSize="12" />
-        <Thumb Name="Thumb" Grid.Row="1">
+        <Thumb Name="Thumb"
+               Grid.Row="1"
+               Grid.Column="1">
             <Thumb.Template>
                 <ControlTemplate>
                     <Rectangle Cursor="" Fill="{Binding Color, Converter={StaticResource ColorToBrushConverter}}" />
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>
-        <Views:ConnectorView x:Name="Connector"
-                             Grid.Row="1"
-                             HorizontalAlignment="Center"
-                             VerticalAlignment="Center" />
+
         <StackPanel Grid.Row="2"
+                    Grid.Column="1"
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
             <StackPanel.Resources>
