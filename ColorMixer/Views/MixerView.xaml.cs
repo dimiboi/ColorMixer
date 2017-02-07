@@ -50,6 +50,12 @@ namespace ColorMixer.Views
                         v => v.AddColorNodeButton.Command)
                     .DisposeWith(disposables);
 
+                this // ViewModel.AddResultNodeCommand -> AddResultNodeButton.Command
+                    .OneWayBind(ViewModel,
+                        vm => vm.AddResultNodeCommand,
+                        v => v.AddResultNodeButton.Command)
+                    .DisposeWith(disposables);
+
                 ViewModel // Handle new node point request by ViewModel
                     .GetNewNodePoint
                     .RegisterHandler(async interaction =>

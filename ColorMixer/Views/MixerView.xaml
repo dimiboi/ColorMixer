@@ -32,28 +32,41 @@
             <Button x:Name="AddOperationNodeButton"
                     Content="&#xE950;"
                     ToolTip="Add Operation" />
-            <Button Content="&#xE129;" ToolTip="Add Result" />
+            <Button x:Name="AddResultNodeButton"
+                    Content="&#xE129;"
+                    ToolTip="Add Result" />
         </StackPanel>
-        <ItemsControl x:Name="Nodes" Grid.Column="1">
-            <ItemsControl.ItemsPanel>
+        <ListBox x:Name="Nodes" Grid.Column="1">
+            <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas Background="Transparent" />
                 </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemContainerStyle>
-                <Style>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
                     <Setter Property="Canvas.Left" Value="{Binding X}" />
                     <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <!--  This is kind of ugly but does the job of wrapping each node  -->
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <Controls:NodeControl Container="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}" ViewModel="{Binding}">
+                                    <ContentPresenter />
+                                </Controls:NodeControl>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
-            </ItemsControl.ItemContainerStyle>
-            <ItemsControl.ItemTemplate>
+            </ListBox.ItemContainerStyle>
+            <ListBox.Resources>
                 <DataTemplate DataType="{x:Type ViewModels:ColorNodeViewModel}">
-                    <Controls:NodeControl Container="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}" ViewModel="{Binding}">
-                        <Views:ColorNodeView ViewModel="{Binding}" />
-                    </Controls:NodeControl>
+                    <Views:ColorNodeView ViewModel="{Binding}" />
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                <DataTemplate DataType="{x:Type ViewModels:ResultNodeViewModel}">
+                    <Views:ResultNodeView ViewModel="{Binding}" />
+                </DataTemplate>
+            </ListBox.Resources>
+        </ListBox>
         <ItemsControl x:Name="Connections" Grid.Column="1">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

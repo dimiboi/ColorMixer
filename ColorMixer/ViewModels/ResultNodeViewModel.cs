@@ -14,7 +14,7 @@ namespace ColorMixer.ViewModels
         IConnectorViewModel Connector { get; }
     }
 
-    public class ResultNodeViewModel : ReactiveObject, IColorNodeViewModel
+    public class ResultNodeViewModel : ReactiveObject, IResultNodeViewModel
     {
         private readonly IInteractionService interactions;
         private readonly IConnectorViewModel connector;

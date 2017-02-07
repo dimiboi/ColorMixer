@@ -1,4 +1,4 @@
-﻿using ColorMixer.ViewModels;
+﻿using ColorMixer.Model;
 using ReactiveUI;
 using System.Reactive;
 
@@ -6,12 +6,11 @@ namespace ColorMixer.Services
 {
     public interface IInteractionService
     {
-        Interaction<IColorNodeViewModel, Unit> DeleteNode { get; }
+        Interaction<INode, Unit> DeleteNode { get; }
     }
 
     public class InteractionService : IInteractionService
     {
-        public Interaction<IColorNodeViewModel, Unit> DeleteNode { get; }
-            = new Interaction<IColorNodeViewModel, Unit>();
+        public Interaction<INode, Unit> DeleteNode { get; } = new Interaction<INode, Unit>();
     }
 }

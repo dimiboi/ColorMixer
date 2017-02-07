@@ -1,5 +1,4 @@
-﻿using ColorMixer.Extensions;
-using ColorMixer.Model;
+﻿using ColorMixer.Model;
 using ColorMixer.Services;
 using ReactiveUI;
 using Splat;
@@ -20,6 +19,7 @@ namespace ColorMixer.ViewModels
         IReadOnlyReactiveList<INode> Nodes { get; }
         IReadOnlyReactiveList<IConnectionViewModel> Connections { get; }
         ReactiveCommand<Unit, Unit> AddColorNodeCommand { get; }
+        ReactiveCommand<Unit, Unit> AddResultNodeCommand { get; }
         Interaction<Unit, Point?> GetNewNodePoint { get; }
     }
 
@@ -50,8 +50,8 @@ namespace ColorMixer.ViewModels
                 {
                     var node = interaction.Input;
 
-                    connections.RemoveRange(connections.Where(c => c.To == node.Connector ||
-                                                                   c.From == node.Connector));
+                    /*connections.RemoveRange(connections.Where(c => c.To == node.Connector ||
+                                                                   c.From == node.Connector));*/
                     nodes.Remove(node);
 
                     interaction.SetOutput(Unit.Default);
@@ -62,17 +62,39 @@ namespace ColorMixer.ViewModels
                 {
                     var point = await GetNewNodePoint.Handle(Unit.Default);
 
-                    if (point.HasValue) // a point has been selected
+                    if (!point.HasValue) // user cancelled point selection
                     {
-                        nodes.Add(new ColorNodeViewModel
-                        {
-                            X = point.Value.X,
-                            Y = point.Value.Y,
-                            Width = 150,
-                            Height = 150,
-                            Color = Colors.SteelBlue
-                        });
+                        return;
                     }
+
+                    nodes.Add(new ColorNodeViewModel
+                    {
+                        X = point.Value.X,
+                        Y = point.Value.Y,
+                        Width = 150,
+                        Height = 150,
+                        Color = Colors.SteelBlue
+                    });
+                })
+                .DisposeWith(disposables);
+
+                AddResultNodeCommand = ReactiveCommand.CreateFromTask(async () =>
+                {
+                    var point = await GetNewNodePoint.Handle(Unit.Default);
+
+                    if (!point.HasValue) // user cancelled point selection
+                    {
+                        return;
+                    }
+
+                    nodes.Add(new ResultNodeViewModel
+                    {
+                        X = point.Value.X,
+                        Y = point.Value.Y,
+                        Width = 150,
+                        Height = 150,
+                        Color = Colors.White
+                    });
                 })
                 .DisposeWith(disposables);
             });
@@ -118,6 +140,8 @@ namespace ColorMixer.ViewModels
         public IReadOnlyReactiveList<IConnectionViewModel> Connections => connections;
 
         public ReactiveCommand<Unit, Unit> AddColorNodeCommand { get; private set; }
+
+        public ReactiveCommand<Unit, Unit> AddResultNodeCommand { get; private set; }
 
         public Interaction<Unit, Point?> GetNewNodePoint { get; private set; }
     }
