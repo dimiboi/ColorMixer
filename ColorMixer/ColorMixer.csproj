@@ -98,6 +98,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\NodeControl.cs" />
     <Compile Include="Converters\ColorToBrushConverter.cs" />
     <Compile Include="Extensions\ReactiveListExtensions.cs" />
     <Compile Include="Services\InteractionService.cs" />

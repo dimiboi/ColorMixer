@@ -1,6 +1,7 @@
 ﻿<UserControl x:Class="ColorMixer.Views.MixerView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Controls="clr-namespace:ColorMixer.Controls"
              xmlns:ViewModels="clr-namespace:ColorMixer.ViewModels"
              xmlns:Views="clr-namespace:ColorMixer.Views"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -29,9 +30,9 @@
                     Content="&#xE2B1;"
                     ToolTip="Add Color" />
             <Button x:Name="AddOperationNodeButton"
-                    Content="&#xE94D;"
+                    Content="&#xE950;"
                     ToolTip="Add Operation" />
-            <Button Content="&#xEA4E;" ToolTip="Add Result" />
+            <Button Content="&#xE129;" ToolTip="Add Result" />
         </StackPanel>
         <ItemsControl x:Name="Nodes" Grid.Column="1">
             <ItemsControl.ItemsPanel>
@@ -47,7 +48,9 @@
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type ViewModels:ColorNodeViewModel}">
-                    <Views:ColorNodeView Container="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}" ViewModel="{Binding}" />
+                    <Controls:NodeControl Container="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}" ViewModel="{Binding}">
+                        <Views:ColorNodeView Container="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}" ViewModel="{Binding}" />
+                    </Controls:NodeControl>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

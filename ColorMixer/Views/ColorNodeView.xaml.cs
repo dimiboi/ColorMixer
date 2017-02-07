@@ -66,32 +66,6 @@ namespace ColorMixer.Views
                     .BindTo(this, v => v.Connector.ViewModel)
                     .DisposeWith(disposables);
 
-                this // Make sure node X stays within bounds
-                    .WhenAnyValue(v => v.ViewModel.X, // node X changed
-                                  v => v.ActualWidth, // node width changed
-                                  v => v.Container.ActualWidth, // container resized
-                                  (a, b, c) => new { X = a, Width = b, ContainerWidth = c })
-                    .Select(e => e.X > 0
-                                 ? e.X + e.Width > e.ContainerWidth
-                                   ? e.ContainerWidth - e.Width
-                                   : e.X
-                                 : 0)
-                    .BindTo(ViewModel, vm => vm.X)
-                    .DisposeWith(disposables);
-
-                this // Make sure node Y stays within bounds
-                    .WhenAnyValue(v => v.ViewModel.Y, // node Y changed
-                                  v => v.ActualHeight, // node height changed
-                                  v => v.Container.ActualHeight, // container resized
-                                  (a, b, c) => new { Y = a, Height = b, ContainerHeight = c })
-                    .Select(e => e.Y > 0
-                                 ? e.Y + e.Height > e.ContainerHeight
-                                   ? e.ContainerHeight - e.Height
-                                   : e.Y
-                                 : 0)
-                    .BindTo(ViewModel, vm => vm.Y)
-                    .DisposeWith(disposables);
-
                 Thumb // Thumb.DragDelta.HorizontalChange -> ViewModel.X
                     .Events()
                     .DragDelta

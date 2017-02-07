@@ -4,10 +4,27 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ColorMixer.Views"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             d:DesignHeight="300"
-             d:DesignWidth="300"
+             d:DesignHeight="100"
+             d:DesignWidth="100"
              mc:Ignorable="d">
-    <Ellipse Fill="{DynamicResource WhiteBrush}"
-             Stroke="{DynamicResource BlackBrush}"
-             StrokeThickness="2" />
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Ellipse Grid.RowSpan="3"
+                 Grid.ColumnSpan="3"
+                 Fill="{DynamicResource WhiteBrush}"
+                 Stroke="{DynamicResource BlackBrush}"
+                 StrokeThickness="2" />
+        <Ellipse Grid.Row="1"
+                 Grid.Column="1"
+                 Fill="{DynamicResource BlackBrush}" />
+    </Grid>
 </UserControl>

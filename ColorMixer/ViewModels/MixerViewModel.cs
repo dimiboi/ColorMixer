@@ -49,8 +49,8 @@ namespace ColorMixer.ViewModels
                 {
                     var node = interaction.Input;
 
-                    connections.RemoveRange(connections.Where(c => c.To == node ||
-                                                                   c.From == node));
+                    connections.RemoveRange(connections.Where(c => c.To == node.Connector ||
+                                                                   c.From == node.Connector));
                     nodes.Remove(node);
 
                     interaction.SetOutput(Unit.Default);
