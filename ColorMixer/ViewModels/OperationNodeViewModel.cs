@@ -21,16 +21,13 @@ namespace ColorMixer.ViewModels
 
         private OperationType operation;
 
-        public OperationNodeViewModel(IDependencyResolver resolver = null,
-                                      IConnectorViewModel inputA = null,
+        public OperationNodeViewModel(IConnectorViewModel inputA = null,
                                       IConnectorViewModel inputB = null,
                                       IConnectorViewModel output = null)
         {
-            resolver = resolver ?? Locator.Current;
-
-            this.inputA = inputA ?? resolver.GetService<IConnectorViewModel>();
-            this.inputB = inputB ?? resolver.GetService<IConnectorViewModel>();
-            this.output = output ?? resolver.GetService<IConnectorViewModel>();
+            this.inputA = inputA ?? Locator.Current.GetService<IConnectorViewModel>();
+            this.inputB = inputB ?? Locator.Current.GetService<IConnectorViewModel>();
+            this.output = output ?? Locator.Current.GetService<IConnectorViewModel>();
 
             this.WhenActivated(disposables =>
             {

@@ -14,12 +14,9 @@ namespace ColorMixer.ViewModels
     {
         private readonly IConnectorViewModel connector;
 
-        public ResultNodeViewModel(IDependencyResolver resolver = null,
-                                   IConnectorViewModel connector = null)
+        public ResultNodeViewModel(IConnectorViewModel connector = null)
         {
-            resolver = resolver ?? Locator.Current;
-
-            this.connector = connector ?? resolver.GetService<IConnectorViewModel>();
+            this.connector = connector ?? Locator.Current.GetService<IConnectorViewModel>();
 
             this.WhenActivated(disposables =>
             {

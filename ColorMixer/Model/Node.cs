@@ -28,11 +28,9 @@ namespace ColorMixer.Model
         private double height = 150;
         private Color color = Colors.Black;
 
-        public Node(IDependencyResolver resolver = null,
-                    IInteractionService interactions = null)
+        public Node(IInteractionService interactions = null)
         {
-            resolver = resolver ?? Locator.Current;
-            interactions = interactions ?? resolver.GetService<IInteractionService>();
+            interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
 
             this.WhenActivated(disposables =>
             {

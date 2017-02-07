@@ -32,14 +32,11 @@ namespace ColorMixer.ViewModels
         private readonly ReactiveList<INode> nodes;
         private readonly ReactiveList<IConnectionViewModel> connections;
 
-        public MixerViewModel(IDependencyResolver resolver = null,
-                              IInteractionService interactions = null,
+        public MixerViewModel(IInteractionService interactions = null,
                               IMainWindowViewModel mainWindow = null)
         {
-            resolver = resolver ?? Locator.Current;
-
-            this.interactions = interactions ?? resolver.GetService<IInteractionService>();
-            this.mainWindow = mainWindow ?? resolver.GetService<IMainWindowViewModel>();
+            this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
+            this.mainWindow = mainWindow ?? Locator.Current.GetService<IMainWindowViewModel>();
 
             HostScreen = this.mainWindow;
 
@@ -69,7 +66,7 @@ namespace ColorMixer.ViewModels
                         return;
                     }
 
-                    var node = resolver.GetService<IColorNodeViewModel>();
+                    var node = Locator.Current.GetService<IColorNodeViewModel>();
 
                     node.X = point.Value.X;
                     node.Y = point.Value.Y;
@@ -87,7 +84,7 @@ namespace ColorMixer.ViewModels
                         return;
                     }
 
-                    var node = resolver.GetService<IResultNodeViewModel>();
+                    var node = Locator.Current.GetService<IResultNodeViewModel>();
 
                     node.X = point.Value.X;
                     node.Y = point.Value.Y;
@@ -105,7 +102,7 @@ namespace ColorMixer.ViewModels
                         return;
                     }
 
-                    var node = resolver.GetService<IOperationNodeViewModel>();
+                    var node = Locator.Current.GetService<IOperationNodeViewModel>();
 
                     node.X = point.Value.X;
                     node.Y = point.Value.Y;
