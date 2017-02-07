@@ -41,12 +41,10 @@ namespace ColorMixer.ViewModels
             this.interactions = interactions ?? resolver.GetService<IInteractionService>();
             this.mainWindow = mainWindow ?? resolver.GetService<IMainWindowViewModel>();
 
+            HostScreen = this.mainWindow;
+
             nodes = new ReactiveList<INode>();
             connections = new ReactiveList<IConnectionViewModel>();
-
-            HostScreen = this.mainWindow;
-            Activator = new ViewModelActivator();
-            GetNewNodePoint = new Interaction<Unit, Point?>();
 
             this.WhenActivated(disposables =>
             {
@@ -145,7 +143,7 @@ namespace ColorMixer.ViewModels
             });
         }
 
-        public ViewModelActivator Activator { get; private set; }
+        public ViewModelActivator Activator { get; } = new ViewModelActivator();
 
         public IScreen HostScreen { get; private set; }
 
@@ -163,6 +161,7 @@ namespace ColorMixer.ViewModels
 
         public ReactiveCommand<Unit, Unit> AddResultNodeCommand { get; private set; }
 
-        public Interaction<Unit, Point?> GetNewNodePoint { get; private set; }
+        public Interaction<Unit, Point?> GetNewNodePoint { get; }
+            = new Interaction<Unit, Point?>();
     }
 }
