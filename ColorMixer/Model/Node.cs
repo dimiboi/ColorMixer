@@ -24,8 +24,8 @@ namespace ColorMixer.Model
         private ObservableAsPropertyHelper<string> title;
         private double x;
         private double y;
-        private double width;
-        private double height;
+        private double width = 150;
+        private double height = 150;
         private Color color = Colors.Black;
 
         public Node(IDependencyResolver resolver = null,

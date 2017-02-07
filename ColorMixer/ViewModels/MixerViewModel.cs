@@ -32,11 +32,14 @@ namespace ColorMixer.ViewModels
         private readonly ReactiveList<INode> nodes;
         private readonly ReactiveList<IConnectionViewModel> connections;
 
-        public MixerViewModel(IInteractionService interactions = null,
+        public MixerViewModel(IDependencyResolver resolver = null,
+                              IInteractionService interactions = null,
                               IMainWindowViewModel mainWindow = null)
         {
-            this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
-            this.mainWindow = mainWindow ?? Locator.Current.GetService<IMainWindowViewModel>();
+            resolver = resolver ?? Locator.Current;
+
+            this.interactions = interactions ?? resolver.GetService<IInteractionService>();
+            this.mainWindow = mainWindow ?? resolver.GetService<IMainWindowViewModel>();
 
             nodes = new ReactiveList<INode>();
             connections = new ReactiveList<IConnectionViewModel>();
@@ -68,14 +71,12 @@ namespace ColorMixer.ViewModels
                         return;
                     }
 
-                    nodes.Add(new ColorNodeViewModel
-                    {
-                        X = point.Value.X,
-                        Y = point.Value.Y,
-                        Width = 150,
-                        Height = 150,
-                        Color = Colors.SteelBlue
-                    });
+                    var node = resolver.GetService<IColorNodeViewModel>();
+
+                    node.X = point.Value.X;
+                    node.Y = point.Value.Y;
+
+                    nodes.Add(node);
                 })
                 .DisposeWith(disposables);
 
@@ -88,13 +89,12 @@ namespace ColorMixer.ViewModels
                         return;
                     }
 
-                    nodes.Add(new ResultNodeViewModel
-                    {
-                        X = point.Value.X,
-                        Y = point.Value.Y,
-                        Width = 150,
-                        Height = 150
-                    });
+                    var node = resolver.GetService<IResultNodeViewModel>();
+
+                    node.X = point.Value.X;
+                    node.Y = point.Value.Y;
+
+                    nodes.Add(node);
                 })
                 .DisposeWith(disposables);
 
@@ -107,13 +107,12 @@ namespace ColorMixer.ViewModels
                         return;
                     }
 
-                    nodes.Add(new OperationNodeViewModel
-                    {
-                        X = point.Value.X,
-                        Y = point.Value.Y,
-                        Width = 150,
-                        Height = 150
-                    });
+                    var node = resolver.GetService<IOperationNodeViewModel>();
+
+                    node.X = point.Value.X;
+                    node.Y = point.Value.Y;
+
+                    nodes.Add(node);
                 })
                 .DisposeWith(disposables);
             });
