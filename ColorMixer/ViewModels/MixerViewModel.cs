@@ -1,4 +1,5 @@
 ﻿using ColorMixer.Extensions;
+using ColorMixer.Model;
 using ColorMixer.Services;
 using ReactiveUI;
 using Splat;
@@ -16,7 +17,7 @@ namespace ColorMixer.ViewModels
     public interface IMixerViewModel : IReactiveObject, IRoutableViewModel, ISupportsActivation
     {
         IObservable<KeyEventArgs> MainWindowKeyDown { get; }
-        IReadOnlyReactiveList<INodeViewModel> Nodes { get; }
+        IReadOnlyReactiveList<INode> Nodes { get; }
         IReadOnlyReactiveList<IConnectionViewModel> Connections { get; }
         ReactiveCommand<Unit, Unit> AddColorNodeCommand { get; }
         Interaction<Unit, Point?> GetNewNodePoint { get; }
@@ -27,7 +28,7 @@ namespace ColorMixer.ViewModels
         private readonly IInteractionService interactions;
         private readonly IMainWindowViewModel mainWindow;
 
-        private readonly ReactiveList<INodeViewModel> nodes;
+        private readonly ReactiveList<INode> nodes;
         private readonly ReactiveList<IConnectionViewModel> connections;
 
         public MixerViewModel(IInteractionService interactions = null,
@@ -36,7 +37,7 @@ namespace ColorMixer.ViewModels
             this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
             this.mainWindow = mainWindow ?? Locator.Current.GetService<IMainWindowViewModel>();
 
-            nodes = new ReactiveList<INodeViewModel>();
+            nodes = new ReactiveList<INode>();
             connections = new ReactiveList<IConnectionViewModel>();
 
             HostScreen = this.mainWindow;
@@ -74,8 +75,6 @@ namespace ColorMixer.ViewModels
                     }
                 })
                 .DisposeWith(disposables);
-
-                CreateData();
             });
         }
 
@@ -114,7 +113,7 @@ namespace ColorMixer.ViewModels
 
         public IObservable<KeyEventArgs> MainWindowKeyDown => mainWindow.KeyDown;
 
-        public IReadOnlyReactiveList<INodeViewModel> Nodes => nodes;
+        public IReadOnlyReactiveList<INode> Nodes => nodes;
 
         public IReadOnlyReactiveList<IConnectionViewModel> Connections => connections;
 

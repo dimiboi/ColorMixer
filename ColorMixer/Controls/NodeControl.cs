@@ -1,4 +1,4 @@
-﻿using ColorMixer.ViewModels;
+﻿using ColorMixer.Model;
 using ReactiveUI;
 using System;
 using System.Reactive.Disposables;
@@ -12,7 +12,7 @@ namespace ColorMixer.Controls
     {
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel",
-                                        typeof(INodeViewModel),
+                                        typeof(INode),
                                         typeof(NodeControl),
                                         new PropertyMetadata(null));
 
@@ -58,9 +58,9 @@ namespace ColorMixer.Controls
             });
         }
 
-        public INodeViewModel ViewModel
+        public INode ViewModel
         {
-            get { return (INodeViewModel)GetValue(ViewModelProperty); }
+            get { return (INode)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 

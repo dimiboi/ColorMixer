@@ -2,9 +2,9 @@
 using System.Reactive;
 using System.Windows.Media;
 
-namespace ColorMixer.ViewModels
+namespace ColorMixer.Model
 {
-    public interface INodeViewModel : IReactiveObject, ISupportsActivation
+    public interface INode
     {
         string Title { get; }
         double X { get; set; }

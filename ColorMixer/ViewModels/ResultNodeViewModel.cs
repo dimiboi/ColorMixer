@@ -9,12 +9,12 @@ using System.Windows.Media;
 
 namespace ColorMixer.ViewModels
 {
-    public interface IColorNodeViewModel : INode, IReactiveObject, ISupportsActivation
+    public interface IResultNodeViewModel : INode, IReactiveObject, ISupportsActivation
     {
         IConnectorViewModel Connector { get; }
     }
 
-    public class ColorNodeViewModel : ReactiveObject, IColorNodeViewModel
+    public class ResultNodeViewModel : ReactiveObject, IColorNodeViewModel
     {
         private readonly IInteractionService interactions;
         private readonly IConnectorViewModel connector;
@@ -27,8 +27,8 @@ namespace ColorMixer.ViewModels
 
         private ObservableAsPropertyHelper<string> title;
 
-        public ColorNodeViewModel(IInteractionService interactions = null,
-                                  IConnectorViewModel connector = null)
+        public ResultNodeViewModel(IInteractionService interactions = null,
+                                   IConnectorViewModel connector = null)
         {
             this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
             this.connector = connector ?? Locator.Current.GetService<IConnectorViewModel>();
