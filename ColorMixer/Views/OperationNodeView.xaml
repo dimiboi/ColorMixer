@@ -33,7 +33,18 @@
                Grid.Column="1">
             <Thumb.Template>
                 <ControlTemplate>
-                    <Rectangle Fill="{Binding Color, Converter={StaticResource ColorToBrushConverter}}" />
+                    <Grid>
+                        <Rectangle Fill="{Binding Color, Converter={StaticResource ColorToBrushConverter}}" />
+                        <Ellipse Width="50"
+                                 Height="50"
+                                 Fill="{DynamicResource WhiteBrush}" />
+                        <TextBlock x:Name="OperationTextBlock"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontFamily="{StaticResource Segoe MDL2 Assets}"
+                                   FontSize="20"
+                                   Text="{Binding Operation, Converter={StaticResource OperationTypeToTextConverter}}" />
+                    </Grid>
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>

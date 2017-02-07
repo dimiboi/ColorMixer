@@ -100,6 +100,7 @@
     </ApplicationDefinition>
     <Compile Include="Controls\NodeControl.cs" />
     <Compile Include="Converters\ColorToBrushConverter.cs" />
+    <Compile Include="Converters\OperationTypeToTextConverter.cs" />
     <Compile Include="Converters\ThicknessToDoubleConverter.cs" />
     <Compile Include="Extensions\ReactiveListExtensions.cs" />
     <Compile Include="Model\OperationType.cs" />

@@ -18,6 +18,7 @@
             </ResourceDictionary.MergedDictionaries>
             <FontFamily x:Key="Segoe MDL2 Assets">pack://application:,,,/resources/#Segoe MDL2 Assets</FontFamily>
             <Converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+            <Converters:OperationTypeToTextConverter x:Key="OperationTypeToTextConverter" />
             <Converters:ThicknessToDoubleConverter x:Key="ThicknessToDoubleConverter" />
             <ColorMixer:AppBootstrapper x:Key="MainWindowViewModel" />
         </ResourceDictionary>
