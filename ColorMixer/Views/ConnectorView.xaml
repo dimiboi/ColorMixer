@@ -7,24 +7,14 @@
              d:DesignHeight="100"
              d:DesignWidth="100"
              mc:Ignorable="d">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <Ellipse Grid.RowSpan="3"
-                 Grid.ColumnSpan="3"
-                 Fill="{DynamicResource WhiteBrush}"
-                 Stroke="{DynamicResource BlackBrush}"
-                 StrokeThickness="2" />
-        <Ellipse Grid.Row="1"
-                 Grid.Column="1"
-                 Fill="{DynamicResource BlackBrush}" />
-    </Grid>
+    <UserControl.Resources>
+        <Style BasedOn="{StaticResource ConnectorButtonStyle}" TargetType="Button">
+            <Setter Property="FontFamily" Value="{StaticResource Segoe MDL2 Assets}" />
+            <Setter Property="FontSize" Value="10" />
+        </Style>
+    </UserControl.Resources>
+    <Button Background="{DynamicResource WhiteBrush}"
+            BorderBrush="{DynamicResource BlackBrush}"
+            BorderThickness="2"
+            Content="&#xE1F5;" />
 </UserControl>

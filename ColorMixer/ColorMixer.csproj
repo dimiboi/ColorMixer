@@ -100,6 +100,7 @@
     </ApplicationDefinition>
     <Compile Include="Controls\NodeControl.cs" />
     <Compile Include="Converters\ColorToBrushConverter.cs" />
+    <Compile Include="Converters\ThicknessToDoubleConverter.cs" />
     <Compile Include="Extensions\ReactiveListExtensions.cs" />
     <Compile Include="Services\InteractionService.cs" />
     <Compile Include="ViewModels\ConnectionViewModel.cs" />
@@ -132,6 +133,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Resources\ConnectorButtonStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\MenuButtonStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

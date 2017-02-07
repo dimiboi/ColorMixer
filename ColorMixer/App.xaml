@@ -13,10 +13,12 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Magenta.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
+                <ResourceDictionary Source="/Resources/ConnectorButtonStyle.xaml" />
                 <ResourceDictionary Source="/Resources/MenuButtonStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <FontFamily x:Key="Segoe MDL2 Assets">pack://application:,,,/resources/#Segoe MDL2 Assets</FontFamily>
             <Converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+            <Converters:ThicknessToDoubleConverter x:Key="ThicknessToDoubleConverter" />
             <ColorMixer:AppBootstrapper x:Key="MainWindowViewModel" />
         </ResourceDictionary>
     </Application.Resources>
