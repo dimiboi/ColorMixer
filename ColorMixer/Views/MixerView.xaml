@@ -49,7 +49,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type ViewModels:ColorNodeViewModel}">
                     <Controls:NodeControl Container="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}" ViewModel="{Binding}">
-                        <Views:ColorNodeView Container="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}" ViewModel="{Binding}" />
+                        <Views:ColorNodeView ViewModel="{Binding}" />
                     </Controls:NodeControl>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

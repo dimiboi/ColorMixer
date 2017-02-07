@@ -50,13 +50,15 @@ namespace ColorMixer.Views
                         v => v.ConnectionPoint)
                     .DisposeWith(disposables);
 
-                this // LayoutUpdated -> ConnectionPoint
+                this // Transform coordinates of the connector to the coordinates of the container
                     .Events()
                     .LayoutUpdated
-                    .Where(_ => Container != null)
-                    .Select(_ => this.TransformToAncestor(Container)
-                                     .Transform(new Point(ActualWidth / 2, ActualHeight / 2)))
-                    .BindTo(this, v => v.ConnectionPoint)
+                    .Where(_ => Container != null) // while Container is set
+                    .Where(_ => Container.IsAncestorOf(this)) // while it's still the ancestor
+                    .Select(_ => this.TransformToAncestor(Container) // get transform to Container
+                                     .Transform(new Point(ActualWidth / 2, // transform the center
+                                                          ActualHeight / 2)))
+                    .BindTo(this, v => v.ConnectionPoint) // set ConnectionPoint
                     .DisposeWith(disposables);
             });
         }

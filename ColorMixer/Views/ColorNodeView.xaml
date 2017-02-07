@@ -60,6 +60,7 @@
                              Height="25"
                              Margin="-12.5,0,0,0"
                              HorizontalAlignment="Center"
-                             VerticalAlignment="Center" />
+                             VerticalAlignment="Center"
+                             Container="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}" />
     </Grid>
 </UserControl>

@@ -17,12 +17,6 @@ namespace ColorMixer.Views
                                         typeof(ColorNodeView),
                                         new PropertyMetadata(null));
 
-        public static readonly DependencyProperty ContainerProperty =
-            DependencyProperty.Register("Container",
-                                        typeof(FrameworkElement),
-                                        typeof(ColorNodeView),
-                                        new PropertyMetadata(null));
-
         public ColorNodeView()
         {
             InitializeComponent();
@@ -56,11 +50,6 @@ namespace ColorMixer.Views
                         v => v.Thumb.Height)
                     .DisposeWith(disposables);
 
-                this // Container -> Connector.Container
-                    .WhenAnyValue(v => v.Container)
-                    .BindTo(this, v => v.Connector.Container)
-                    .DisposeWith(disposables);
-
                 this // ViewModel.Connector -> Connector.ViewModel
                     .WhenAnyValue(v => v.ViewModel.Connector)
                     .BindTo(this, v => v.Connector.ViewModel)
@@ -85,12 +74,6 @@ namespace ColorMixer.Views
                         vm => vm.DeleteNodeCommand,
                         v => v.DeleteNodeButton.Command)
                     .DisposeWith(disposables);
-
-                this // Clear Container when node is deleted
-                    .WhenAnyValue(v => v.ViewModel) // when ViewModel is set
-                    .SelectMany(vm => vm.DeleteNodeCommand) // subscribe to command execution
-                    .Subscribe(_ => Container = null) // clear the container when node is deleted
-                    .DisposeWith(disposables);
             });
         }
 
@@ -104,12 +87,6 @@ namespace ColorMixer.Views
         {
             get { return ViewModel; }
             set { ViewModel = (IColorNodeViewModel)value; }
-        }
-
-        public FrameworkElement Container
-        {
-            get { return (FrameworkElement)GetValue(ContainerProperty); }
-            set { SetValue(ContainerProperty, value); }
         }
     }
 }
