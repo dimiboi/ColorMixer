@@ -9,6 +9,7 @@
              d:DesignWidth="300"
              mc:Ignorable="d">
     <ed:LineArrow x:Name="Arrow"
+                  EndArrow="StealthArrow"
                   Fill="{DynamicResource BlackBrush}"
                   Stroke="{DynamicResource BlackBrush}"
                   StrokeThickness="2" />
