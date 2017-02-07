@@ -10,7 +10,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid>
-                        <!--  OuterBorder keeps accent color consistent even on black background  -->
+                        <!--  OuterBorder keeps accent color consistent  -->
                         <Border x:Name="OuterBorder" Background="Transparent">
                             <Border x:Name="Border"
                                     Background="Transparent"

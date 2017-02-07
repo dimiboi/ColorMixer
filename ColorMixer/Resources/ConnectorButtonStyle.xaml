@@ -10,10 +10,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid>
-                        <!--  OuterBorder keeps accent color consistent even on black background  -->
-                        <Ellipse x:Name="OuterBorder" Fill="Transparent" />
+                        <!--  OuterBorder keeps accent color consistent  -->
+                        <Ellipse x:Name="OuterBorder" Fill="{TemplateBinding Background}" />
                         <Ellipse x:Name="Border"
-                                 Fill="{TemplateBinding Background}"
                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                  Stroke="{TemplateBinding BorderBrush}"
                                  StrokeThickness="{TemplateBinding BorderThickness,
@@ -35,6 +34,7 @@
                             <Setter TargetName="OuterBorder" Property="Fill" Value="{DynamicResource WhiteBrush}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Border" Property="Opacity" Value="0.25" />
                             <Setter TargetName="PART_ContentPresenter" Property="Opacity" Value="0.25" />
                         </Trigger>
                     </ControlTemplate.Triggers>

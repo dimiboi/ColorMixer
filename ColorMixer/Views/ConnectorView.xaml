@@ -15,6 +15,9 @@
     </UserControl.Resources>
     <Button Background="{DynamicResource WhiteBrush}"
             BorderBrush="{DynamicResource BlackBrush}"
-            BorderThickness="2"
-            Content="&#xE1F5;" />
+            BorderThickness="2" />
+    <!--
+        &#xE106; - cross
+        &#xECCC; - bullet
+    -->
 </UserControl>
