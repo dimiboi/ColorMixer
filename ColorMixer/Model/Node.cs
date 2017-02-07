@@ -26,7 +26,7 @@ namespace ColorMixer.Model
         private double y;
         private double width;
         private double height;
-        private Color color;
+        private Color color = Colors.Black;
 
         public Node(IDependencyResolver resolver = null,
                     IInteractionService interactions = null)

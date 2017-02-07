@@ -58,6 +58,9 @@ namespace ColorMixer
             resolver.Register(() => new ColorNodeViewModel(),
                                     typeof(IColorNodeViewModel));
 
+            resolver.Register(() => new OperationNodeViewModel(),
+                                    typeof(IOperationNodeViewModel));
+
             resolver.Register(() => new ResultNodeViewModel(),
                                     typeof(IResultNodeViewModel));
 
@@ -73,6 +76,9 @@ namespace ColorMixer
 
             resolver.Register(() => new ColorNodeView(),
                                     typeof(IViewFor<ColorNodeViewModel>));
+
+            resolver.Register(() => new OperationNodeView(),
+                                    typeof(IViewFor<OperationNodeViewModel>));
 
             resolver.Register(() => new ResultNodeView(),
                                     typeof(IViewFor<ResultNodeViewModel>));

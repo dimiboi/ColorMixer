@@ -19,6 +19,7 @@ namespace ColorMixer.ViewModels
         IReadOnlyReactiveList<INode> Nodes { get; }
         IReadOnlyReactiveList<IConnectionViewModel> Connections { get; }
         ReactiveCommand<Unit, Unit> AddColorNodeCommand { get; }
+        ReactiveCommand<Unit, Unit> AddOperationNodeCommand { get; }
         ReactiveCommand<Unit, Unit> AddResultNodeCommand { get; }
         Interaction<Unit, Point?> GetNewNodePoint { get; }
     }
@@ -92,8 +93,26 @@ namespace ColorMixer.ViewModels
                         X = point.Value.X,
                         Y = point.Value.Y,
                         Width = 150,
-                        Height = 150,
-                        Color = Colors.White
+                        Height = 150
+                    });
+                })
+                .DisposeWith(disposables);
+
+                AddOperationNodeCommand = ReactiveCommand.CreateFromTask(async () =>
+                {
+                    var point = await GetNewNodePoint.Handle(Unit.Default);
+
+                    if (!point.HasValue) // user cancelled point selection
+                    {
+                        return;
+                    }
+
+                    nodes.Add(new OperationNodeViewModel
+                    {
+                        X = point.Value.X,
+                        Y = point.Value.Y,
+                        Width = 150,
+                        Height = 150
                     });
                 })
                 .DisposeWith(disposables);
@@ -140,6 +159,8 @@ namespace ColorMixer.ViewModels
         public IReadOnlyReactiveList<IConnectionViewModel> Connections => connections;
 
         public ReactiveCommand<Unit, Unit> AddColorNodeCommand { get; private set; }
+
+        public ReactiveCommand<Unit, Unit> AddOperationNodeCommand { get; private set; }
 
         public ReactiveCommand<Unit, Unit> AddResultNodeCommand { get; private set; }
 

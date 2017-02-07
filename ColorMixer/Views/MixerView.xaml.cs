@@ -50,6 +50,12 @@ namespace ColorMixer.Views
                         v => v.AddColorNodeButton.Command)
                     .DisposeWith(disposables);
 
+                this // ViewModel.AddOperationNodeCommand -> AddOperationNodeButton.Command
+                    .OneWayBind(ViewModel,
+                        vm => vm.AddOperationNodeCommand,
+                        v => v.AddOperationNodeButton.Command)
+                    .DisposeWith(disposables);
+
                 this // ViewModel.AddResultNodeCommand -> AddResultNodeButton.Command
                     .OneWayBind(ViewModel,
                         vm => vm.AddResultNodeCommand,

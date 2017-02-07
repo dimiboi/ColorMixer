@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Views="clr-namespace:ColorMixer.Views"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:ColorMixer.Views"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              d:DesignHeight="300"
              d:DesignWidth="300"
@@ -11,6 +10,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -28,6 +29,7 @@
                    FontSize="12" />
         <Thumb Name="Thumb"
                Grid.Row="1"
+               Grid.RowSpan="3"
                Grid.Column="1">
             <Thumb.Template>
                 <ControlTemplate>
@@ -35,7 +37,7 @@
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>
-        <StackPanel Grid.Row="2"
+        <StackPanel Grid.Row="4"
                     Grid.Column="1"
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
@@ -52,8 +54,8 @@
                     Content="&#xE74D;"
                     ToolTip="Delete Node" />
         </StackPanel>
-        <local:ConnectorView x:Name="Connector"
-                             Grid.Row="1"
+        <Views:ConnectorView x:Name="Connector"
+                             Grid.Row="2"
                              Grid.Column="0"
                              Width="20"
                              Height="20"

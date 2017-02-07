@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ColorMixer.Views.ColorNodeView"
+﻿<UserControl x:Class="ColorMixer.Views.OperationNodeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Views="clr-namespace:ColorMixer.Views"
@@ -57,8 +57,23 @@
                     Content="&#xE74D;"
                     ToolTip="Delete Node" />
         </StackPanel>
-        <Views:ConnectorView x:Name="Connector"
-                             Grid.Row="2"
+        <Views:ConnectorView Grid.Row="1"
+                             Grid.Column="0"
+                             Width="20"
+                             Height="20"
+                             Margin="0,0,-10,0"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Bottom"
+                             Container="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}" />
+        <Views:ConnectorView Grid.Row="3"
+                             Grid.Column="0"
+                             Width="20"
+                             Height="20"
+                             Margin="0,0,-10,0"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Top"
+                             Container="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}" />
+        <Views:ConnectorView Grid.Row="2"
                              Grid.Column="2"
                              Width="20"
                              Height="20"

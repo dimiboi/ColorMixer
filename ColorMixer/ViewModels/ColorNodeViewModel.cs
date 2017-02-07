@@ -18,9 +18,8 @@ namespace ColorMixer.ViewModels
                                   IConnectorViewModel connector = null)
         {
             resolver = resolver ?? Locator.Current;
-            connector = connector ?? resolver.GetService<IConnectorViewModel>();
 
-            this.connector = connector;
+            this.connector = connector ?? resolver.GetService<IConnectorViewModel>();
 
             this.WhenActivated(disposables =>
             {

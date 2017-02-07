@@ -108,6 +108,7 @@
     <Compile Include="Model\Node.cs" />
     <Compile Include="ViewModels\MixerViewModel.cs" />
     <Compile Include="ViewModels\ColorNodeViewModel.cs" />
+    <Compile Include="ViewModels\OperationNodeViewModel.cs" />
     <Compile Include="ViewModels\ResultNodeViewModel.cs" />
     <Compile Include="Views\ConnectionView.xaml.cs">
       <DependentUpon>ConnectionView.xaml</DependentUpon>
@@ -120,6 +121,9 @@
     </Compile>
     <Compile Include="Views\ColorNodeView.xaml.cs">
       <DependentUpon>ColorNodeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OperationNodeView.xaml.cs">
+      <DependentUpon>OperationNodeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ResultNodeView.xaml.cs">
       <DependentUpon>ResultNodeView.xaml</DependentUpon>
@@ -158,6 +162,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ColorNodeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OperationNodeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
