@@ -40,16 +40,14 @@
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
             <StackPanel.Resources>
-                <Style BasedOn="{StaticResource MenuButtonStyle}" TargetType="Button">
+                <Style BasedOn="{StaticResource MenuButtonStyle}"
+                       TargetType="Button">
                     <Setter Property="Width" Value="36" />
                     <Setter Property="Height" Value="36" />
                     <Setter Property="FontFamily" Value="{StaticResource Segoe MDL2 Assets}" />
                     <Setter Property="FontSize" Value="15" />
                 </Style>
             </StackPanel.Resources>
-            <Button x:Name="EditNodeButton"
-                    Content="&#xE70F;"
-                    ToolTip="Edit Node" />
             <Button x:Name="DeleteNodeButton"
                     Content="&#xE74D;"
                     ToolTip="Delete Node" />

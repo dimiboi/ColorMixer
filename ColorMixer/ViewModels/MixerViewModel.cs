@@ -111,7 +111,7 @@ namespace ColorMixer.ViewModels
                 Color = Colors.SteelBlue
             });
 
-            nodes.Add(new ColorNodeViewModel
+            nodes.Add(new ResultNodeViewModel
             {
                 X = 200,
                 Y = 200,
@@ -123,7 +123,7 @@ namespace ColorMixer.ViewModels
             connections.Add(new ConnectionViewModel
             {
                 From = (nodes.First() as IColorNodeViewModel).Connector,
-                To = (nodes.Last() as IColorNodeViewModel).Connector
+                To = (nodes.Last() as IResultNodeViewModel).Connector
             });
         }
 

@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace ColorMixer.ViewModels
 {
-    public interface IResultNodeViewModel : INode, IReactiveObject, ISupportsActivation
+    public interface IResultNodeViewModel : INode, ISupportsActivation
     {
         IConnectorViewModel Connector { get; }
     }

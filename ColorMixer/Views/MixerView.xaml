@@ -17,9 +17,11 @@
             <ColumnDefinition Width="48" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" Background="Black">
+        <StackPanel Grid.Column="0"
+                    Background="Black">
             <StackPanel.Resources>
-                <Style BasedOn="{StaticResource MenuButtonStyle}" TargetType="Button">
+                <Style BasedOn="{StaticResource MenuButtonStyle}"
+                       TargetType="Button">
                     <Setter Property="Width" Value="48" />
                     <Setter Property="Height" Value="48" />
                     <Setter Property="FontFamily" Value="{StaticResource Segoe MDL2 Assets}" />
@@ -36,7 +38,8 @@
                     Content="&#xE129;"
                     ToolTip="Add Result" />
         </StackPanel>
-        <ListBox x:Name="Nodes" Grid.Column="1">
+        <ListBox x:Name="Nodes"
+                 Grid.Column="1">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas Background="Transparent" />
@@ -48,9 +51,9 @@
                     <Setter Property="Canvas.Top" Value="{Binding Y}" />
                     <Setter Property="Template">
                         <Setter.Value>
-                            <!--  This is kind of ugly but does the job of wrapping each node  -->
                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                <Controls:NodeControl Container="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}" ViewModel="{Binding}">
+                                <Controls:NodeControl Container="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}"
+                                                      ViewModel="{Binding}">
                                     <ContentPresenter />
                                 </Controls:NodeControl>
                             </ControlTemplate>
@@ -58,26 +61,14 @@
                     </Setter>
                 </Style>
             </ListBox.ItemContainerStyle>
-            <ListBox.Resources>
-                <DataTemplate DataType="{x:Type ViewModels:ColorNodeViewModel}">
-                    <Views:ColorNodeView ViewModel="{Binding}" />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type ViewModels:ResultNodeViewModel}">
-                    <Views:ResultNodeView ViewModel="{Binding}" />
-                </DataTemplate>
-            </ListBox.Resources>
         </ListBox>
-        <ItemsControl x:Name="Connections" Grid.Column="1">
+        <ItemsControl x:Name="Connections"
+                      Grid.Column="1">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type ViewModels:ConnectionViewModel}">
-                    <Views:ConnectionView ViewModel="{Binding}" />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
         </ItemsControl>
     </Grid>
 </UserControl>

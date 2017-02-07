@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 namespace ColorMixer.Model
 {
-    public interface INode
+    public interface INode : IReactiveObject
     {
         string Title { get; }
         double X { get; set; }
