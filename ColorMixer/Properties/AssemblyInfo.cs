@@ -9,7 +9,7 @@ using System.Windows;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Dmitry Makarov")]
-[assembly: AssemblyProduct("ColorMixer")]
+[assembly: AssemblyProduct("Color Mixer")]
 [assembly: AssemblyCopyright("Copyright © Dmitry Makarov 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

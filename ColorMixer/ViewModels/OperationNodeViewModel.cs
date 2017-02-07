@@ -10,6 +10,7 @@ namespace ColorMixer.ViewModels
         IConnectorViewModel InputA { get; }
         IConnectorViewModel InputB { get; }
         IConnectorViewModel Output { get; }
+        OperationType Operation { get; }
     }
 
     public class OperationNodeViewModel : Node, IOperationNodeViewModel
@@ -17,6 +18,8 @@ namespace ColorMixer.ViewModels
         private readonly IConnectorViewModel inputA;
         private readonly IConnectorViewModel inputB;
         private readonly IConnectorViewModel output;
+
+        private OperationType operation;
 
         public OperationNodeViewModel(IDependencyResolver resolver = null,
                                       IConnectorViewModel inputA = null,
@@ -41,5 +44,11 @@ namespace ColorMixer.ViewModels
         public IConnectorViewModel InputB => inputB;
 
         public IConnectorViewModel Output => output;
+
+        public OperationType Operation
+        {
+            get { return operation; }
+            set { this.RaiseAndSetIfChanged(ref operation, value); }
+        }
     }
 }
