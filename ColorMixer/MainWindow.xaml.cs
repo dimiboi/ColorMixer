@@ -1,9 +1,14 @@
-﻿using MahApps.Metro.Controls;
+﻿using ColorMixer.Dialogs;
+using ColorMixer.Services;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using ReactiveUI;
+using Splat;
 using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Media;
 
 namespace ColorMixer
 {
@@ -15,9 +20,20 @@ namespace ColorMixer
                                         typeof(MainWindow),
                                         new PropertyMetadata(null));
 
-        public MainWindow()
+        private readonly IInteractionService interactions;
+
+        public MainWindow() : this(null)
+        {
+        }
+
+        public MainWindow(IInteractionService interactions)
         {
             InitializeComponent();
+
+            ViewModel = Application.Current
+                                   .FindResource("MainWindowViewModel") as IMainWindowViewModel;
+
+            this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
 
             IDisposable activation = null;
             activation = this.WhenActivated(disposables =>
@@ -35,10 +51,25 @@ namespace ColorMixer
                     .Select(_ => this.Events().KeyDown)
                     .BindTo(ViewModel, vm => vm.KeyDown)
                     .DisposeWith(disposables);
-            });
 
-            ViewModel = Application.Current
-                                   .FindResource("MainWindowViewModel") as IMainWindowViewModel;
+                this
+                    .interactions
+                    .GetNodeColor
+                    .RegisterHandler(async interaction =>
+                    {
+                        var dialog = new ColorDialog
+                        {
+                            Color = interaction.Input
+                        };
+
+                        await this.ShowMetroDialogAsync(dialog);
+                        await dialog.WaitUntilClosed();
+                        await this.HideMetroDialogAsync(dialog);
+
+                        interaction.SetOutput(dialog.Color);
+                    })
+                    .DisposeWith(disposables);
+            });
         }
 
         public IMainWindowViewModel ViewModel

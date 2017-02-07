@@ -102,6 +102,9 @@
     <Compile Include="Converters\ColorToBrushConverter.cs" />
     <Compile Include="Converters\OperationTypeToTextConverter.cs" />
     <Compile Include="Converters\ThicknessToDoubleConverter.cs" />
+    <Compile Include="Dialogs\ColorDialog.xaml.cs">
+      <DependentUpon>ColorDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Extensions\ReactiveListExtensions.cs" />
     <Compile Include="Model\OperationType.cs" />
     <Compile Include="Services\InteractionService.cs" />
@@ -130,6 +133,10 @@
     <Compile Include="Views\ResultNodeView.xaml.cs">
       <DependentUpon>ResultNodeView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Dialogs\ColorDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
