@@ -105,7 +105,7 @@
     <Compile Include="Services\InteractionService.cs" />
     <Compile Include="ViewModels\ConnectionViewModel.cs" />
     <Compile Include="ViewModels\ConnectorViewModel.cs" />
-    <Compile Include="Model\INode.cs" />
+    <Compile Include="Model\Node.cs" />
     <Compile Include="ViewModels\MixerViewModel.cs" />
     <Compile Include="ViewModels\ColorNodeViewModel.cs" />
     <Compile Include="ViewModels\ResultNodeViewModel.cs" />
