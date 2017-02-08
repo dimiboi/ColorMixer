@@ -190,6 +190,21 @@ namespace ColorMixer.ViewModels
             InteractionContext<TSrc, TDst> interaction) where TDst : class, IConnector
                                                         where TSrc : class, IConnector
         {
+            var connector = interaction.Input;
+
+            if (connector.IsConnected)
+            {
+                var connected = connections.Where(c => c.To == connector || c.From == connector);
+
+                foreach (var connection in connected)
+                {
+                    connection.To.ConnectedTo = null;
+                    connection.From.ConnectedTo = null;
+                }
+
+                connections.RemoveRange(connected);
+            }
+
             if (ConnectingConnector == null) // connection initiated
             {
                 ConnectingConnector = interaction.Input;
