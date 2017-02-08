@@ -1,5 +1,7 @@
-﻿using ColorMixer.ViewModels;
+﻿using ColorMixer.Services;
+using ColorMixer.ViewModels;
 using ReactiveUI;
+using Splat;
 using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -17,9 +19,17 @@ namespace ColorMixer.Views
                                         typeof(MixerView),
                                         new PropertyMetadata(null));
 
-        public MixerView()
+        private readonly IInteractionService interactions;
+
+        public MixerView() : this(null)
+        {
+        }
+
+        public MixerView(IInteractionService interactions)
         {
             InitializeComponent();
+
+            this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
 
             IDisposable activation = null;
             activation = this.WhenActivated(disposables =>
@@ -62,7 +72,8 @@ namespace ColorMixer.Views
                         v => v.AddResultNodeButton.Command)
                     .DisposeWith(disposables);
 
-                ViewModel // Handle new node point request by ViewModel
+                this // Handle new node point request by ViewModel
+                    .interactions
                     .GetNewNodePoint
                     .RegisterHandler(async interaction =>
                     {

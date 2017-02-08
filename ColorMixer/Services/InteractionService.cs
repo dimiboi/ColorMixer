@@ -2,12 +2,15 @@
 using ColorMixer.ViewModels;
 using ReactiveUI;
 using System.Reactive;
+using System.Windows;
 using System.Windows.Media;
 
 namespace ColorMixer.Services
 {
     public interface IInteractionService
     {
+        Interaction<Unit, Point?> GetNewNodePoint { get; }
+
         Interaction<INode, Unit> DeleteNode { get; }
 
         Interaction<Color, Color> GetNodeColor { get; }
@@ -21,6 +24,9 @@ namespace ColorMixer.Services
 
     public class InteractionService : IInteractionService
     {
+        public Interaction<Unit, Point?> GetNewNodePoint
+        { get; } = new Interaction<Unit, Point?>();
+
         public Interaction<INode, Unit> DeleteNode
         { get; } = new Interaction<INode, Unit>();
 

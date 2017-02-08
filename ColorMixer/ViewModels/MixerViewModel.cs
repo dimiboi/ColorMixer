@@ -9,7 +9,6 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -23,7 +22,6 @@ namespace ColorMixer.ViewModels
         ReactiveCommand<Unit, Unit> AddColorNodeCommand { get; }
         ReactiveCommand<Unit, Unit> AddOperationNodeCommand { get; }
         ReactiveCommand<Unit, Unit> AddResultNodeCommand { get; }
-        Interaction<Unit, Point?> GetNewNodePoint { get; }
         IConnector ConnectingConnector { get; }
         IConnector ConnectedConnector { get; }
     }
@@ -72,7 +70,9 @@ namespace ColorMixer.ViewModels
 
                 AddColorNodeCommand = ReactiveCommand.CreateFromTask(async () =>
                 {
-                    var point = await GetNewNodePoint.Handle(Unit.Default);
+                    var point = await this.interactions
+                                          .GetNewNodePoint
+                                          .Handle(Unit.Default);
 
                     if (!point.HasValue) // user cancelled point selection
                     {
@@ -90,7 +90,9 @@ namespace ColorMixer.ViewModels
 
                 AddResultNodeCommand = ReactiveCommand.CreateFromTask(async () =>
                 {
-                    var point = await GetNewNodePoint.Handle(Unit.Default);
+                    var point = await this.interactions
+                                          .GetNewNodePoint
+                                          .Handle(Unit.Default);
 
                     if (!point.HasValue) // user cancelled point selection
                     {
@@ -108,7 +110,9 @@ namespace ColorMixer.ViewModels
 
                 AddOperationNodeCommand = ReactiveCommand.CreateFromTask(async () =>
                 {
-                    var point = await GetNewNodePoint.Handle(Unit.Default);
+                    var point = await this.interactions
+                                          .GetNewNodePoint
+                                          .Handle(Unit.Default);
 
                     if (!point.HasValue) // user cancelled point selection
                     {
@@ -170,9 +174,6 @@ namespace ColorMixer.ViewModels
         public ReactiveCommand<Unit, Unit> AddOperationNodeCommand { get; private set; }
 
         public ReactiveCommand<Unit, Unit> AddResultNodeCommand { get; private set; }
-
-        public Interaction<Unit, Point?> GetNewNodePoint { get; }
-            = new Interaction<Unit, Point?>();
 
         public IConnector ConnectingConnector
         {
