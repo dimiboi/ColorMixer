@@ -10,20 +10,20 @@ namespace ColorMixer.ViewModels
 {
     public interface IColorNodeViewModel : INode
     {
-        IConnectorViewModel Connector { get; }
+        IOutputConnectorViewModel Output { get; }
         ReactiveCommand<Unit, Unit> EditNodeCommand { get; }
     }
 
     public class ColorNodeViewModel : Node, IColorNodeViewModel
     {
         private readonly IInteractionService interactions;
-        private readonly IConnectorViewModel connector;
+        private readonly IOutputConnectorViewModel output;
 
         public ColorNodeViewModel(IInteractionService interactions = null,
-                                  IConnectorViewModel connector = null)
+                                  IOutputConnectorViewModel output = null)
         {
             this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
-            this.connector = connector ?? Locator.Current.GetService<IConnectorViewModel>();
+            this.output = output ?? Locator.Current.GetService<IOutputConnectorViewModel>();
 
             this.WhenActivated(disposables =>
             {
@@ -37,7 +37,7 @@ namespace ColorMixer.ViewModels
             });
         }
 
-        public IConnectorViewModel Connector => connector;
+        public IOutputConnectorViewModel Output => output;
 
         public ReactiveCommand<Unit, Unit> EditNodeCommand { get; private set; }
     }

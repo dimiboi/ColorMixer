@@ -135,8 +135,8 @@ namespace ColorMixer.ViewModels
 
             connections.Add(new ConnectionViewModel
             {
-                From = (nodes.First() as IColorNodeViewModel).Connector,
-                To = (nodes.Last() as IResultNodeViewModel).Connector
+                From = (nodes.First() as IColorNodeViewModel).Output,
+                To = (nodes.Last() as IResultNodeViewModel).Input
             });
         }
 

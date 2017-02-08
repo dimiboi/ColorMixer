@@ -50,9 +50,9 @@ namespace ColorMixer.Views
                         v => v.Thumb.Height)
                     .DisposeWith(disposables);
 
-                this // ViewModel.Connector -> Connector.ViewModel
-                    .WhenAnyValue(v => v.ViewModel.Connector)
-                    .BindTo(this, v => v.Connector.ViewModel)
+                this // ViewModel.Output -> OutputConnector.ViewModel
+                    .WhenAnyValue(v => v.ViewModel.Output)
+                    .BindTo(this, v => v.OutputConnector.ViewModel)
                     .DisposeWith(disposables);
 
                 Thumb // Thumb.DragDelta.HorizontalChange -> ViewModel.X

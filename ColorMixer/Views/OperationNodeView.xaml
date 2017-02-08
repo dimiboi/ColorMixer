@@ -68,7 +68,8 @@
                     Content="&#xE74D;"
                     ToolTip="Delete Node" />
         </StackPanel>
-        <Views:ConnectorView Grid.Row="1"
+        <Views:ConnectorView x:Name="InputAConnector"
+                             Grid.Row="1"
                              Grid.Column="0"
                              Width="20"
                              Height="20"
@@ -76,7 +77,8 @@
                              HorizontalAlignment="Center"
                              VerticalAlignment="Bottom"
                              Container="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}" />
-        <Views:ConnectorView Grid.Row="3"
+        <Views:ConnectorView x:Name="InputBConnector"
+                             Grid.Row="3"
                              Grid.Column="0"
                              Width="20"
                              Height="20"
@@ -84,7 +86,8 @@
                              HorizontalAlignment="Center"
                              VerticalAlignment="Top"
                              Container="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}" />
-        <Views:ConnectorView Grid.Row="2"
+        <Views:ConnectorView x:Name="OutputConnector"
+                             Grid.Row="2"
                              Grid.Column="2"
                              Width="20"
                              Height="20"

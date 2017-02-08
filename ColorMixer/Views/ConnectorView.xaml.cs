@@ -1,4 +1,4 @@
-﻿using ColorMixer.ViewModels;
+﻿using ColorMixer.Model;
 using ReactiveUI;
 using System;
 using System.Reactive.Disposables;
@@ -9,11 +9,11 @@ using System.Windows.Media;
 
 namespace ColorMixer.Views
 {
-    public partial class ConnectorView : UserControl, IViewFor<IConnectorViewModel>
+    public partial class ConnectorView : UserControl, IViewFor<IConnector>
     {
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel",
-                                        typeof(IConnectorViewModel),
+                                        typeof(IConnector),
                                         typeof(ConnectorView),
                                         new PropertyMetadata(null));
 
@@ -63,16 +63,16 @@ namespace ColorMixer.Views
             });
         }
 
-        public IConnectorViewModel ViewModel
+        public IConnector ViewModel
         {
-            get { return (IConnectorViewModel)GetValue(ViewModelProperty); }
+            get { return (IConnector)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
         object IViewFor.ViewModel
         {
             get { return ViewModel; }
-            set { ViewModel = (IConnectorViewModel)value; }
+            set { ViewModel = (IConnector)value; }
         }
 
         public Point ConnectionPoint

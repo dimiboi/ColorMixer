@@ -51,8 +51,8 @@ namespace ColorMixer.Views
                     .DisposeWith(disposables);
 
                 this // ViewModel.Connector -> Connector.ViewModel
-                    .WhenAnyValue(v => v.ViewModel.Connector)
-                    .BindTo(this, v => v.Connector.ViewModel)
+                    .WhenAnyValue(v => v.ViewModel.Input)
+                    .BindTo(this, v => v.InputConnector.ViewModel)
                     .DisposeWith(disposables);
 
                 Thumb // Thumb.DragDelta.HorizontalChange -> ViewModel.X

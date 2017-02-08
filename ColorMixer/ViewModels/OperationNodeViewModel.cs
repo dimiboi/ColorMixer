@@ -10,9 +10,9 @@ namespace ColorMixer.ViewModels
 {
     public interface IOperationNodeViewModel : INode
     {
-        IConnectorViewModel InputA { get; }
-        IConnectorViewModel InputB { get; }
-        IConnectorViewModel Output { get; }
+        IInputConnectorViewModel InputA { get; }
+        IInputConnectorViewModel InputB { get; }
+        IOutputConnectorViewModel Output { get; }
         OperationType Operation { get; }
         ReactiveCommand<Unit, Unit> EditNodeCommand { get; }
     }
@@ -20,21 +20,21 @@ namespace ColorMixer.ViewModels
     public class OperationNodeViewModel : Node, IOperationNodeViewModel
     {
         private readonly IInteractionService interactions;
-        private readonly IConnectorViewModel inputA;
-        private readonly IConnectorViewModel inputB;
-        private readonly IConnectorViewModel output;
+        private readonly IInputConnectorViewModel inputA;
+        private readonly IInputConnectorViewModel inputB;
+        private readonly IOutputConnectorViewModel output;
 
         private OperationType operation;
 
         public OperationNodeViewModel(IInteractionService interactions = null,
-                                      IConnectorViewModel inputA = null,
-                                      IConnectorViewModel inputB = null,
-                                      IConnectorViewModel output = null)
+                                      IInputConnectorViewModel inputA = null,
+                                      IInputConnectorViewModel inputB = null,
+                                      IOutputConnectorViewModel output = null)
         {
             this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
-            this.inputA = inputA ?? Locator.Current.GetService<IConnectorViewModel>();
-            this.inputB = inputB ?? Locator.Current.GetService<IConnectorViewModel>();
-            this.output = output ?? Locator.Current.GetService<IConnectorViewModel>();
+            this.inputA = inputA ?? Locator.Current.GetService<IInputConnectorViewModel>();
+            this.inputB = inputB ?? Locator.Current.GetService<IInputConnectorViewModel>();
+            this.output = output ?? Locator.Current.GetService<IOutputConnectorViewModel>();
 
             this.WhenActivated(disposables =>
             {
@@ -48,11 +48,11 @@ namespace ColorMixer.ViewModels
             });
         }
 
-        public IConnectorViewModel InputA => inputA;
+        public IInputConnectorViewModel InputA => inputA;
 
-        public IConnectorViewModel InputB => inputB;
+        public IInputConnectorViewModel InputB => inputB;
 
-        public IConnectorViewModel Output => output;
+        public IOutputConnectorViewModel Output => output;
 
         public OperationType Operation
         {

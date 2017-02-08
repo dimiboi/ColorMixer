@@ -54,7 +54,7 @@
                     Content="&#xE74D;"
                     ToolTip="Delete Node" />
         </StackPanel>
-        <Views:ConnectorView x:Name="Connector"
+        <Views:ConnectorView x:Name="InputConnector"
                              Grid.Row="2"
                              Grid.Column="0"
                              Width="20"
