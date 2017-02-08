@@ -29,11 +29,19 @@
                      Grid.Row="1"
                      Content="Subtraction"
                      GroupName="Operation" />
-        <Button x:Name="DoneButton"
-                Grid.Row="2"
-                MinWidth="80"
-                Margin="5,10,0,5"
-                HorizontalAlignment="Right"
-                Content="Done" />
+        <StackPanel Grid.Row="3"
+                    Grid.ColumnSpan="4"
+                    Margin="0,10,0,5"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+            <Button x:Name="CancelButton"
+                    MinWidth="80"
+                    Margin="0,0,5,0"
+                    Content="Cancel" />
+            <Button x:Name="AcceptButton"
+                    MinWidth="80"
+                    Margin="5,0,0,0"
+                    Content="Accept" />
+        </StackPanel>
     </Grid>
 </Dialogs:CustomDialog>

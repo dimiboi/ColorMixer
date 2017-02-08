@@ -82,10 +82,18 @@ namespace ColorMixer.Dialogs
             });
         }
 
-        public async Task WaitUntilClosed()
-            => await DoneButton.Events()
-                               .Click
-                               .FirstAsync();
+        public async Task<bool> WaitUntilClosedAsync()
+        {
+            var isAccepted = await
+                Observable.Merge(
+                    AcceptButton.Events()
+                                .Click
+                                .Select(_ => true),
+                    CancelButton.Events()
+                                .Click
+                                .Select(_ => false)).FirstAsync();
+            return isAccepted;
+        }
 
         public Color Color
         {

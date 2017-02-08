@@ -63,10 +63,17 @@ namespace ColorMixer
                         };
 
                         await this.ShowMetroDialogAsync(dialog);
-                        await dialog.WaitUntilClosed();
+                        var isAccepted = await dialog.WaitUntilClosedAsync();
                         await this.HideMetroDialogAsync(dialog);
 
-                        interaction.SetOutput(dialog.Color);
+                        if (isAccepted)
+                        {
+                            interaction.SetOutput(dialog.Color);
+                        }
+                        else
+                        {
+                            interaction.SetOutput(interaction.Input);
+                        }
                     })
                     .DisposeWith(disposables);
 
@@ -81,10 +88,17 @@ namespace ColorMixer
                         };
 
                         await this.ShowMetroDialogAsync(dialog);
-                        await dialog.WaitUntilClosed();
+                        var isAccepted = await dialog.WaitUntilClosedAsync();
                         await this.HideMetroDialogAsync(dialog);
 
-                        interaction.SetOutput(dialog.Operation);
+                        if (isAccepted)
+                        {
+                            interaction.SetOutput(dialog.Operation);
+                        }
+                        else
+                        {
+                            interaction.SetOutput(interaction.Input);
+                        }
                     })
                     .DisposeWith(disposables);
             });
