@@ -70,5 +70,8 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
+        <Canvas Grid.Column="1">
+            <Controls:Arrow x:Name="Arrow" />
+        </Canvas>
     </Grid>
 </UserControl>

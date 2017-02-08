@@ -79,6 +79,26 @@ namespace ColorMixer.Views
                     .GetNewNodePoint
                     .RegisterHandler(i => HandleNewNodePointRequest(i))
                     .DisposeWith(disposables);
+
+                this // Show an arrow following mouse pointer when a connection is being created
+                    .WhenAnyValue(v => v.ViewModel.ConnectingConnector)
+                    .Select(c => c == null ? Visibility.Hidden : Visibility.Visible)
+                    .Delay(TimeSpan.FromMilliseconds(150), RxApp.MainThreadScheduler)
+                    .BindTo(this, v => v.Arrow.Visibility)
+                    .DisposeWith(disposables);
+
+                this // Set the point where the arrow should start from
+                    .WhenAnyValue(v => v.ViewModel.ConnectingConnector.ConnectionPoint)
+                    .BindTo(this, v => v.Arrow.From)
+                    .DisposeWith(disposables);
+
+                Nodes // Make the arrow follow mouse pointer
+                    .Events()
+                    .MouseMove
+                    .Where(_ => ViewModel.ConnectingConnector != null)
+                    .Select(e => e.GetPosition(Nodes))
+                    .BindTo(this, v => v.Arrow.To)
+                    .DisposeWith(disposables);
             });
         }
 

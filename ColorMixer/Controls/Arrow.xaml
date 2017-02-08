@@ -10,6 +10,7 @@
     <ed:LineArrow x:Name="LineArrow"
                   EndArrow="StealthArrow"
                   Fill="{DynamicResource BlackBrush}"
+                  IsHitTestVisible="False"
                   Stroke="{DynamicResource BlackBrush}"
                   StrokeThickness="2" />
 </UserControl>
