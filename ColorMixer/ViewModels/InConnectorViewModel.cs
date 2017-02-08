@@ -10,7 +10,7 @@ namespace ColorMixer.ViewModels
 {
     public interface IInConnectorViewModel : IConnector
     {
-        IOutConnectorViewModel ConnectedTo { get; }
+        IOutConnectorViewModel ConnectedTo { get; set; }
     }
 
     public class InConnectorViewModel : Connector, IInConnectorViewModel
@@ -19,6 +19,7 @@ namespace ColorMixer.ViewModels
         private readonly IMixerViewModel mixer;
 
         private ObservableAsPropertyHelper<bool> isEnabled;
+        private ObservableAsPropertyHelper<bool> isConnected;
         private IOutConnectorViewModel connectedTo;
 
         public InConnectorViewModel(IInteractionService interactions = null,
@@ -35,6 +36,11 @@ namespace ColorMixer.ViewModels
                     .ToProperty(this, vm => vm.IsEnabled)
                     .DisposeWith(disposables);
 
+                isConnected = this // ConectedTo -> IsConnected
+                    .WhenAnyValue(vm => vm.ConnectedTo)
+                    .Select(ct => ct != null)
+                    .ToProperty(this, vm => vm.IsConnected);
+
                 ConnectorCommand = ReactiveCommand.CreateFromTask(async () =>
                 {
                     ConnectedTo = await this.interactions
@@ -45,6 +51,8 @@ namespace ColorMixer.ViewModels
             });
         }
 
+        public override bool IsConnected => isConnected.Value;
+
         public override bool IsEnabled => isEnabled.Value;
 
         public override ConnectorDirection Direction => ConnectorDirection.Input;
@@ -54,7 +62,7 @@ namespace ColorMixer.ViewModels
         public IOutConnectorViewModel ConnectedTo
         {
             get { return connectedTo; }
-            private set { this.RaiseAndSetIfChanged(ref connectedTo, value); }
+            set { this.RaiseAndSetIfChanged(ref connectedTo, value); }
         }
     }
 }

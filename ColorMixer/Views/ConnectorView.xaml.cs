@@ -50,6 +50,12 @@ namespace ColorMixer.Views
                         v => v.IsEnabled)
                     .DisposeWith(disposables);
 
+                this // ViewModel.IsConnected -> ConnectorButton.Content
+                    .WhenAnyValue(v => v.ViewModel.IsConnected)
+                    .Select(ic => ic ? "\xECCC" : string.Empty)
+                    .BindTo(this, v => v.ConnectorButton.Content)
+                    .DisposeWith(disposables);
+
                 this // ViewModel.ConnectorCommand -> ConnectorButton.Command
                     .OneWayBind(ViewModel,
                         vm => vm.ConnectorCommand,

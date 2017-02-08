@@ -7,6 +7,7 @@ namespace ColorMixer.Model
 {
     public interface IConnector : IReactiveObject, ISupportsActivation
     {
+        bool IsConnected { get; }
         bool IsEnabled { get; }
         INode Node { get; set; }
         Point ConnectionPoint { get; set; }
@@ -29,6 +30,8 @@ namespace ColorMixer.Model
         }
 
         public ViewModelActivator Activator { get; } = new ViewModelActivator();
+
+        public abstract bool IsConnected { get; }
 
         public abstract bool IsEnabled { get; }
 

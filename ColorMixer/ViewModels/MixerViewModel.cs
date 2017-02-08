@@ -1,4 +1,5 @@
-﻿using ColorMixer.Model;
+﻿using ColorMixer.Extensions;
+using ColorMixer.Model;
 using ColorMixer.Services;
 using ReactiveUI;
 using Splat;
@@ -66,9 +67,15 @@ namespace ColorMixer.ViewModels
                 this.interactions.DeleteNode.RegisterHandler(interaction =>
                 {
                     var node = interaction.Input;
+                    var connected = connections.Where(c => c.To.Node == node ||
+                                                           c.From.Node == node);
+                    foreach (var connection in connected)
+                    {
+                        connection.To.ConnectedTo = null;
+                        connection.From.ConnectedTo = null;
+                    }
 
-                    /*connections.RemoveRange(connections.Where(c => c.To == node.Connector ||
-                                                                   c.From == node.Connector));*/
+                    connections.RemoveRange(connected);
                     nodes.Remove(node);
 
                     interaction.SetOutput(Unit.Default);

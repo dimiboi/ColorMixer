@@ -18,8 +18,4 @@
             Background="{DynamicResource WhiteBrush}"
             BorderBrush="{DynamicResource BlackBrush}"
             BorderThickness="2" />
-    <!--
-        &#xE106; - cross
-        &#xECCC; - bullet
-    -->
 </UserControl>
