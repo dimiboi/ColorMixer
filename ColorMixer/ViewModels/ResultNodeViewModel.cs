@@ -18,6 +18,8 @@ namespace ColorMixer.ViewModels
         {
             this.input = input ?? Locator.Current.GetService<IInConnectorViewModel>();
 
+            this.input.Node = this;
+
             this.WhenActivated(disposables =>
             {
                 Disposable.Empty

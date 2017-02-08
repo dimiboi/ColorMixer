@@ -25,6 +25,8 @@ namespace ColorMixer.ViewModels
             this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
             this.output = output ?? Locator.Current.GetService<IOutConnectorViewModel>();
 
+            this.output.Node = this;
+
             this.WhenActivated(disposables =>
             {
                 EditNodeCommand = ReactiveCommand.CreateFromTask(async () =>

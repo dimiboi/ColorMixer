@@ -36,6 +36,10 @@ namespace ColorMixer.ViewModels
             this.inputB = inputB ?? Locator.Current.GetService<IInConnectorViewModel>();
             this.output = output ?? Locator.Current.GetService<IOutConnectorViewModel>();
 
+            this.inputA.Node = this;
+            this.inputB.Node = this;
+            this.output.Node = this;
+
             this.WhenActivated(disposables =>
             {
                 EditNodeCommand = ReactiveCommand.CreateFromTask(async () =>
