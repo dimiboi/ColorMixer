@@ -1,4 +1,5 @@
 ﻿using ReactiveUI;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Windows;
 
@@ -8,6 +9,7 @@ namespace ColorMixer.Model
     {
         Point ConnectionPoint { get; set; }
         ConnectorDirection Direction { get; }
+        ReactiveCommand<Unit, Unit> ConnectorCommand { get; }
     }
 
     public abstract class Connector : ReactiveObject, IConnector
@@ -32,5 +34,7 @@ namespace ColorMixer.Model
         }
 
         public abstract ConnectorDirection Direction { get; }
+
+        public abstract ReactiveCommand<Unit, Unit> ConnectorCommand { get; protected set; }
     }
 }

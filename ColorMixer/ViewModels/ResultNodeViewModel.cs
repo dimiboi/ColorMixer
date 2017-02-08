@@ -7,16 +7,16 @@ namespace ColorMixer.ViewModels
 {
     public interface IResultNodeViewModel : INode
     {
-        IInputConnectorViewModel Input { get; }
+        IInConnectorViewModel Input { get; }
     }
 
     public class ResultNodeViewModel : Node, IResultNodeViewModel
     {
-        private readonly IInputConnectorViewModel input;
+        private readonly IInConnectorViewModel input;
 
-        public ResultNodeViewModel(IInputConnectorViewModel input = null)
+        public ResultNodeViewModel(IInConnectorViewModel input = null)
         {
-            this.input = input ?? Locator.Current.GetService<IInputConnectorViewModel>();
+            this.input = input ?? Locator.Current.GetService<IInConnectorViewModel>();
 
             this.WhenActivated(disposables =>
             {
@@ -25,6 +25,6 @@ namespace ColorMixer.ViewModels
             });
         }
 
-        public IInputConnectorViewModel Input => input;
+        public IInConnectorViewModel Input => input;
     }
 }
