@@ -8,12 +8,14 @@
              d:DesignWidth="100"
              mc:Ignorable="d">
     <UserControl.Resources>
-        <Style BasedOn="{StaticResource ConnectorButtonStyle}" TargetType="Button">
+        <Style BasedOn="{StaticResource ConnectorButtonStyle}"
+               TargetType="Button">
             <Setter Property="FontFamily" Value="{StaticResource Segoe MDL2 Assets}" />
             <Setter Property="FontSize" Value="10" />
         </Style>
     </UserControl.Resources>
-    <Button Background="{DynamicResource WhiteBrush}"
+    <Button x:Name="ConnectorButton"
+            Background="{DynamicResource WhiteBrush}"
             BorderBrush="{DynamicResource BlackBrush}"
             BorderThickness="2" />
     <!--

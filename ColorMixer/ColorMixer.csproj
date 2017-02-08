@@ -98,6 +98,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\Arrow.xaml.cs">
+      <DependentUpon>Arrow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\NodeControl.cs" />
     <Compile Include="Converters\ColorToBrushConverter.cs" />
     <Compile Include="Converters\OperationTypeToTextConverter.cs" />
@@ -139,6 +142,10 @@
     <Compile Include="Views\ResultNodeView.xaml.cs">
       <DependentUpon>ResultNodeView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\Arrow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\ColorDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
