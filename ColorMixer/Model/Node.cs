@@ -52,7 +52,9 @@ namespace ColorMixer.Model
                               .DeleteNode
                               .Handle(this);
                 },
-                this.WhenAnyValue(vm => vm.mixer.IsNodeBeingAdded, b => !b))
+                this.WhenAnyValue(vm => vm.mixer.IsNodeBeingAdded,
+                                  vm => vm.mixer.ConnectingConnector,
+                                  (a, b) => !a && b == null))
                 .DisposeWith(disposables);
             });
         }

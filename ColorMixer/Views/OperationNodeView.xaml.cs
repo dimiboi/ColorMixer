@@ -100,8 +100,10 @@ namespace ColorMixer.Views
                         v => v.DeleteNodeButton.Command)
                     .DisposeWith(disposables);
 
-                this // Make Thumb click-through when a node is being added
-                    .WhenAnyValue(v => v.mixer.IsNodeBeingAdded, b => !b)
+                this // Make Thumb click-through when a node or connection is being added
+                    .WhenAnyValue(v => v.mixer.IsNodeBeingAdded,
+                                  v => v.mixer.ConnectingConnector,
+                                  (a, b) => !a && b == null)
                     .BindTo(this, v => v.Thumb.IsHitTestVisible)
                     .DisposeWith(disposables);
             });
