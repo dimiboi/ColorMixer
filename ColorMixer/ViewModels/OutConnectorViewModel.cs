@@ -31,7 +31,7 @@ namespace ColorMixer.ViewModels
             {
                 isEnabled = this // Disable when not connectable to
                     .WhenAnyValue(vm => vm.mixer.ConnectingConnector)
-                    .Select(c => c == null || c.Direction != Direction)
+                    .Select(c => c == null || (c.Direction != Direction && c.Node != Node))
                     .ToProperty(this, vm => vm.IsEnabled)
                     .DisposeWith(disposables);
 
