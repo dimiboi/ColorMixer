@@ -1,4 +1,5 @@
 ﻿using ColorMixer.Services;
+using ColorMixer.ViewModels;
 using ReactiveUI;
 using Splat;
 using System.Reactive;
@@ -21,6 +22,9 @@ namespace ColorMixer.Model
 
     public abstract class Node : ReactiveObject, INode
     {
+        private readonly IInteractionService interactions;
+        private readonly IMixerViewModel mixer;
+
         private ObservableAsPropertyHelper<string> title;
         private double x;
         private double y;
@@ -28,9 +32,11 @@ namespace ColorMixer.Model
         private double height = 150;
         private Color color = Colors.Black;
 
-        public Node(IInteractionService interactions = null)
+        public Node(IInteractionService interactions = null,
+                    IMixerViewModel mixer = null)
         {
-            interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
+            this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
+            this.mixer = mixer ?? Locator.Current.GetService<IMixerViewModel>();
 
             this.WhenActivated(disposables =>
             {
@@ -42,8 +48,11 @@ namespace ColorMixer.Model
 
                 DeleteNodeCommand = ReactiveCommand.CreateFromTask(async () =>
                 {
-                    await interactions.DeleteNode.Handle(this);
-                })
+                    await this.interactions
+                              .DeleteNode
+                              .Handle(this);
+                },
+                this.WhenAnyValue(vm => vm.mixer.IsNodeBeingAdded, b => !b))
                 .DisposeWith(disposables);
             });
         }

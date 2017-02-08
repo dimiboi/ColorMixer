@@ -16,6 +16,7 @@ namespace ColorMixer.ViewModels
 {
     public interface IMixerViewModel : IReactiveObject, IRoutableViewModel, ISupportsActivation
     {
+        bool IsNodeBeingAdded { get; }
         IObservable<KeyEventArgs> MainWindowKeyDown { get; }
         IReadOnlyReactiveList<INode> Nodes { get; }
         IReadOnlyReactiveList<IConnectionViewModel> Connections { get; }
@@ -33,6 +34,8 @@ namespace ColorMixer.ViewModels
 
         private readonly ReactiveList<INode> nodes;
         private readonly ReactiveList<IConnectionViewModel> connections;
+
+        private ObservableAsPropertyHelper<bool> isNodeBeingAdded;
 
         private IConnector connectingConnector;
         private IConnector connectedConnector;
@@ -88,6 +91,26 @@ namespace ColorMixer.ViewModels
                 })
                 .DisposeWith(disposables);
 
+                AddOperationNodeCommand = ReactiveCommand.CreateFromTask(async () =>
+                {
+                    var point = await this.interactions
+                                          .GetNewNodePoint
+                                          .Handle(Unit.Default);
+
+                    if (!point.HasValue) // user cancelled point selection
+                    {
+                        return;
+                    }
+
+                    var node = Locator.Current.GetService<IOperationNodeViewModel>();
+
+                    node.X = point.Value.X;
+                    node.Y = point.Value.Y;
+
+                    nodes.Add(node);
+                })
+                .DisposeWith(disposables);
+
                 AddResultNodeCommand = ReactiveCommand.CreateFromTask(async () =>
                 {
                     var point = await this.interactions
@@ -108,25 +131,13 @@ namespace ColorMixer.ViewModels
                 })
                 .DisposeWith(disposables);
 
-                AddOperationNodeCommand = ReactiveCommand.CreateFromTask(async () =>
-                {
-                    var point = await this.interactions
-                                          .GetNewNodePoint
-                                          .Handle(Unit.Default);
-
-                    if (!point.HasValue) // user cancelled point selection
-                    {
-                        return;
-                    }
-
-                    var node = Locator.Current.GetService<IOperationNodeViewModel>();
-
-                    node.X = point.Value.X;
-                    node.Y = point.Value.Y;
-
-                    nodes.Add(node);
-                })
-                .DisposeWith(disposables);
+                isNodeBeingAdded = this
+                    .WhenAnyObservable(vm => vm.AddColorNodeCommand.IsExecuting,
+                                       vm => vm.AddOperationNodeCommand.IsExecuting,
+                                       vm => vm.AddResultNodeCommand.IsExecuting,
+                                       (a, b, c) => a || b || c)
+                    .ToProperty(this, vm => vm.IsNodeBeingAdded)
+                    .DisposeWith(disposables);
             });
         }
 
@@ -162,6 +173,8 @@ namespace ColorMixer.ViewModels
         public IScreen HostScreen { get; private set; }
 
         public string UrlPathSegment => "Mixer";
+
+        public bool IsNodeBeingAdded => isNodeBeingAdded.Value;
 
         public IObservable<KeyEventArgs> MainWindowKeyDown => mainWindow.KeyDown;
 

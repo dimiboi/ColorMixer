@@ -12,10 +12,13 @@ namespace ColorMixer.ViewModels
 
     public class ResultNodeViewModel : Node, IResultNodeViewModel
     {
+        private readonly IMixerViewModel mixer;
         private readonly IInConnectorViewModel input;
 
-        public ResultNodeViewModel(IInConnectorViewModel input = null)
+        public ResultNodeViewModel(IMixerViewModel mixer = null,
+                                   IInConnectorViewModel input = null)
         {
+            this.mixer = mixer ?? Locator.Current.GetService<IMixerViewModel>();
             this.input = input ?? Locator.Current.GetService<IInConnectorViewModel>();
 
             this.input.Node = this;

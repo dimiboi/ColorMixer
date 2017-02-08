@@ -1,5 +1,6 @@
 ﻿using ColorMixer.ViewModels;
 using ReactiveUI;
+using Splat;
 using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -17,9 +18,17 @@ namespace ColorMixer.Views
                                         typeof(ResultNodeView),
                                         new PropertyMetadata(null));
 
-        public ResultNodeView()
+        private readonly IMixerViewModel mixer;
+
+        public ResultNodeView() : this(null)
+        {
+        }
+
+        public ResultNodeView(IMixerViewModel mixer = null)
         {
             InitializeComponent();
+
+            this.mixer = mixer ?? Locator.Current.GetService<IMixerViewModel>();
 
             IDisposable activation = null;
             activation = this.WhenActivated(disposables =>
@@ -73,6 +82,11 @@ namespace ColorMixer.Views
                     .OneWayBind(ViewModel,
                         vm => vm.DeleteNodeCommand,
                         v => v.DeleteNodeButton.Command)
+                    .DisposeWith(disposables);
+
+                this // Make Thumb click-through when a node is being added
+                    .WhenAnyValue(v => v.mixer.IsNodeBeingAdded, b => !b)
+                    .BindTo(this, v => v.Thumb.IsHitTestVisible)
                     .DisposeWith(disposables);
             });
         }

@@ -27,7 +27,7 @@ namespace ColorMixer.Views
         {
         }
 
-        public MixerView(IInteractionService interactions)
+        public MixerView(IInteractionService interactions = null)
         {
             InitializeComponent();
 

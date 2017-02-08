@@ -39,14 +39,16 @@ namespace ColorMixer.ViewModels
                 isConnected = this // ConectedTo -> IsConnected
                     .WhenAnyValue(vm => vm.ConnectedTo)
                     .Select(ct => ct != null)
-                    .ToProperty(this, vm => vm.IsConnected);
+                    .ToProperty(this, vm => vm.IsConnected)
+                    .DisposeWith(disposables);
 
                 ConnectorCommand = ReactiveCommand.CreateFromTask(async () =>
                 {
                     ConnectedTo = await this.interactions
                                             .GetOutConnector
                                             .Handle(this);
-                })
+                },
+                this.WhenAnyValue(vm => vm.mixer.IsNodeBeingAdded, b => !b))
                 .DisposeWith(disposables);
             });
         }

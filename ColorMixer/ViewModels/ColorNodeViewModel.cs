@@ -17,12 +17,15 @@ namespace ColorMixer.ViewModels
     public class ColorNodeViewModel : Node, IColorNodeViewModel
     {
         private readonly IInteractionService interactions;
+        private readonly IMixerViewModel mixer;
         private readonly IOutConnectorViewModel output;
 
         public ColorNodeViewModel(IInteractionService interactions = null,
+                                  IMixerViewModel mixer = null,
                                   IOutConnectorViewModel output = null)
         {
             this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
+            this.mixer = mixer ?? Locator.Current.GetService<IMixerViewModel>();
             this.output = output ?? Locator.Current.GetService<IOutConnectorViewModel>();
 
             this.output.Node = this;
@@ -34,7 +37,8 @@ namespace ColorMixer.ViewModels
                     Color = await this.interactions
                                       .GetNodeColor
                                       .Handle(Color);
-                })
+                },
+                this.WhenAnyValue(vm => vm.mixer.IsNodeBeingAdded, b => !b))
                 .DisposeWith(disposables);
             });
         }

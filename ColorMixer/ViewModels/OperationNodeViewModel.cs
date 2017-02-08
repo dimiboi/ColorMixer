@@ -20,6 +20,7 @@ namespace ColorMixer.ViewModels
     public class OperationNodeViewModel : Node, IOperationNodeViewModel
     {
         private readonly IInteractionService interactions;
+        private readonly IMixerViewModel mixer;
         private readonly IInConnectorViewModel inputA;
         private readonly IInConnectorViewModel inputB;
         private readonly IOutConnectorViewModel output;
@@ -27,11 +28,13 @@ namespace ColorMixer.ViewModels
         private OperationType operation;
 
         public OperationNodeViewModel(IInteractionService interactions = null,
+                                      IMixerViewModel mixer = null,
                                       IInConnectorViewModel inputA = null,
                                       IInConnectorViewModel inputB = null,
                                       IOutConnectorViewModel output = null)
         {
             this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
+            this.mixer = mixer ?? Locator.Current.GetService<IMixerViewModel>();
             this.inputA = inputA ?? Locator.Current.GetService<IInConnectorViewModel>();
             this.inputB = inputB ?? Locator.Current.GetService<IInConnectorViewModel>();
             this.output = output ?? Locator.Current.GetService<IOutConnectorViewModel>();
@@ -47,7 +50,8 @@ namespace ColorMixer.ViewModels
                     Operation = await this.interactions
                                           .GetNodeOperation
                                           .Handle(Operation);
-                })
+                },
+                this.WhenAnyValue(vm => vm.mixer.IsNodeBeingAdded, b => !b))
                 .DisposeWith(disposables);
             });
         }
