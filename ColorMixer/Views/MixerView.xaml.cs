@@ -3,8 +3,10 @@ using ColorMixer.ViewModels;
 using ReactiveUI;
 using Splat;
 using System;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -75,32 +77,7 @@ namespace ColorMixer.Views
                 this // Handle new node point request by ViewModel
                     .interactions
                     .GetNewNodePoint
-                    .RegisterHandler(async interaction =>
-                    {
-                        try
-                        {
-                            Nodes.Cursor = Cursors.Cross;
-
-                            var sequence = Observable.Merge(
-                                Nodes.Events()
-                                     .MouseLeftButtonDown // left button picks a point
-                                     .Select(e => new Point?(e.GetPosition(Nodes))),
-                                Nodes.Events()
-                                     .MouseRightButtonDown // right button cancels addition
-                                     .Select(e => default(Point?)),
-                                ViewModel.MainWindowKeyDown
-                                         .Where(e => e.Key == Key.Escape) // Esc cancels addition
-                                         .Select(e => default(Point?)));
-
-                            var point = await sequence.FirstAsync(); // whichever comes first
-
-                            interaction.SetOutput(point);
-                        }
-                        finally
-                        {
-                            Nodes.Cursor = Cursors.Arrow;
-                        }
-                    })
+                    .RegisterHandler(i => HandleNewNodePointRequest(i))
                     .DisposeWith(disposables);
             });
         }
@@ -115,6 +92,33 @@ namespace ColorMixer.Views
         {
             get { return ViewModel; }
             set { ViewModel = (IMixerViewModel)value; }
+        }
+
+        private async Task HandleNewNodePointRequest(InteractionContext<Unit, Point?> interaction)
+        {
+            try
+            {
+                Nodes.Cursor = Cursors.Cross;
+
+                var sequence = Observable.Merge(
+                    Nodes.Events()
+                         .MouseLeftButtonDown // left button picks a point
+                         .Select(e => new Point?(e.GetPosition(Nodes))),
+                    Nodes.Events()
+                         .MouseRightButtonDown // right button cancels addition
+                         .Select(e => default(Point?)),
+                    ViewModel.MainWindowKeyDown
+                             .Where(e => e.Key == Key.Escape) // Esc cancels addition
+                             .Select(e => default(Point?)));
+
+                var point = await sequence.FirstAsync(); // whichever comes first
+
+                interaction.SetOutput(point);
+            }
+            finally
+            {
+                Nodes.Cursor = Cursors.Arrow;
+            }
         }
     }
 }
