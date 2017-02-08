@@ -4,7 +4,7 @@
                       xmlns:Dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                      Title="Select Color"
+                      Title="Adjust Color"
                       d:DesignHeight="300"
                       d:DesignWidth="500"
                       mc:Ignorable="d">
