@@ -50,6 +50,21 @@ namespace ColorMixer.Dialogs
                     .BindTo(this, v => v.BlueSlider.Value)
                     .DisposeWith(disposables);
 
+                this // Color.R -> RedValue.Content
+                    .WhenAnyValue(v => v.Color, c => c.R)
+                    .BindTo(this, v => v.RedValue.Content)
+                    .DisposeWith(disposables);
+
+                this // Color.G -> RedValue.Content
+                    .WhenAnyValue(v => v.Color, c => c.G)
+                    .BindTo(this, v => v.GreenValue.Content)
+                    .DisposeWith(disposables);
+
+                this // Color.B -> RedValue.Content
+                    .WhenAnyValue(v => v.Color, c => c.B)
+                    .BindTo(this, v => v.BlueValue.Content)
+                    .DisposeWith(disposables);
+
                 this // RedSlider.Value, GreenSlider.Value, BlueSlider.Value -> Color
                     .WhenAnyValue(v => v.RedSlider.Value,
                                   v => v.GreenSlider.Value,

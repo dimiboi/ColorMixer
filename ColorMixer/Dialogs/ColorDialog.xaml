@@ -10,6 +10,11 @@
                       mc:Ignorable="d">
     <Grid Margin="0,20">
         <Grid.Resources>
+            <Style BasedOn="{StaticResource {x:Type Label}}"
+                   TargetType="Label">
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="HorizontalContentAlignment" Value="Right" />
+            </Style>
             <Style BasedOn="{StaticResource {x:Type Slider}}"
                    TargetType="Slider">
                 <Setter Property="Minimum" Value="0" />
@@ -28,25 +33,48 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto"
-                              MinWidth="100" />
+                              MinWidth="30" />
+            <ColumnDefinition Width="100" />
         </Grid.ColumnDefinitions>
+        <Label Grid.Row="0"
+               Grid.Column="0"
+               Content="R:" />
+        <Label Grid.Row="1"
+               Grid.Column="0"
+               Content="G:" />
+        <Label Grid.Row="2"
+               Grid.Column="0"
+               Content="B:" />
         <Slider x:Name="RedSlider"
-                Grid.Row="0" />
+                Grid.Row="0"
+                Grid.Column="1" />
         <Slider x:Name="GreenSlider"
-                Grid.Row="1" />
+                Grid.Row="1"
+                Grid.Column="1" />
         <Slider x:Name="BlueSlider"
-                Grid.Row="2" />
+                Grid.Row="2"
+                Grid.Column="1" />
+        <Label x:Name="RedValue"
+               Grid.Row="0"
+               Grid.Column="2" />
+        <Label x:Name="GreenValue"
+               Grid.Row="1"
+               Grid.Column="2" />
+        <Label x:Name="BlueValue"
+               Grid.Row="2"
+               Grid.Column="2" />
         <Rectangle x:Name="ColorRectangle"
                    Grid.RowSpan="3"
-                   Grid.Column="1"
+                   Grid.Column="3"
                    Width="100"
                    Height="100"
                    Margin="15,5,0,5" />
         <Button x:Name="DoneButton"
                 Grid.Row="3"
-                Grid.ColumnSpan="2"
+                Grid.ColumnSpan="4"
                 MinWidth="80"
                 Margin="0,10,0,5"
                 HorizontalAlignment="Right"
