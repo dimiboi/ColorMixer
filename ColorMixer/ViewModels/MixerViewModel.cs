@@ -64,23 +64,11 @@ namespace ColorMixer.ViewModels
                     .RegisterHandler(i => HandleConnectionRequest(i))
                     .DisposeWith(disposables);
 
-                this.interactions.DeleteNode.RegisterHandler(interaction =>
-                {
-                    var node = interaction.Input;
-                    var connected = connections.Where(c => c.To.Node == node ||
-                                                           c.From.Node == node);
-                    foreach (var connection in connected)
-                    {
-                        connection.To.ConnectedTo = null;
-                        connection.From.ConnectedTo = null;
-                    }
-
-                    connections.RemoveRange(connected);
-                    nodes.Remove(node);
-
-                    interaction.SetOutput(Unit.Default);
-                })
-                .DisposeWith(disposables);
+                this
+                    .interactions
+                    .DeleteNode
+                    .RegisterHandler(i => HandleDeletionRequest(i))
+                    .DisposeWith(disposables);
 
                 AddColorNodeCommand = ReactiveCommand.CreateFromTask(async () =>
                 {
@@ -241,6 +229,23 @@ namespace ColorMixer.ViewModels
                 ConnectingConnector = null;
                 ConnectedConnector = null;
             }
+        }
+
+        private void HandleDeletionRequest(InteractionContext<INode, Unit> interaction)
+        {
+            var node = interaction.Input;
+            var connected = connections.Where(c => c.To.Node == node || c.From.Node == node);
+
+            foreach (var connection in connected)
+            {
+                connection.To.ConnectedTo = null;
+                connection.From.ConnectedTo = null;
+            }
+
+            connections.RemoveRange(connected);
+            nodes.Remove(node);
+
+            interaction.SetOutput(Unit.Default);
         }
     }
 }
