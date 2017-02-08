@@ -4,6 +4,7 @@ using ReactiveUI;
 using Splat;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 
 namespace ColorMixer.ViewModels
 {
@@ -15,21 +16,36 @@ namespace ColorMixer.ViewModels
     public class OutConnectorViewModel : Connector, IOutConnectorViewModel
     {
         private readonly IInteractionService interactions;
+        private readonly IMixerViewModel mixer;
 
+        private ObservableAsPropertyHelper<bool> isEnabled;
         private IInConnectorViewModel connectedTo;
 
-        public OutConnectorViewModel(IInteractionService interactions = null)
+        public OutConnectorViewModel(IInteractionService interactions = null,
+                                     IMixerViewModel mixer = null)
         {
             this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
+            this.mixer = mixer ?? Locator.Current.GetService<IMixerViewModel>();
 
             this.WhenActivated(disposables =>
             {
+                isEnabled = this // Disable when not connectable to
+                    .WhenAnyValue(vm => vm.mixer.ConnectingConnector)
+                    .Select(c => c == null || c.Direction != Direction)
+                    .ToProperty(this, vm => vm.IsEnabled)
+                    .DisposeWith(disposables);
+
                 ConnectorCommand = ReactiveCommand.CreateFromTask(async () =>
                 {
+                    ConnectedTo = await this.interactions
+                                            .GetInConnector
+                                            .Handle(this);
                 })
                 .DisposeWith(disposables);
             });
         }
+
+        public override bool IsEnabled => isEnabled.Value;
 
         public override ConnectorDirection Direction => ConnectorDirection.Output;
 
@@ -38,7 +54,7 @@ namespace ColorMixer.ViewModels
         public IInConnectorViewModel ConnectedTo
         {
             get { return connectedTo; }
-            set { this.RaiseAndSetIfChanged(ref connectedTo, value); }
+            private set { this.RaiseAndSetIfChanged(ref connectedTo, value); }
         }
     }
 }

@@ -67,8 +67,8 @@ namespace ColorMixer
             resolver.Register(() => new ResultNodeViewModel(),
                                     typeof(IResultNodeViewModel));
 
-            resolver.Register(() => new MixerViewModel(),
-                                    typeof(IMixerViewModel));
+            resolver.RegisterConstant(new MixerViewModel(),
+                                      typeof(IMixerViewModel));
             // Views
 
             resolver.Register(() => new ConnectionView(),
@@ -89,8 +89,8 @@ namespace ColorMixer
             resolver.Register(() => new ResultNodeView(),
                                     typeof(IViewFor<ResultNodeViewModel>));
 
-            resolver.Register(() => new MixerView(),
-                                    typeof(IViewFor<MixerViewModel>));
+            resolver.RegisterConstant(new MixerView(),
+                                      typeof(IViewFor<MixerViewModel>));
         }
 
         public IObservable<KeyEventArgs> KeyDown

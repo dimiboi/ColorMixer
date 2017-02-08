@@ -44,10 +44,16 @@ namespace ColorMixer.Views
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                this // ViewModel.ConnectionPoint <-> ConnectionPoint
-                    .Bind(ViewModel,
-                        vm => vm.ConnectionPoint,
-                        v => v.ConnectionPoint)
+                this // ViewModel.IsEnabled -> IsEnabled
+                    .OneWayBind(ViewModel,
+                        vm => vm.IsEnabled,
+                        v => v.IsEnabled)
+                    .DisposeWith(disposables);
+
+                this // ViewModel.ConnectorCommand -> ConnectorButton.Command
+                    .OneWayBind(ViewModel,
+                        vm => vm.ConnectorCommand,
+                        v => v.ConnectorButton.Command)
                     .DisposeWith(disposables);
 
                 this // Transform coordinates of the connector to the coordinates of the container
@@ -59,6 +65,12 @@ namespace ColorMixer.Views
                                      .Transform(new Point(ActualWidth / 2, // transform the center
                                                           ActualHeight / 2)))
                     .BindTo(this, v => v.ConnectionPoint) // set ConnectionPoint
+                    .DisposeWith(disposables);
+
+                this // ViewModel.ConnectionPoint <-> ConnectionPoint
+                    .Bind(ViewModel,
+                        vm => vm.ConnectionPoint,
+                        v => v.ConnectionPoint)
                     .DisposeWith(disposables);
             });
         }

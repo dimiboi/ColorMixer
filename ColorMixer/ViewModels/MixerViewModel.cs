@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -22,6 +23,8 @@ namespace ColorMixer.ViewModels
         ReactiveCommand<Unit, Unit> AddOperationNodeCommand { get; }
         ReactiveCommand<Unit, Unit> AddResultNodeCommand { get; }
         Interaction<Unit, Point?> GetNewNodePoint { get; }
+        IConnector ConnectingConnector { get; }
+        IConnector ConnectedConnector { get; }
     }
 
     public class MixerViewModel : ReactiveObject, IMixerViewModel
@@ -31,6 +34,9 @@ namespace ColorMixer.ViewModels
 
         private readonly ReactiveList<INode> nodes;
         private readonly ReactiveList<IConnectionViewModel> connections;
+
+        private IConnector connectingConnector;
+        private IConnector connectedConnector;
 
         public MixerViewModel(IInteractionService interactions = null,
                               IMainWindowViewModel mainWindow = null)
@@ -45,6 +51,18 @@ namespace ColorMixer.ViewModels
 
             this.WhenActivated(disposables =>
             {
+                this
+                    .interactions
+                    .GetInConnector
+                    .RegisterHandler(i => HandleConnectionRequest(i))
+                    .DisposeWith(disposables);
+
+                this
+                    .interactions
+                    .GetOutConnector
+                    .RegisterHandler(i => HandleConnectionRequest(i))
+                    .DisposeWith(disposables);
+
                 this.interactions.DeleteNode.RegisterHandler(interaction =>
                 {
                     var node = interaction.Input;
@@ -160,5 +178,62 @@ namespace ColorMixer.ViewModels
 
         public Interaction<Unit, Point?> GetNewNodePoint { get; }
             = new Interaction<Unit, Point?>();
+
+        public IConnector ConnectingConnector
+        {
+            get { return connectingConnector; }
+            private set { this.RaiseAndSetIfChanged(ref connectingConnector, value); }
+        }
+
+        public IConnector ConnectedConnector
+        {
+            get { return connectedConnector; }
+            private set { this.RaiseAndSetIfChanged(ref connectedConnector, value); }
+        }
+
+        private async Task HandleConnectionRequest<TSrc, TDst>(
+            InteractionContext<TSrc, TDst> interaction) where TDst : class, IConnector
+                                                        where TSrc : class, IConnector
+        {
+            if (ConnectingConnector == null) // connection initiated
+            {
+                ConnectingConnector = interaction.Input;
+
+                var secondConnector = await this.WhenAnyValue(vm => vm.ConnectedConnector)
+                                                .Skip(1) // ignore initial value
+                                                .FirstAsync();
+
+                interaction.SetOutput(secondConnector as TDst);
+            }
+            else // the second connector
+            {
+                ConnectedConnector = interaction.Input;
+                interaction.SetOutput(ConnectingConnector as TDst);
+
+                var connection = Locator.Current.GetService<IConnectionViewModel>();
+
+                if (ConnectingConnector.Direction == ConnectorDirection.Input &&
+                    ConnectedConnector.Direction == ConnectorDirection.Output)
+                {
+                    connection.From = ConnectedConnector as IOutConnectorViewModel;
+                    connection.To = ConnectingConnector as IInConnectorViewModel;
+                }
+                else if (ConnectingConnector.Direction == ConnectorDirection.Output &&
+                         ConnectedConnector.Direction == ConnectorDirection.Input)
+                {
+                    connection.From = ConnectingConnector as IOutConnectorViewModel;
+                    connection.To = ConnectedConnector as IInConnectorViewModel;
+                }
+
+                if (connection.From != null &&
+                    connection.To != null)
+                {
+                    connections.Add(connection);
+                }
+
+                ConnectingConnector = null;
+                ConnectedConnector = null;
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ namespace ColorMixer.Model
 {
     public interface IConnector : IReactiveObject, ISupportsActivation
     {
+        bool IsEnabled { get; }
         Point ConnectionPoint { get; set; }
         ConnectorDirection Direction { get; }
         ReactiveCommand<Unit, Unit> ConnectorCommand { get; }
@@ -26,6 +27,8 @@ namespace ColorMixer.Model
         }
 
         public ViewModelActivator Activator { get; } = new ViewModelActivator();
+
+        public abstract bool IsEnabled { get; }
 
         public Point ConnectionPoint
         {
