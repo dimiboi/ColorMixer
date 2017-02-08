@@ -52,7 +52,7 @@ namespace ColorMixer
                     .BindTo(ViewModel, vm => vm.KeyDown)
                     .DisposeWith(disposables);
 
-                this
+                this // Handle GetNodeColor interaction
                     .interactions
                     .GetNodeColor
                     .RegisterHandler(async interaction =>
@@ -67,6 +67,24 @@ namespace ColorMixer
                         await this.HideMetroDialogAsync(dialog);
 
                         interaction.SetOutput(dialog.Color);
+                    })
+                    .DisposeWith(disposables);
+
+                this
+                    .interactions
+                    .GetNodeOperation
+                    .RegisterHandler(async interaction =>
+                    {
+                        var dialog = new OperationDialog
+                        {
+                            Operation = interaction.Input
+                        };
+
+                        await this.ShowMetroDialogAsync(dialog);
+                        await dialog.WaitUntilClosed();
+                        await this.HideMetroDialogAsync(dialog);
+
+                        interaction.SetOutput(dialog.Operation);
                     })
                     .DisposeWith(disposables);
             });

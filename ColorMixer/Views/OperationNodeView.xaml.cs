@@ -69,6 +69,12 @@ namespace ColorMixer.Views
                     .BindTo(ViewModel, vm => vm.Y)
                     .DisposeWith(disposables);
 
+                this // ViewModel.EditNodeCommand -> EditNodeButton.Command
+                    .OneWayBind(ViewModel,
+                        vm => vm.EditNodeCommand,
+                        v => v.EditNodeButton.Command)
+                    .DisposeWith(disposables);
+
                 this // ViewModel.DeleteNodeCommand -> DeleteNodeButton.Command
                     .OneWayBind(ViewModel,
                         vm => vm.DeleteNodeCommand,
