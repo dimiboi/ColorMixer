@@ -1,4 +1,5 @@
-﻿using ColorMixer.Services;
+﻿using ColorMixer.Model;
+using ColorMixer.Services;
 using ColorMixer.ViewModels;
 using ReactiveUI;
 using Splat;
@@ -98,6 +99,27 @@ namespace ColorMixer.Views
                     .Where(_ => ViewModel.ConnectingConnector != null)
                     .Select(e => e.GetPosition(Nodes))
                     .BindTo(this, v => v.Arrow.To)
+                    .DisposeWith(disposables);
+
+                this // Cancel connection creating on right mouse button click
+                    .WhenAnyValue(v => v.ViewModel.ConnectingConnector,
+                                  v => v.ViewModel.ConnectedConnector,
+                                  (from, to) => new { From = from, To = to })
+                    .Where(c => c.From != null && c.To == null)
+                    .SelectMany(_ => Nodes.Events().MouseRightButtonDown)
+                    .Select(_ => default(IConnector))
+                    .BindTo(ViewModel, vm => vm.ConnectingConnector)
+                    .DisposeWith(disposables);
+
+                this // Cancel connection creating on Escape button press
+                    .WhenAnyValue(v => v.ViewModel.ConnectingConnector,
+                                  v => v.ViewModel.ConnectedConnector,
+                                  (from, to) => new { From = from, To = to })
+                    .Where(c => c.From != null && c.To == null)
+                    .SelectMany(_ => ViewModel.MainWindowKeyDown
+                                              .Where(e => e.Key == Key.Escape))
+                    .Select(_ => default(IConnector))
+                    .BindTo(ViewModel, vm => vm.ConnectingConnector)
                     .DisposeWith(disposables);
             });
         }

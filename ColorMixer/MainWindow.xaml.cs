@@ -30,7 +30,7 @@ namespace ColorMixer
         {
             InitializeComponent();
 
-            ViewModel = Application.Current
+            ViewModel = Application.Current // get the bootstrapper from App resources
                                    .FindResource("MainWindowViewModel") as IMainWindowViewModel;
 
             this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
@@ -59,7 +59,7 @@ namespace ColorMixer
                     {
                         var dialog = new ColorDialog
                         {
-                            Color = interaction.Input
+                            Color = interaction.Input // dialog edits what the node sent here
                         };
 
                         await this.ShowMetroDialogAsync(dialog);
@@ -68,11 +68,11 @@ namespace ColorMixer
 
                         if (isAccepted)
                         {
-                            interaction.SetOutput(dialog.Color);
+                            interaction.SetOutput(dialog.Color); // return new color
                         }
                         else
                         {
-                            interaction.SetOutput(interaction.Input);
+                            interaction.SetOutput(interaction.Input); // return old color
                         }
                     })
                     .DisposeWith(disposables);
@@ -84,7 +84,7 @@ namespace ColorMixer
                     {
                         var dialog = new OperationDialog
                         {
-                            Operation = interaction.Input
+                            Operation = interaction.Input // dialog edits what the node sent here
                         };
 
                         await this.ShowMetroDialogAsync(dialog);
@@ -93,11 +93,11 @@ namespace ColorMixer
 
                         if (isAccepted)
                         {
-                            interaction.SetOutput(dialog.Operation);
+                            interaction.SetOutput(dialog.Operation); // return new operation
                         }
                         else
                         {
-                            interaction.SetOutput(interaction.Input);
+                            interaction.SetOutput(interaction.Input); // return old operation
                         }
                     })
                     .DisposeWith(disposables);

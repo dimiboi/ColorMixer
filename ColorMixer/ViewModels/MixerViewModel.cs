@@ -23,8 +23,8 @@ namespace ColorMixer.ViewModels
         ReactiveCommand<Unit, Unit> AddColorNodeCommand { get; }
         ReactiveCommand<Unit, Unit> AddOperationNodeCommand { get; }
         ReactiveCommand<Unit, Unit> AddResultNodeCommand { get; }
-        IConnector ConnectingConnector { get; }
-        IConnector ConnectedConnector { get; }
+        IConnector ConnectingConnector { get; set; }
+        IConnector ConnectedConnector { get; set; }
     }
 
     public class MixerViewModel : ReactiveObject, IMixerViewModel
@@ -191,13 +191,16 @@ namespace ColorMixer.ViewModels
         public IConnector ConnectingConnector
         {
             get { return connectingConnector; }
-            private set { this.RaiseAndSetIfChanged(ref connectingConnector, value); }
+            set { this.RaiseAndSetIfChanged(ref connectingConnector, value); }
         }
 
         public IConnector ConnectedConnector
         {
             get { return connectedConnector; }
-            private set { this.RaiseAndSetIfChanged(ref connectedConnector, value); }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref connectedConnector, value);
+            }
         }
 
         private async Task HandleConnectionRequest<TSrc, TDst>(
@@ -206,7 +209,7 @@ namespace ColorMixer.ViewModels
         {
             var connector = interaction.Input;
 
-            if (connector.IsConnected)
+            if (connector.IsConnected) // remove previous connections if connector is connected
             {
                 var connected = connections.Where(c => c.To == connector || c.From == connector);
 
@@ -223,13 +226,20 @@ namespace ColorMixer.ViewModels
             {
                 ConnectingConnector = interaction.Input;
 
-                var secondConnector = await this.WhenAnyValue(vm => vm.ConnectedConnector)
-                                                .Skip(1) // ignore initial value
-                                                .FirstAsync();
+                // Wait for either ConnectedConnector to get the connector value or
+                // ConnectingConnector to become null indicating connection was cancelled
+
+                var sequence = Observable.Merge(this.WhenAnyValue(vm => vm.ConnectedConnector)
+                                                    .Skip(1), // ignore initial value
+                                                this.WhenAnyValue(vm => vm.ConnectingConnector)
+                                                    .Skip(1) // ignore initial value
+                                                    .Where(v => v == null));
+
+                var secondConnector = await sequence.FirstAsync();
 
                 interaction.SetOutput(secondConnector as TDst);
             }
-            else // the second connector
+            else // the second connector got set
             {
                 ConnectedConnector = interaction.Input;
                 interaction.SetOutput(ConnectingConnector as TDst);
