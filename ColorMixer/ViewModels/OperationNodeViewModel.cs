@@ -12,10 +12,7 @@ namespace ColorMixer.ViewModels
 {
     public interface IOperationNodeViewModel : INode
     {
-        //INode NodeA { get; }
-        //INode NodeB { get; }
         IInConnectorViewModel InputA { get; }
-
         IInConnectorViewModel InputB { get; }
         IOutConnectorViewModel Output { get; }
         OperationType Operation { get; }
@@ -30,9 +27,6 @@ namespace ColorMixer.ViewModels
         private IInConnectorViewModel inputA;
         private IInConnectorViewModel inputB;
         private IOutConnectorViewModel output;
-
-        private ObservableAsPropertyHelper<INode> nodeA;
-        private ObservableAsPropertyHelper<INode> nodeB;
 
         private OperationType operation;
 
@@ -89,10 +83,6 @@ namespace ColorMixer.ViewModels
                 .DisposeWith(disposables);
             });
         }
-
-        //public INode NodeA => nodeA.Value;
-
-        //public INode NodeB => nodeB.Value;
 
         public IInConnectorViewModel InputA
         {

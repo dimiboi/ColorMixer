@@ -19,7 +19,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <RadioButton x:Name="AdditionRadioButton"
                      Grid.Row="0"
@@ -33,6 +33,7 @@
                     Grid.ColumnSpan="4"
                     Margin="0,10,0,5"
                     HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
                     Orientation="Horizontal">
             <Button x:Name="CancelButton"
                     MinWidth="80"
