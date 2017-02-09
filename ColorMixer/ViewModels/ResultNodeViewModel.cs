@@ -2,6 +2,8 @@
 using ReactiveUI;
 using Splat;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Windows.Media;
 
 namespace ColorMixer.ViewModels
 {
@@ -25,8 +27,19 @@ namespace ColorMixer.ViewModels
 
             this.WhenActivated(disposables =>
             {
-                Disposable.Empty
-                          .DisposeWith(disposables);
+                this // Handle the connection
+                    .WhenAnyValue(vm => vm.Input.ConnectedTo)
+                    .Select(i => i != null
+                                 ? i.Node.Color
+                                 : Colors.Black)
+                    .BindTo(this, vm => vm.Color)
+                    .DisposeWith(disposables);
+
+                this // Handle the color
+                    .WhenAnyValue(vm => vm.Input.ConnectedTo.Node.Color)
+                    .Where(_ => Input?.ConnectedTo?.Node != null) // when a node is connected
+                    .BindTo(this, vm => vm.Color)
+                    .DisposeWith(disposables);
             });
         }
 
