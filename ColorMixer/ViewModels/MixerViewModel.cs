@@ -141,33 +141,6 @@ namespace ColorMixer.ViewModels
             });
         }
 
-        private void CreateData()
-        {
-            nodes.Add(new ColorNodeViewModel
-            {
-                X = 10,
-                Y = 10,
-                Width = 150,
-                Height = 150,
-                Color = Colors.SteelBlue
-            });
-
-            nodes.Add(new ResultNodeViewModel
-            {
-                X = 200,
-                Y = 200,
-                Width = 150,
-                Height = 150,
-                Color = Colors.SteelBlue
-            });
-
-            connections.Add(new ConnectionViewModel
-            {
-                From = (nodes.First() as IColorNodeViewModel).Output,
-                To = (nodes.Last() as IResultNodeViewModel).Input
-            });
-        }
-
         public ViewModelActivator Activator { get; } = new ViewModelActivator();
 
         public IScreen HostScreen { get; private set; }
@@ -197,10 +170,7 @@ namespace ColorMixer.ViewModels
         public IConnector ConnectedConnector
         {
             get { return connectedConnector; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref connectedConnector, value);
-            }
+            set { this.RaiseAndSetIfChanged(ref connectedConnector, value); }
         }
 
         private async Task HandleConnectionRequest<TSrc, TDst>(

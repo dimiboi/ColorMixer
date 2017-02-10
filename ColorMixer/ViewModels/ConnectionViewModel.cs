@@ -20,7 +20,8 @@ namespace ColorMixer.ViewModels
 
             this.WhenActivated(disposables =>
             {
-                Disposable.Empty.DisposeWith(disposables);
+                Disposable.Empty
+                          .DisposeWith(disposables);
             });
         }
 
