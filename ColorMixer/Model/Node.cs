@@ -22,15 +22,19 @@ namespace ColorMixer.Model
 
     public abstract class Node : ReactiveObject, INode
     {
+        internal static readonly double DefaultWidth = 150;
+        internal static readonly double DefaultHeight = 150;
+        internal static readonly Color DefaultColor = Colors.Black;
+
         private readonly IInteractionService interactions;
         private readonly IMixerViewModel mixer;
 
         private ObservableAsPropertyHelper<string> title;
         private double x;
         private double y;
-        private double width = 150;
-        private double height = 150;
-        private Color color = Colors.Black;
+        private double width = DefaultWidth;
+        private double height = DefaultHeight;
+        private Color color = DefaultColor;
 
         public Node(IInteractionService interactions = null,
                     IMixerViewModel mixer = null)
@@ -54,7 +58,10 @@ namespace ColorMixer.Model
                 },
                 this.WhenAnyValue(vm => vm.mixer.IsNodeBeingAdded,
                                   vm => vm.mixer.ConnectingConnector,
-                                  (a, b) => !a && b == null))
+                                  (a, b) =>
+                                  {
+                                      return !a && b == null;
+                                  }))
                 .DisposeWith(disposables);
             });
         }
