@@ -70,13 +70,13 @@ namespace ViewModels
             // Arrange
 
             var input = default(Color);
-            var expected = Colors.Pink;
+            var output = Colors.Pink;
 
             interactions.GetNodeColor
                         .RegisterHandler(i =>
                         {
                             input = i.Input;
-                            i.SetOutput(expected);
+                            i.SetOutput(output);
                         });
             // Act
 
@@ -92,7 +92,7 @@ namespace ViewModels
 
             input.Should().Be(Node.DefaultColor);
 
-            node.Color.Should().Be(expected);
+            node.Color.Should().Be(output);
         }
 
         [Theory]
@@ -118,12 +118,12 @@ namespace ViewModels
             node.Activator
                 .Activate();
 
-            var canExecute = await node.EditNodeCommand
-                                       .CanExecute
-                                       .FirstAsync();
+            var actual = await node.EditNodeCommand
+                                   .CanExecute
+                                   .FirstAsync();
             // Assert
 
-            canExecute.Should().Be(expected);
+            actual.Should().Be(expected);
         }
     }
 }

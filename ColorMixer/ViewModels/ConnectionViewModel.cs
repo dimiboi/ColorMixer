@@ -1,5 +1,4 @@
 ﻿using ReactiveUI;
-using System.Reactive.Disposables;
 
 namespace ColorMixer.ViewModels
 {
@@ -14,18 +13,7 @@ namespace ColorMixer.ViewModels
         private IOutConnectorViewModel from;
         private IInConnectorViewModel to;
 
-        public ConnectionViewModel()
-        {
-            Activator = new ViewModelActivator();
-
-            this.WhenActivated(disposables =>
-            {
-                Disposable.Empty
-                          .DisposeWith(disposables);
-            });
-        }
-
-        public ViewModelActivator Activator { get; private set; }
+        public ViewModelActivator Activator { get; } = new ViewModelActivator();
 
         public IOutConnectorViewModel From
         {

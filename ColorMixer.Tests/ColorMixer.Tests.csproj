@@ -129,6 +129,9 @@
     <Compile Include="Model\Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\ColorNode.cs" />
+    <Compile Include="ViewModels\Connection.cs" />
+    <Compile Include="ViewModels\InConnector.cs" />
+    <Compile Include="ViewModels\OutConnector.cs" />
     <Compile Include="ViewModels\ResultNode.cs" />
   </ItemGroup>
   <ItemGroup>
