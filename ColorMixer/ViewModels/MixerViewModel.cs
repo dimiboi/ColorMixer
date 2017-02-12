@@ -1,5 +1,4 @@
-﻿using ColorMixer.Extensions;
-using ColorMixer.Model;
+﻿using ColorMixer.Model;
 using ColorMixer.Services;
 using ReactiveUI;
 using Splat;
@@ -10,7 +9,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace ColorMixer.ViewModels
 {
@@ -189,7 +187,7 @@ namespace ColorMixer.ViewModels
                     connection.From.ConnectedTo = null;
                 }
 
-                connections.RemoveRange(connected);
+                connections.RemoveAll(connected.ToArray());
             }
 
             if (ConnectingConnector == null) // connection initiated
@@ -251,7 +249,7 @@ namespace ColorMixer.ViewModels
                 connection.From.ConnectedTo = null;
             }
 
-            connections.RemoveRange(connected);
+            connections.RemoveAll(connected.ToArray());
             nodes.Remove(node);
 
             interaction.SetOutput(Unit.Default);
