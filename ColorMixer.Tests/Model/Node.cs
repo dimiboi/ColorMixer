@@ -1,6 +1,7 @@
 ﻿using ColorMixer.Model;
 using ColorMixer.Services;
 using ColorMixer.Tests;
+using ColorMixer.Tests.Attributes;
 using ColorMixer.ViewModels;
 using FluentAssertions;
 using Ninject;
@@ -25,6 +26,7 @@ namespace Model
     public class NodeModel
     {
         private readonly IKernel kernel;
+
         private readonly IInteractionService interactions;
         private readonly IMixerViewModel mixer;
 
@@ -147,16 +149,21 @@ namespace Model
             input.Should().Be(node);
         }
 
-        [Fact]
-        public async void DeleteNodeCommand_CanExecute()
+        [Theory]
+        [InlineData(true, false, default(IConnector))]
+        [InlineData(false, true, default(IConnector))]
+        [InlineAutoNSubstituteData(false, false)]
+        public async void DeleteNodeCommand_CanExecute(bool expected,
+                                                       bool isNodeBeingAdded,
+                                                       IConnector connectingConnector)
         {
             // Arrange
 
             mixer.IsNodeBeingAdded
-                 .Returns(false);
+                 .Returns(isNodeBeingAdded);
 
             mixer.ConnectingConnector
-                 .Returns(default(IConnector));
+                 .Returns(connectingConnector);
 
             // Act
 
@@ -170,59 +177,7 @@ namespace Model
                                        .FirstAsync();
             // Assert
 
-            canExecute.Should().BeTrue();
-        }
-
-        [Fact]
-        public async void DeleteNodeCommand_CannotExecute_WhenNodeIsBeingAdded()
-        {
-            // Arrange
-
-            mixer.IsNodeBeingAdded
-                 .Returns(true);
-
-            mixer.ConnectingConnector
-                 .Returns(default(IConnector));
-
-            // Act
-
-            var node = kernel.Get<INode>();
-
-            node.Activator
-                .Activate();
-
-            var canExecute = await node.DeleteNodeCommand
-                                       .CanExecute
-                                       .FirstAsync();
-            // Assert
-
-            canExecute.Should().BeFalse();
-        }
-
-        [Fact]
-        public async void DeleteNodeCommand_CannotExecute_WhenConnectionIsCreated()
-        {
-            // Arrange
-
-            mixer.IsNodeBeingAdded
-                 .Returns(false);
-
-            mixer.ConnectingConnector
-                 .Returns(Substitute.For<IConnector>());
-
-            // Act
-
-            var node = kernel.Get<INode>();
-
-            node.Activator
-                .Activate();
-
-            var canExecute = await node.DeleteNodeCommand
-                                       .CanExecute
-                                       .FirstAsync();
-            // Assert
-
-            canExecute.Should().BeFalse();
+            canExecute.Should().Be(expected);
         }
 
         [Theory]

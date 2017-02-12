@@ -4,6 +4,7 @@ using ColorMixer.Views;
 using ReactiveUI;
 using Splat;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Input;
 
 namespace ColorMixer
@@ -13,6 +14,7 @@ namespace ColorMixer
         IObservable<KeyEventArgs> KeyDown { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class AppBootstrapper : ReactiveObject, IMainWindowViewModel
     {
         private IObservable<KeyEventArgs> keyDown;
