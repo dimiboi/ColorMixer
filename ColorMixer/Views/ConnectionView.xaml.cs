@@ -1,12 +1,14 @@
 ﻿using ColorMixer.ViewModels;
 using ReactiveUI;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace ColorMixer.Views
 {
+    [ExcludeFromCodeCoverage]
     public partial class ConnectionView : UserControl, IViewFor<IConnectionViewModel>
     {
         public static readonly DependencyProperty ViewModelProperty =

@@ -4,6 +4,7 @@ using ColorMixer.ViewModels;
 using ReactiveUI;
 using Splat;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -14,6 +15,7 @@ using System.Windows.Input;
 
 namespace ColorMixer.Views
 {
+    [ExcludeFromCodeCoverage]
     public partial class MixerView : UserControl, IViewFor<IMixerViewModel>
     {
         public static readonly DependencyProperty ViewModelProperty =

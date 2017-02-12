@@ -2,6 +2,7 @@
 using MahApps.Metro.Controls.Dialogs;
 using ReactiveUI;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using System.Windows.Controls.Primitives;
 
 namespace ColorMixer.Dialogs
 {
+    [ExcludeFromCodeCoverage]
     public partial class OperationDialog : CustomDialog, IActivatable
     {
         public static readonly DependencyProperty OperationProperty =

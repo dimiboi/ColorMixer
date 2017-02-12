@@ -5,6 +5,7 @@ using MahApps.Metro.Controls.Dialogs;
 using ReactiveUI;
 using Splat;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 
 namespace ColorMixer
 {
+    [ExcludeFromCodeCoverage]
     public partial class MainWindow : MetroWindow, IViewFor<IMainWindowViewModel>
     {
         public static readonly DependencyProperty ViewModelProperty =

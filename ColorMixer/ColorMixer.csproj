@@ -111,7 +111,6 @@
     <Compile Include="Dialogs\OperationDialog.xaml.cs">
       <DependentUpon>OperationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\ReactiveListExtensions.cs" />
     <Compile Include="Model\Connector.cs" />
     <Compile Include="Model\ConnectorDirection.cs" />
     <Compile Include="Model\OperationType.cs" />

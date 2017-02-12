@@ -58,10 +58,7 @@ namespace ColorMixer.Model
                 },
                 this.WhenAnyValue(vm => vm.mixer.IsNodeBeingAdded,
                                   vm => vm.mixer.ConnectingConnector,
-                                  (a, b) =>
-                                  {
-                                      return !a && b == null;
-                                  }))
+                                  (a, b) => !a && b == null))
                 .DisposeWith(disposables);
             });
         }

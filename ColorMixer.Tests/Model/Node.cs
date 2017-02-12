@@ -1,15 +1,12 @@
 ﻿using ColorMixer.Model;
 using ColorMixer.Services;
-using ColorMixer.Tests.Extensions;
+using ColorMixer.Tests;
 using ColorMixer.ViewModels;
 using FluentAssertions;
 using Ninject;
 using NSubstitute;
 using Ploeh.AutoFixture.Xunit2;
-using ReactiveUI;
-using System;
 using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Windows.Media;
 using Xunit;
@@ -46,6 +43,18 @@ namespace Model
 
             kernel.Bind<INode>()
                   .To<TestNode>(); // system under test
+        }
+
+        [Fact]
+        public void SetsActivator()
+        {
+            // Act
+
+            var connector = kernel.Get<INode>();
+
+            // Assert
+
+            connector.Activator.Should().NotBeNull();
         }
 
         [Fact]
@@ -222,36 +231,17 @@ namespace Model
         [InlineAutoData(nameof(Node.Width))]
         [InlineAutoData(nameof(Node.Height))]
         public void SetsDoubleProperties(string property, double initial, double expected)
-            => SetsProperty(property, initial, expected);
+            => kernel.Get<INode>()
+                     .ShouldSetProperty(property, initial, expected);
 
         [Theory]
         [InlineAutoData(nameof(Node.Color))]
         public void SetsColorProperties(string property,
-                                        byte initialR, byte initialG, byte initialB,
-                                        byte expectedR, byte expectedG, byte expectedB)
-            => SetsProperty(property,
-                            Color.FromRgb(initialR, initialG, initialB),
-                            Color.FromRgb(expectedR, expectedG, expectedB));
-
-        private void SetsProperty<T>(string property, T initial, T expected)
-        {
-            // Arrange
-
-            string raised = null;
-
-            var node = kernel.Get<INode>();
-
-            node.SetProperty(property, initial);
-            node.PropertyChanged += (s, e) => raised = e.PropertyName;
-
-            // Act
-
-            node.SetProperty(property, expected);
-
-            // Assert
-
-            node.GetProperty(property).Should().Be(expected);
-            raised.Should().Be(property);
-        }
+                                   byte initialR, byte initialG, byte initialB,
+                                   byte expectedR, byte expectedG, byte expectedB)
+            => kernel.Get<INode>()
+                     .ShouldSetProperty(property,
+                                        Color.FromRgb(initialR, initialG, initialB),
+                                        Color.FromRgb(expectedR, expectedG, expectedB));
     }
 }

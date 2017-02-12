@@ -2,6 +2,7 @@
 using ReactiveUI;
 using Splat;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -10,6 +11,7 @@ using System.Windows.Controls.Primitives;
 
 namespace ColorMixer.Views
 {
+    [ExcludeFromCodeCoverage]
     public partial class OperationNodeView : UserControl, IViewFor<IOperationNodeViewModel>
     {
         public static readonly DependencyProperty ViewModelProperty =

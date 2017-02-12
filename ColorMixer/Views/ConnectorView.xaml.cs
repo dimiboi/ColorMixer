@@ -1,6 +1,7 @@
 ﻿using ColorMixer.Model;
 using ReactiveUI;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -9,6 +10,7 @@ using System.Windows.Media;
 
 namespace ColorMixer.Views
 {
+    [ExcludeFromCodeCoverage]
     public partial class ConnectorView : UserControl, IViewFor<IConnector>
     {
         public static readonly DependencyProperty ViewModelProperty =

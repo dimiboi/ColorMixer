@@ -1,12 +1,14 @@
 ﻿using Microsoft.Expression.Media;
 using ReactiveUI;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace ColorMixer.Controls
 {
+    [ExcludeFromCodeCoverage]
     public partial class Arrow : UserControl, IActivatable
     {
         public static readonly DependencyProperty FromProperty =

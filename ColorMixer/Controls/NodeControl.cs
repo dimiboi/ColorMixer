@@ -1,6 +1,7 @@
 ﻿using ColorMixer.Model;
 using ReactiveUI;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -8,6 +9,7 @@ using System.Windows.Controls;
 
 namespace ColorMixer.Controls
 {
+    [ExcludeFromCodeCoverage]
     public class NodeControl : ContentControl, IActivatable
     {
         public static readonly DependencyProperty ViewModelProperty =

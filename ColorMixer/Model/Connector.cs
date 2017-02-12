@@ -20,15 +20,6 @@ namespace ColorMixer.Model
         private INode node;
         private Point connectionPoint;
 
-        public Connector()
-        {
-            this.WhenActivated(disposables =>
-            {
-                Disposable.Empty
-                          .DisposeWith(disposables);
-            });
-        }
-
         public ViewModelActivator Activator { get; } = new ViewModelActivator();
 
         public abstract bool IsConnected { get; }
