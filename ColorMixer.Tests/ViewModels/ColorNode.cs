@@ -5,6 +5,7 @@ using ColorMixer.ViewModels;
 using FluentAssertions;
 using Ninject;
 using NSubstitute;
+using ReactiveUI;
 using System.Reactive.Linq;
 using System.Windows.Media;
 using Xunit;
@@ -24,7 +25,7 @@ namespace ViewModels
             kernel = new StandardKernel();
 
             interactions = new InteractionService();
-            mixer = Substitute.For<IMixerViewModel>();
+            mixer = Substitute.For<IMixerViewModel, ReactiveObject>();
             output = Substitute.For<IOutConnectorViewModel>();
 
             kernel.Bind<IInteractionService>()
@@ -43,7 +44,7 @@ namespace ViewModels
         [Fact]
         public void SetsOutput()
         {
-            // Act
+            // Arrange
 
             var node = kernel.Get<IColorNodeViewModel>();
 
@@ -55,7 +56,7 @@ namespace ViewModels
         [Fact]
         public void SetsOutputNode()
         {
-            // Act
+            // Arrange
 
             var node = kernel.Get<IColorNodeViewModel>();
 
@@ -78,9 +79,10 @@ namespace ViewModels
                             input = i.Input;
                             i.SetOutput(output);
                         });
-            // Act
 
             var node = kernel.Get<IColorNodeViewModel>();
+
+            // Act
 
             node.Activator
                 .Activate();
@@ -105,18 +107,22 @@ namespace ViewModels
         {
             // Arrange
 
+            var node = kernel.Get<IColorNodeViewModel>();
+
+            // Act
+
+            node.Activator
+                .Activate();
+
             mixer.IsNodeBeingAdded
                  .Returns(isNodeBeingAdded);
+
+            mixer.RaisePropertyChanged(nameof(mixer.IsNodeBeingAdded));
 
             mixer.ConnectingConnector
                  .Returns(connectingConnector);
 
-            // Act
-
-            var node = kernel.Get<IColorNodeViewModel>();
-
-            node.Activator
-                .Activate();
+            mixer.RaisePropertyChanged(nameof(mixer.ConnectingConnector));
 
             var actual = await node.EditNodeCommand
                                    .CanExecute

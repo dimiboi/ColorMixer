@@ -59,12 +59,15 @@ namespace ViewModels
 
             var connectingConnector = Substitute.For<IConnector>();
 
-            connectingConnector.Direction.Returns(connectingDirection);
-            connectingConnector.Node.Returns(connectingNode);
+            connectingConnector.Direction
+                               .Returns(connectingDirection);
 
-            // Act
+            connectingConnector.Node
+                               .Returns(connectingNode);
 
             var connector = kernel.Get<IOutConnectorViewModel>();
+
+            // Act
 
             connector.Activator
                      .Activate();
@@ -87,12 +90,15 @@ namespace ViewModels
 
             var connectingConnector = Substitute.For<IConnector>();
 
-            connectingConnector.Direction.Returns(connectingDirection);
-            connectingConnector.Node.Returns(node);
+            connectingConnector.Direction
+                               .Returns(connectingDirection);
 
-            // Act
+            connectingConnector.Node
+                               .Returns(node);
 
             var connector = kernel.Get<IOutConnectorViewModel>();
+
+            // Act
 
             connector.Activator
                      .Activate();
@@ -109,9 +115,11 @@ namespace ViewModels
         [Fact]
         public async void Enabled_WhenNotConnecting()
         {
-            // Act
+            // Arrange
 
             var connector = kernel.Get<IOutConnectorViewModel>();
+
+            // Act
 
             connector.Activator
                      .Activate();
@@ -130,9 +138,11 @@ namespace ViewModels
         [InlineData(false, default(IInConnectorViewModel))]
         public async void SetsIsConnected(bool expected, IInConnectorViewModel connectedTo)
         {
-            // Act
+            // Arrange
 
             var connector = kernel.Get<IOutConnectorViewModel>();
+
+            // Act
 
             connector.Activator
                      .Activate();
@@ -160,9 +170,10 @@ namespace ViewModels
                             input = i.Input;
                             i.SetOutput(output);
                         });
-            // Act
 
             var connector = kernel.Get<IOutConnectorViewModel>();
+
+            // Act
 
             connector.Activator
                      .Activate();
@@ -184,15 +195,17 @@ namespace ViewModels
         {
             // Arrange
 
-            mixer.IsNodeBeingAdded
-                 .Returns(isNodeBeingAdded);
+            var connector = kernel.Get<IOutConnectorViewModel>();
 
             // Act
 
-            var connector = kernel.Get<IOutConnectorViewModel>();
-
             connector.Activator
                      .Activate();
+
+            mixer.IsNodeBeingAdded
+                 .Returns(isNodeBeingAdded);
+
+            mixer.RaisePropertyChanged(nameof(mixer.IsNodeBeingAdded));
 
             var actual = await connector.ConnectorCommand
                                         .CanExecute

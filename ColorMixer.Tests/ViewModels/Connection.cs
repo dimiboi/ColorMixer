@@ -22,7 +22,7 @@ namespace ViewModels
         [Fact]
         public void SetsActivator()
         {
-            // Act
+            // Arrange
 
             var connection = kernel.Get<IConnectionViewModel>();
 

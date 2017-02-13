@@ -38,6 +38,9 @@ namespace ViewModels
 
             kernel.Bind<IResultNodeViewModel>()
                   .To<ResultNodeViewModel>(); // system under test
+
+            input.ConnectedTo = Arg.Do<IOutConnectorViewModel>(
+                _ => input.RaisePropertyChanged(nameof(input.ConnectedTo)));
         }
 
         [Fact]
@@ -77,12 +80,9 @@ namespace ViewModels
             var connector = Substitute.For<IOutConnectorViewModel>();
             connector.Node.Returns(source);
 
-            input.ConnectedTo = Arg.Do<IOutConnectorViewModel>(
-                _ => input.RaisePropertyChanged(nameof(input.ConnectedTo)));
+            var node = kernel.Get<IResultNodeViewModel>();
 
             // Act
-
-            var node = kernel.Get<IResultNodeViewModel>();
 
             node.Activator
                 .Activate();
@@ -109,18 +109,14 @@ namespace ViewModels
             var connector = Substitute.For<IOutConnectorViewModel>();
             connector.Node.Returns(source);
 
-            input.ConnectedTo = Arg.Do<IOutConnectorViewModel>(
-                _ => input.RaisePropertyChanged(nameof(input.ConnectedTo)));
-
-            input.ConnectedTo = connector;
+            var node = kernel.Get<IResultNodeViewModel>();
 
             // Act
-
-            var node = kernel.Get<IResultNodeViewModel>();
 
             node.Activator
                 .Activate();
 
+            input.ConnectedTo = connector;
             input.ConnectedTo = null;
 
             var actual = await node.WhenAnyValue(vm => vm.Color)
@@ -148,9 +144,9 @@ namespace ViewModels
             source.Color = Arg.Do<Color>(
                 _ => source.RaisePropertyChanged(nameof(source.Color)));
 
-            // Act
-
             var node = kernel.Get<IResultNodeViewModel>();
+
+            // Act
 
             node.Activator
                 .Activate();

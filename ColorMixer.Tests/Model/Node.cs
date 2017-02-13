@@ -7,6 +7,7 @@ using FluentAssertions;
 using Ninject;
 using NSubstitute;
 using Ploeh.AutoFixture.Xunit2;
+using ReactiveUI;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Media;
@@ -35,7 +36,7 @@ namespace Model
             kernel = new StandardKernel();
 
             interactions = new InteractionService();
-            mixer = Substitute.For<IMixerViewModel>();
+            mixer = Substitute.For<IMixerViewModel, ReactiveObject>();
 
             kernel.Bind<IInteractionService>()
                   .ToConstant(interactions);
@@ -109,11 +110,13 @@ namespace Model
 
             var title = $"R: {color.R} / G: {color.G} / B {color.B}";
 
-            // Act
-
             var node = kernel.Get<INode>();
 
-            node.Activator.Activate();
+            // Act
+
+            node.Activator
+                .Activate();
+
             node.Color = color;
 
             // Assert
@@ -134,9 +137,10 @@ namespace Model
                             input = i.Input;
                             i.SetOutput(Unit.Default);
                         });
-            // Act
 
             var node = kernel.Get<INode>();
+
+            // Act
 
             node.Activator
                 .Activate();
@@ -159,18 +163,22 @@ namespace Model
         {
             // Arrange
 
+            var node = kernel.Get<INode>();
+
+            // Act
+
+            node.Activator
+                .Activate();
+
             mixer.IsNodeBeingAdded
                  .Returns(isNodeBeingAdded);
+
+            mixer.RaisePropertyChanged(nameof(mixer.IsNodeBeingAdded));
 
             mixer.ConnectingConnector
                  .Returns(connectingConnector);
 
-            // Act
-
-            var node = kernel.Get<INode>();
-
-            node.Activator
-                .Activate();
+            mixer.RaisePropertyChanged(nameof(mixer.ConnectingConnector));
 
             var canExecute = await node.DeleteNodeCommand
                                        .CanExecute
