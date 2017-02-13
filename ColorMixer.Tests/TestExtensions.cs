@@ -23,7 +23,7 @@ namespace ColorMixer.Tests
         {
             // Arrange
 
-            string raised = null;
+            var raised = default(string);
 
             obj.SetProperty(property, initial);
             obj.PropertyChanged += (s, e) => raised = e.PropertyName;

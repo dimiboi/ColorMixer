@@ -101,7 +101,7 @@ namespace Model
         {
             // Arrange
 
-            INode input = null;
+            var input = default(INode);
 
             interactions.DeleteNode
                         .RegisterHandler(i =>

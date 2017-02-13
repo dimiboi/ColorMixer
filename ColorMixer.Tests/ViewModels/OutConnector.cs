@@ -117,6 +117,8 @@ namespace ViewModels
         {
             // Arrange
 
+            var connectingConnector = Substitute.For<IConnector>();
+
             var connector = kernel.Get<IOutConnectorViewModel>();
 
             // Act
@@ -124,6 +126,7 @@ namespace ViewModels
             connector.Activator
                      .Activate();
 
+            mixer.ConnectedConnector = connectingConnector;
             mixer.ConnectingConnector = null;
 
             var isEnabled = await connector.WhenAnyValue(vm => vm.IsEnabled)
