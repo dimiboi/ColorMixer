@@ -1,4 +1,5 @@
-﻿using MahApps.Metro.Controls.Dialogs;
+﻿using ColorMixer.Model;
+using MahApps.Metro.Controls.Dialogs;
 using ReactiveUI;
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -19,7 +20,7 @@ namespace ColorMixer.Dialogs
             DependencyProperty.Register("Color",
                                         typeof(Color),
                                         typeof(ColorDialog),
-                                        new PropertyMetadata(Colors.Black));
+                                        new PropertyMetadata(Node.DefaultColor));
 
         public ColorDialog()
         {

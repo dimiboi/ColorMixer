@@ -56,7 +56,7 @@ namespace ColorMixer.ViewModels
                                   (a, b, op) => new { A = a, B = b, Op = op })
                     .Select(i => i.A != null && i.B != null
                                  ? Execute(i.A.Node.Color, i.B.Node.Color, i.Op)
-                                 : Colors.Black)
+                                 : DefaultColor)
                     .BindTo(this, vm => vm.Color)
                     .DisposeWith(disposables);
 

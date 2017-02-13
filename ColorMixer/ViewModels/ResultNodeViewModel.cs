@@ -3,7 +3,6 @@ using ReactiveUI;
 using Splat;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Windows.Media;
 
 namespace ColorMixer.ViewModels
 {
@@ -31,7 +30,7 @@ namespace ColorMixer.ViewModels
                     .WhenAnyValue(vm => vm.Input.ConnectedTo)
                     .Select(i => i != null
                                  ? i.Node.Color
-                                 : Colors.Black)
+                                 : DefaultColor)
                     .BindTo(this, vm => vm.Color)
                     .DisposeWith(disposables);
 
