@@ -50,51 +50,23 @@ namespace Model
 
         [Fact]
         public void SetsActivator()
-        {
-            // Act
-
-            var connector = kernel.Get<INode>();
-
-            // Assert
-
-            connector.Activator.Should().NotBeNull();
-        }
+            => kernel.Get<INode>()
+                     .Activator.Should().NotBeNull();
 
         [Fact]
         public void SetsDefaultWidth()
-        {
-            // Act
-
-            var node = kernel.Get<INode>();
-
-            // Assert
-
-            node.Width.Should().Be(Node.DefaultWidth);
-        }
+            => kernel.Get<INode>()
+                     .Width.Should().Be(Node.DefaultWidth);
 
         [Fact]
         public void SetsDefaultHeight()
-        {
-            // Act
-
-            var node = kernel.Get<INode>();
-
-            // Assert
-
-            node.Width.Should().Be(Node.DefaultHeight);
-        }
+            => kernel.Get<INode>()
+                     .Width.Should().Be(Node.DefaultHeight);
 
         [Fact]
         public void SetsDefaultColor()
-        {
-            // Act
-
-            var node = kernel.Get<INode>();
-
-            // Assert
-
-            node.Color.Should().Be(Node.DefaultColor);
-        }
+            => kernel.Get<INode>()
+                     .Color.Should().Be(Node.DefaultColor);
 
         [Fact]
         public void SetsTitleFromColor()

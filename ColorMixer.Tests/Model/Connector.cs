@@ -35,15 +35,8 @@ namespace Model
 
         [Fact]
         public void SetsActivator()
-        {
-            // Act
-
-            var connector = kernel.Get<IConnector>();
-
-            // Assert
-
-            connector.Activator.Should().NotBeNull();
-        }
+            => kernel.Get<IConnector>()
+                     .Activator.Should().NotBeNull();
 
         [Theory]
         [InlineAutoNSubstituteData(nameof(Connector.Node))]

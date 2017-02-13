@@ -43,15 +43,8 @@ namespace ViewModels
 
         [Fact]
         public void SetsOutput()
-        {
-            // Arrange
-
-            var node = kernel.Get<IColorNodeViewModel>();
-
-            // Assert
-
-            node.Output.Should().Be(output);
-        }
+            => kernel.Get<IColorNodeViewModel>()
+                     .Output.Should().Be(output);
 
         [Fact]
         public void SetsOutputNode()

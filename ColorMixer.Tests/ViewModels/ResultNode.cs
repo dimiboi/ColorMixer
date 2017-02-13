@@ -45,15 +45,8 @@ namespace ViewModels
 
         [Fact]
         public void SetsInput()
-        {
-            // Act
-
-            var node = kernel.Get<IResultNodeViewModel>();
-
-            // Assert
-
-            node.Input.Should().Be(input);
-        }
+            => kernel.Get<IResultNodeViewModel>()
+                     .Input.Should().Be(input);
 
         [Fact]
         public void SetsInputNode()
