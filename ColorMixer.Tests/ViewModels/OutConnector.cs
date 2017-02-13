@@ -44,7 +44,7 @@ namespace ViewModels
         }
 
         [Fact]
-        public void InDirection()
+        public void OutDirection()
             => kernel.Get<IOutConnectorViewModel>()
                      .Direction.Should().Be(ConnectorDirection.Output);
 
