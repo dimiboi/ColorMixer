@@ -124,6 +124,7 @@
     <Compile Include="Converters\ColorToBrush.cs" />
     <Compile Include="Converters\OperationTypeToText.cs" />
     <Compile Include="Converters\ThicknessToDouble.cs" />
+    <Compile Include="Extensions\Color.cs" />
     <Compile Include="TestExtensions.cs" />
     <Compile Include="Model\Connector.cs" />
     <Compile Include="Model\Node.cs" />

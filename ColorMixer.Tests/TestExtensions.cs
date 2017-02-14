@@ -1,5 +1,10 @@
-﻿using FluentAssertions;
+﻿using ColorMixer.Model;
+using ColorMixer.Services;
+using ColorMixer.ViewModels;
+using FluentAssertions;
 using System.ComponentModel;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 namespace ColorMixer.Tests
 {
@@ -36,6 +41,18 @@ namespace ColorMixer.Tests
 
             obj.GetProperty(property).Should().Be(expected);
             raised.Should().Be(property);
+        }
+
+        public static async Task SetOperation(this IOperationNodeViewModel node,
+                                                   OperationType operation,
+                                                   IInteractionService interactions)
+        {
+            using (var handler = interactions.GetNodeOperation
+                                             .RegisterHandler(i => i.SetOutput(operation)))
+            {
+                await node.EditNodeCommand
+                          .Execute();
+            }
         }
     }
 }

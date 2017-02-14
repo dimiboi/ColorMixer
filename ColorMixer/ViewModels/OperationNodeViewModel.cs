@@ -1,8 +1,8 @@
-﻿using ColorMixer.Model;
+﻿using ColorMixer.Extensions;
+using ColorMixer.Model;
 using ColorMixer.Services;
 using ReactiveUI;
 using Splat;
-using System;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -117,38 +117,13 @@ namespace ColorMixer.ViewModels
             switch (operation)
             {
                 case OperationType.Addition:
-                    return new Color
-                    {
-                        R = (byte)(a.R + b.R < 255
-                                   ? a.R + b.R
-                                   : 255),
-                        G = (byte)(a.G + b.G < 255
-                                   ? a.G + b.G
-                                   : 255),
-                        B = (byte)(a.B + b.B < 255
-                                   ? a.B + b.B
-                                   : 255),
-                        A = 255
-                    };
+                    return a.Add(b);
 
                 case OperationType.Subtraction:
-                    return new Color
-                    {
-                        R = (byte)(a.R - b.R > 0
-                                   ? a.R - b.R
-                                   : 0),
-                        G = (byte)(a.G - b.G > 0
-                                   ? a.G - b.G
-                                   : 0),
-                        B = (byte)(a.B - b.B > 0
-                                   ? a.B - b.B
-                                   : 0),
-                        A = 255
-                    };
+                    return a.Subtract(b);
 
                 default:
-                    throw new ArgumentException($"Operation '{operation}' is unknown.",
-                                                nameof(operation));
+                    return DefaultColor;
             }
         }
     }

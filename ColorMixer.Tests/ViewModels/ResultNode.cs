@@ -118,18 +118,16 @@ namespace ViewModels
         {
             // Arrange
 
-            var expected = Colors.Pink;
+            var expectedBefore = Colors.SteelBlue;
+            var expectedAfter = Colors.Pink;
 
             var source = Substitute.For<INode, ReactiveObject>();
-            source.Color.Returns(Colors.SteelBlue);
+            source.Color = Arg.Do<Color>(_ => source.RaisePropertyChanged(nameof(source.Color)));
 
             var connector = Substitute.For<IOutConnectorViewModel>();
             connector.Node.Returns(source);
 
             input.ConnectedTo.Returns(connector);
-
-            source.Color = Arg.Do<Color>(
-                _ => source.RaisePropertyChanged(nameof(source.Color)));
 
             var node = kernel.Get<IResultNodeViewModel>();
 
@@ -138,13 +136,19 @@ namespace ViewModels
             node.Activator
                 .Activate();
 
-            source.Color = expected;
+            source.Color = expectedBefore;
 
-            var actual = await node.WhenAnyValue(vm => vm.Color)
+            var before = await node.WhenAnyValue(vm => vm.Color)
                                    .FirstAsync();
+
+            source.Color = expectedAfter;
+
+            var after = await node.WhenAnyValue(vm => vm.Color)
+                                  .FirstAsync();
             // Assert
 
-            actual.Should().Be(expected);
+            before.Should().Be(expectedBefore);
+            after.Should().Be(expectedAfter);
         }
     }
 }
