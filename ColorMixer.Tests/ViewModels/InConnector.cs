@@ -164,6 +164,7 @@ namespace ViewModels
         {
             // Arrange
 
+            var isInvoked = false;
             var input = default(IInConnectorViewModel);
             var output = Substitute.For<IOutConnectorViewModel>();
 
@@ -171,6 +172,7 @@ namespace ViewModels
                         .RegisterHandler(i =>
                         {
                             input = i.Input;
+                            isInvoked = true;
                             i.SetOutput(output);
                         });
 
@@ -186,8 +188,8 @@ namespace ViewModels
 
             // Assert
 
+            isInvoked.Should().BeTrue();
             input.Should().Be(connector);
-
             connector.ConnectedTo.Should().Be(output);
         }
 

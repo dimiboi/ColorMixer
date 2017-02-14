@@ -21,6 +21,8 @@ namespace ColorMixer.ViewModels
 
     public class OperationNodeViewModel : Node, IOperationNodeViewModel
     {
+        internal static readonly OperationType DefaultOperation = OperationType.Addition;
+
         private readonly IInteractionService interactions;
         private readonly IMixerViewModel mixer;
 
@@ -28,7 +30,7 @@ namespace ColorMixer.ViewModels
         private IInConnectorViewModel inputB;
         private IOutConnectorViewModel output;
 
-        private OperationType operation;
+        private OperationType operation = DefaultOperation;
 
         public OperationNodeViewModel(IInteractionService interactions = null,
                                       IMixerViewModel mixer = null,

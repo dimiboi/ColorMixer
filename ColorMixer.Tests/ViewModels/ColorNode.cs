@@ -38,7 +38,8 @@ namespace ViewModels
                   .ToConstant(output);
 
             kernel.Bind<IColorNodeViewModel>()
-                  .To<ColorNodeViewModel>(); // system under test
+                  .To<ColorNodeViewModel>()
+                  .InSingletonScope(); // system under test
         }
 
         [Fact]
@@ -48,21 +49,15 @@ namespace ViewModels
 
         [Fact]
         public void SetsOutputNode()
-        {
-            // Arrange
-
-            var node = kernel.Get<IColorNodeViewModel>();
-
-            // Assert
-
-            output.Received().Node = node;
-        }
+            => kernel.Get<IColorNodeViewModel>()
+                     .Output.Received().Node = kernel.Get<IColorNodeViewModel>();
 
         [Fact]
-        public async void EditNodeCommand_InvokesDeleteNodeInteraction()
+        public async void EditNodeCommand_InvokesGetNodeColorInteraction()
         {
             // Arrange
 
+            var isInvoked = false;
             var input = default(Color);
             var output = Colors.Pink;
 
@@ -70,6 +65,7 @@ namespace ViewModels
                         .RegisterHandler(i =>
                         {
                             input = i.Input;
+                            isInvoked = true;
                             i.SetOutput(output);
                         });
 
@@ -85,8 +81,8 @@ namespace ViewModels
 
             // Assert
 
+            isInvoked.Should().BeTrue();
             input.Should().Be(Node.DefaultColor);
-
             node.Color.Should().Be(output);
         }
 

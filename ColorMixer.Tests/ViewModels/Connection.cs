@@ -16,20 +16,14 @@ namespace ViewModels
             kernel = new StandardKernel();
 
             kernel.Bind<IConnectionViewModel>()
-                  .To<ConnectionViewModel>(); // system under test
+                  .To<ConnectionViewModel>()
+                  .InSingletonScope(); // system under test
         }
 
         [Fact]
         public void SetsActivator()
-        {
-            // Arrange
-
-            var connection = kernel.Get<IConnectionViewModel>();
-
-            // Assert
-
-            connection.Activator.Should().NotBeNull();
-        }
+            => kernel.Get<IConnectionViewModel>()
+                     .Activator.Should().NotBeNull();
 
         [Theory]
         [InlineAutoNSubstituteData(nameof(IConnectionViewModel.From))]

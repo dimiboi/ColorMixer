@@ -37,7 +37,8 @@ namespace ViewModels
                   .ToConstant(input);
 
             kernel.Bind<IResultNodeViewModel>()
-                  .To<ResultNodeViewModel>(); // system under test
+                  .To<ResultNodeViewModel>()
+                  .InSingletonScope(); // system under test
 
             input.ConnectedTo = Arg.Do<IOutConnectorViewModel>(
                 _ => input.RaisePropertyChanged(nameof(input.ConnectedTo)));
@@ -50,18 +51,11 @@ namespace ViewModels
 
         [Fact]
         public void SetsInputNode()
-        {
-            // Act
-
-            var node = kernel.Get<IResultNodeViewModel>();
-
-            // Assert
-
-            input.Received().Node = node;
-        }
+            => kernel.Get<IResultNodeViewModel>()
+                     .Input.Received().Node = kernel.Get<IResultNodeViewModel>();
 
         [Fact]
-        public async void SetsInputColor_WhenConnected()
+        public async void SetsColor_WhenConnected()
         {
             // Arrange
 

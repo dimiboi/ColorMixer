@@ -68,19 +68,15 @@ namespace Model
             => kernel.Get<INode>()
                      .Color.Should().Be(Node.DefaultColor);
 
-        [Fact]
-        public void SetsTitleFromColor()
+        [Theory]
+        [AutoData]
+        public void SetsTitleFromColor(byte r, byte g, byte b)
         {
             // Arrange
 
-            var color = new Color
-            {
-                R = 12,
-                G = 34,
-                B = 56
-            };
+            var color = Color.FromRgb(r, g, b);
 
-            var title = $"R: {color.R} / G: {color.G} / B {color.B}";
+            var title = $"R: {r} / G: {g} / B {b}";
 
             var node = kernel.Get<INode>();
 
@@ -101,12 +97,14 @@ namespace Model
         {
             // Arrange
 
+            var isInvoked = false;
             var input = default(INode);
 
             interactions.DeleteNode
                         .RegisterHandler(i =>
                         {
                             input = i.Input;
+                            isInvoked = true;
                             i.SetOutput(Unit.Default);
                         });
 
@@ -122,6 +120,7 @@ namespace Model
 
             // Assert
 
+            isInvoked.Should().BeTrue();
             input.Should().Be(node);
         }
 

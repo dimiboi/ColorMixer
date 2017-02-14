@@ -30,7 +30,8 @@ namespace Model
             kernel = new StandardKernel();
 
             kernel.Bind<IConnector>()
-                  .To<TestConnector>(); // system under test
+                  .To<TestConnector>()
+                  .InSingletonScope(); // system under test
         }
 
         [Fact]
