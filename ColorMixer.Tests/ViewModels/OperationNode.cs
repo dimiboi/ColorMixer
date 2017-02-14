@@ -98,10 +98,11 @@ namespace ViewModels
         [InlineAutoData(42)]
         [InlineAutoData(OperationType.Addition)]
         [InlineAutoData(OperationType.Subtraction)]
-        public async void SetsColor_WhenConnected(OperationType operation,
-                                                  byte rA, byte gA, byte bA,
-                                                  byte rB, byte gB, byte bB)
-            => await SetsColor(
+        public async void SetsColor_WhenBothConnected(OperationType operation,
+                                                      byte rA, byte gA, byte bA,
+                                                      byte rB, byte gB, byte bB)
+            => await kernel.Get<IOperationNodeViewModel>().ShouldUpdateColor(
+                Node.DefaultColor,
                 operation == OperationType.Addition
                 ? Color.FromRgb(rA, gA, bA)
                        .Add(Color.FromRgb(rB, gB, bB))
@@ -109,6 +110,7 @@ namespace ViewModels
                   ? Color.FromRgb(rA, gA, bA)
                          .Subtract(Color.FromRgb(rB, gB, bB))
                   : Node.DefaultColor,
+                node => { },
                 async node =>
                 {
                     await node.SetOperation(operation, interactions);
@@ -119,10 +121,30 @@ namespace ViewModels
 
         [Theory]
         [AutoData]
+        public async void SetsDefaultColor_WhenAConnected(byte r, byte g, byte b)
+            => await kernel.Get<IOperationNodeViewModel>().ShouldUpdateColor(
+                Node.DefaultColor,
+                Node.DefaultColor,
+                node => { },
+                node => inputA.ConnectToNodeWithColor(Color.FromRgb(r, g, b)));
+
+        [Theory]
+        [AutoData]
+        public async void SetsDefaultColor_WhenBConnected(byte r, byte g, byte b)
+            => await kernel.Get<IOperationNodeViewModel>().ShouldUpdateColor(
+                Node.DefaultColor,
+                Node.DefaultColor,
+                node => { },
+                node => inputB.ConnectToNodeWithColor(Color.FromRgb(r, g, b)));
+
+        [Theory]
+        [AutoData]
         public async void SetsDefaultColor_WhenADisconnected(byte rA, byte gA, byte bA,
                                                              byte rB, byte gB, byte bB)
-            => await SetsColor(
+            => await kernel.Get<IOperationNodeViewModel>().ShouldUpdateColor(
                 Node.DefaultColor,
+                Node.DefaultColor,
+                node => { },
                 node =>
                 {
                     inputA.ConnectToNodeWithColor(Color.FromRgb(rA, gA, bA));
@@ -134,8 +156,10 @@ namespace ViewModels
         [AutoData]
         public async void SetsDefaultColor_WhenBDisconnected(byte rA, byte gA, byte bA,
                                                              byte rB, byte gB, byte bB)
-            => await SetsColor(
+            => await kernel.Get<IOperationNodeViewModel>().ShouldUpdateColor(
                 Node.DefaultColor,
+                Node.DefaultColor,
+                node => { },
                 node =>
                 {
                     inputA.ConnectToNodeWithColor(Color.FromRgb(rA, gA, bA));
@@ -147,8 +171,10 @@ namespace ViewModels
         [AutoData]
         public async void SetsDefaultColor_WhenBothDisconnected(byte rA, byte gA, byte bA,
                                                                 byte rB, byte gB, byte bB)
-            => await SetsColor(
+            => await kernel.Get<IOperationNodeViewModel>().ShouldUpdateColor(
                 Node.DefaultColor,
+                Node.DefaultColor,
+                node => { },
                 node =>
                 {
                     inputA.ConnectToNodeWithColor(Color.FromRgb(rA, gA, bA));
@@ -161,7 +187,7 @@ namespace ViewModels
         [AutoData]
         public async void UpdatesColor_WhenOperartionChanged(byte rA, byte gA, byte bA,
                                                              byte rB, byte gB, byte bB)
-            => await UpdatesColor(
+            => await kernel.Get<IOperationNodeViewModel>().ShouldUpdateColor(
                 Color.FromRgb(rA, gA, bA)
                      .Add(Color.FromRgb(rB, gB, bB)),
                 Color.FromRgb(rA, gA, bA)
@@ -183,7 +209,7 @@ namespace ViewModels
         public async void UpdatesColor_WhenColorAChanged(byte rA1, byte gA1, byte bA1,
                                                          byte rB1, byte gB1, byte bB1,
                                                          byte rA2, byte gA2, byte bA2)
-            => await UpdatesColor(
+            => await kernel.Get<IOperationNodeViewModel>().ShouldUpdateColor(
                 Color.FromRgb(rA1, gA1, bA1)
                      .Add(Color.FromRgb(rB1, gB1, bB1)),
                 Color.FromRgb(rA2, gA2, bA2)
@@ -203,7 +229,7 @@ namespace ViewModels
         public async void UpdatesColor_WhenColorBChanged(byte rA1, byte gA1, byte bA1,
                                                          byte rB1, byte gB1, byte bB1,
                                                          byte rB2, byte gB2, byte bB2)
-            => await UpdatesColor(
+            => await kernel.Get<IOperationNodeViewModel>().ShouldUpdateColor(
                 Color.FromRgb(rA1, gA1, bA1)
                      .Add(Color.FromRgb(rB1, gB1, bB1)),
                 Color.FromRgb(rA1, gA1, bA1)
@@ -224,7 +250,7 @@ namespace ViewModels
                                                              byte rB1, byte gB1, byte bB1,
                                                              byte rA2, byte gA2, byte bA2,
                                                              byte rB2, byte gB2, byte bB2)
-            => await UpdatesColor(
+            => await kernel.Get<IOperationNodeViewModel>().ShouldUpdateColor(
                 Color.FromRgb(rA1, gA1, bA1)
                      .Add(Color.FromRgb(rB1, gB1, bB1)),
                 Color.FromRgb(rA2, gA2, bA2)
@@ -307,54 +333,6 @@ namespace ViewModels
             // Assert
 
             actual.Should().Be(expected);
-        }
-
-        private async Task SetsColor(Color expected, Action<IOperationNodeViewModel> action)
-        {
-            // Arrange
-
-            var node = kernel.Get<IOperationNodeViewModel>();
-
-            // Act
-
-            node.Activator
-                .Activate();
-
-            action(node);
-
-            var actual = await node.WhenAnyValue(vm => vm.Color)
-                                   .FirstAsync();
-            // Assert
-
-            actual.Should().Be(expected);
-        }
-
-        private async Task UpdatesColor(Color expectedBefore,
-                                        Color expectedAfter,
-                                        Action<IOperationNodeViewModel> before,
-                                        Action<IOperationNodeViewModel> after)
-        {
-            // Arrange
-
-            var node = kernel.Get<IOperationNodeViewModel>();
-
-            // Act
-
-            node.Activator
-                .Activate();
-
-            before(node);
-
-            var actualBefore = await node.WhenAnyValue(vm => vm.Color)
-                                         .FirstAsync();
-            after(node);
-
-            var actualAfter = await node.WhenAnyValue(vm => vm.Color)
-                                        .FirstAsync();
-            // Assert
-
-            actualBefore.Should().Be(expectedBefore);
-            actualAfter.Should().Be(expectedAfter);
         }
     }
 }

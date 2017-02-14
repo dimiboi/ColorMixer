@@ -1,11 +1,12 @@
 ﻿using ColorMixer.Model;
 using ColorMixer.Services;
+using ColorMixer.Tests;
 using ColorMixer.ViewModels;
 using FluentAssertions;
 using Ninject;
 using NSubstitute;
+using Ploeh.AutoFixture.Xunit2;
 using ReactiveUI;
-using System.Reactive.Linq;
 using System.Windows.Media;
 using Xunit;
 
@@ -54,101 +55,32 @@ namespace ViewModels
             => kernel.Get<IResultNodeViewModel>()
                      .Input.Received().Node = kernel.Get<IResultNodeViewModel>();
 
-        [Fact]
-        public async void SetsColor_WhenConnected()
-        {
-            // Arrange
+        [Theory]
+        [AutoData]
+        public async void SetsColor_WhenConnected(byte r, byte g, byte b)
+            => await kernel.Get<IResultNodeViewModel>().ShouldUpdateColor(
+                Node.DefaultColor,
+                Color.FromRgb(r, g, b),
+                node => { },
+                node => input.ConnectToNodeWithColor(Color.FromRgb(r, g, b)));
 
-            var expected = Colors.Pink;
+        [Theory]
+        [AutoData]
+        public async void SetsDefaultColor_WhenDisconnected(byte r, byte g, byte b)
+            => await kernel.Get<IResultNodeViewModel>().ShouldUpdateColor(
+                Color.FromRgb(r, g, b),
+                Node.DefaultColor,
+                node => input.ConnectToNodeWithColor(Color.FromRgb(r, g, b)),
+                node => input.ConnectedTo = null);
 
-            var source = Substitute.For<INode>();
-            source.Color.Returns(expected);
-
-            var connector = Substitute.For<IOutConnectorViewModel>();
-            connector.Node.Returns(source);
-
-            var node = kernel.Get<IResultNodeViewModel>();
-
-            // Act
-
-            node.Activator
-                .Activate();
-
-            input.ConnectedTo = connector;
-
-            var actual = await node.WhenAnyValue(vm => vm.Color)
-                                   .FirstAsync();
-            // Assert
-
-            actual.Should().Be(expected);
-        }
-
-        [Fact]
-        public async void SetsDefaultColor_WhenDisconnected()
-        {
-            // Arrange
-
-            var expected = Node.DefaultColor;
-
-            var source = Substitute.For<INode>();
-            source.Color.Returns(Colors.Pink);
-
-            var connector = Substitute.For<IOutConnectorViewModel>();
-            connector.Node.Returns(source);
-
-            var node = kernel.Get<IResultNodeViewModel>();
-
-            // Act
-
-            node.Activator
-                .Activate();
-
-            input.ConnectedTo = connector;
-            input.ConnectedTo = null;
-
-            var actual = await node.WhenAnyValue(vm => vm.Color)
-                                   .FirstAsync();
-            // Assert
-
-            actual.Should().Be(expected);
-        }
-
-        [Fact]
-        public async void UpdatesColor_WhenSourceColorChanges()
-        {
-            // Arrange
-
-            var expectedBefore = Colors.SteelBlue;
-            var expectedAfter = Colors.Pink;
-
-            var source = Substitute.For<INode, ReactiveObject>();
-            source.Color = Arg.Do<Color>(_ => source.RaisePropertyChanged(nameof(source.Color)));
-
-            var connector = Substitute.For<IOutConnectorViewModel>();
-            connector.Node.Returns(source);
-
-            input.ConnectedTo.Returns(connector);
-
-            var node = kernel.Get<IResultNodeViewModel>();
-
-            // Act
-
-            node.Activator
-                .Activate();
-
-            source.Color = expectedBefore;
-
-            var before = await node.WhenAnyValue(vm => vm.Color)
-                                   .FirstAsync();
-
-            source.Color = expectedAfter;
-
-            var after = await node.WhenAnyValue(vm => vm.Color)
-                                  .FirstAsync();
-            // Assert
-
-            before.Should().Be(expectedBefore);
-            after.Should().Be(expectedAfter);
-        }
+        [Theory]
+        [AutoData]
+        public async void UpdatesColor_WhenSourceColorChanges(byte r1, byte g1, byte b1,
+                                                              byte r2, byte g2, byte b2)
+            => await kernel.Get<IResultNodeViewModel>().ShouldUpdateColor(
+                Color.FromRgb(r1, g1, b1),
+                Color.FromRgb(r2, g2, b2),
+                node => input.ConnectToNodeWithColor(Color.FromRgb(r1, g1, b1)),
+                node => input.ConnectedTo.Node.Color = Color.FromRgb(r2, g2, b2));
     }
 }

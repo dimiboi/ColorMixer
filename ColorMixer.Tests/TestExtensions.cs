@@ -4,6 +4,7 @@ using ColorMixer.ViewModels;
 using FluentAssertions;
 using NSubstitute;
 using ReactiveUI;
+using System;
 using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -46,6 +47,32 @@ namespace ColorMixer.Tests
             raised.Should().Be(property);
         }
 
+        public static async Task ShouldUpdateColor<TNode>(this TNode node,
+                                                          Color expectedBefore,
+                                                          Color expectedAfter,
+                                                          Action<TNode> before,
+                                                          Action<TNode> after)
+            where TNode : class, INode
+        {
+            // Act
+
+            node.Activator
+                .Activate();
+
+            before(node);
+
+            var actualBefore = await node.WhenAnyValue(vm => vm.Color)
+                                         .FirstAsync();
+            after(node);
+
+            var actualAfter = await node.WhenAnyValue(vm => vm.Color)
+                                        .FirstAsync();
+            // Assert
+
+            actualBefore.Should().Be(expectedBefore);
+            actualAfter.Should().Be(expectedAfter);
+        }
+
         public static async Task SetOperation(this IOperationNodeViewModel node,
                                                    OperationType operation,
                                                    IInteractionService interactions)
@@ -63,9 +90,6 @@ namespace ColorMixer.Tests
             var output = Substitute.For<IOutConnectorViewModel>();
             output.Node.Returns(node);
 
-            output.ConnectedTo = Arg.Do<IInConnectorViewModel>(
-                _ => output.RaisePropertyChanged(nameof(output.ConnectedTo)));
-
             input.ConnectedTo = output;
         }
 
@@ -73,9 +97,6 @@ namespace ColorMixer.Tests
         {
             var output = Substitute.For<IInConnectorViewModel>();
             output.Node.Returns(node);
-
-            output.ConnectedTo = Arg.Do<IOutConnectorViewModel>(
-                _ => output.RaisePropertyChanged(nameof(output.ConnectedTo)));
 
             input.ConnectedTo = output;
         }
