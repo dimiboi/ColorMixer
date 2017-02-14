@@ -63,6 +63,9 @@ namespace ColorMixer.Tests
             var output = Substitute.For<IOutConnectorViewModel>();
             output.Node.Returns(node);
 
+            output.ConnectedTo = Arg.Do<IInConnectorViewModel>(
+                _ => output.RaisePropertyChanged(nameof(output.ConnectedTo)));
+
             input.ConnectedTo = output;
         }
 
@@ -70,6 +73,9 @@ namespace ColorMixer.Tests
         {
             var output = Substitute.For<IInConnectorViewModel>();
             output.Node.Returns(node);
+
+            output.ConnectedTo = Arg.Do<IOutConnectorViewModel>(
+                _ => output.RaisePropertyChanged(nameof(output.ConnectedTo)));
 
             input.ConnectedTo = output;
         }

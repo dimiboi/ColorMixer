@@ -11,6 +11,7 @@ using Ploeh.AutoFixture.Xunit2;
 using ReactiveUI;
 using System;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using Xunit;
 
@@ -94,174 +95,150 @@ namespace ViewModels
                      .Operation.Should().Be(OperationNodeViewModel.DefaultOperation);
 
         [Theory]
+        [InlineAutoData(42)]
         [InlineAutoData(OperationType.Addition)]
         [InlineAutoData(OperationType.Subtraction)]
         public async void SetsColor_WhenConnected(OperationType operation,
                                                   byte rA, byte gA, byte bA,
                                                   byte rB, byte gB, byte bB)
-        {
-            // Arrange
+            => await SetsColor(
+                operation == OperationType.Addition
+                ? Color.FromRgb(rA, gA, bA)
+                       .Add(Color.FromRgb(rB, gB, bB))
+                : operation == OperationType.Subtraction
+                  ? Color.FromRgb(rA, gA, bA)
+                         .Subtract(Color.FromRgb(rB, gB, bB))
+                  : Node.DefaultColor,
+                async node =>
+                {
+                    await node.SetOperation(operation, interactions);
 
-            var colorA = Color.FromRgb(rA, gA, bA);
-            var colorB = Color.FromRgb(rB, gB, bB);
-
-            var expected = default(Color);
-
-            if (operation == OperationType.Addition)
-            {
-                expected = colorA.Add(colorB);
-            }
-            else if (operation == OperationType.Subtraction)
-            {
-                expected = colorA.Subtract(colorB);
-            }
-
-            var node = kernel.Get<IOperationNodeViewModel>();
-
-            // Act
-
-            node.Activator
-                .Activate();
-
-            await node.SetOperation(operation, interactions);
-
-            inputA.ConnectToNodeWithColor(colorA);
-            inputB.ConnectToNodeWithColor(colorB);
-
-            var actual = await node.WhenAnyValue(vm => vm.Color)
-                                   .FirstAsync();
-            // Assert
-
-            actual.Should().Be(expected);
-        }
+                    inputA.ConnectToNodeWithColor(Color.FromRgb(rA, gA, bA));
+                    inputB.ConnectToNodeWithColor(Color.FromRgb(rB, gB, bB));
+                });
 
         [Theory]
         [AutoData]
         public async void SetsDefaultColor_WhenADisconnected(byte rA, byte gA, byte bA,
                                                              byte rB, byte gB, byte bB)
-        {
-            // Arrange
-
-            var colorA = Color.FromRgb(rA, gA, bA);
-            var colorB = Color.FromRgb(rB, gB, bB);
-
-            var expected = Node.DefaultColor;
-
-            var node = kernel.Get<IOperationNodeViewModel>();
-
-            // Act
-
-            node.Activator
-                .Activate();
-
-            inputA.ConnectToNodeWithColor(colorA);
-            inputB.ConnectToNodeWithColor(colorB);
-            inputA.ConnectedTo = null;
-
-            var actual = await node.WhenAnyValue(vm => vm.Color)
-                                   .FirstAsync();
-            // Assert
-
-            actual.Should().Be(expected);
-        }
+            => await SetsColor(
+                Node.DefaultColor,
+                node =>
+                {
+                    inputA.ConnectToNodeWithColor(Color.FromRgb(rA, gA, bA));
+                    inputB.ConnectToNodeWithColor(Color.FromRgb(rB, gB, bB));
+                    inputA.ConnectedTo = null;
+                });
 
         [Theory]
         [AutoData]
         public async void SetsDefaultColor_WhenBDisconnected(byte rA, byte gA, byte bA,
                                                              byte rB, byte gB, byte bB)
-        {
-            // Arrange
-
-            var colorA = Color.FromRgb(rA, gA, bA);
-            var colorB = Color.FromRgb(rB, gB, bB);
-
-            var expected = Node.DefaultColor;
-
-            var node = kernel.Get<IOperationNodeViewModel>();
-
-            // Act
-
-            node.Activator
-                .Activate();
-
-            inputA.ConnectToNodeWithColor(colorA);
-            inputB.ConnectToNodeWithColor(colorB);
-            inputB.ConnectedTo = null;
-
-            var actual = await node.WhenAnyValue(vm => vm.Color)
-                                   .FirstAsync();
-            // Assert
-
-            actual.Should().Be(expected);
-        }
+            => await SetsColor(
+                Node.DefaultColor,
+                node =>
+                {
+                    inputA.ConnectToNodeWithColor(Color.FromRgb(rA, gA, bA));
+                    inputB.ConnectToNodeWithColor(Color.FromRgb(rB, gB, bB));
+                    inputB.ConnectedTo = null;
+                });
 
         [Theory]
         [AutoData]
         public async void SetsDefaultColor_WhenBothDisconnected(byte rA, byte gA, byte bA,
                                                                 byte rB, byte gB, byte bB)
-        {
-            // Arrange
-
-            var colorA = Color.FromRgb(rA, gA, bA);
-            var colorB = Color.FromRgb(rB, gB, bB);
-
-            var expected = Node.DefaultColor;
-
-            var node = kernel.Get<IOperationNodeViewModel>();
-
-            // Act
-
-            node.Activator
-                .Activate();
-
-            inputA.ConnectToNodeWithColor(colorA);
-            inputB.ConnectToNodeWithColor(colorB);
-            inputA.ConnectedTo = null;
-            inputB.ConnectedTo = null;
-
-            var actual = await node.WhenAnyValue(vm => vm.Color)
-                                   .FirstAsync();
-
-            // Assert
-
-            actual.Should().Be(expected);
-        }
+            => await SetsColor(
+                Node.DefaultColor,
+                node =>
+                {
+                    inputA.ConnectToNodeWithColor(Color.FromRgb(rA, gA, bA));
+                    inputB.ConnectToNodeWithColor(Color.FromRgb(rB, gB, bB));
+                    inputA.ConnectedTo = null;
+                    inputB.ConnectedTo = null;
+                });
 
         [Theory]
         [AutoData]
         public async void UpdatesColor_WhenOperartionChanged(byte rA, byte gA, byte bA,
                                                              byte rB, byte gB, byte bB)
-        {
-            // Arrange
+            => await UpdatesColor(
+                Color.FromRgb(rA, gA, bA)
+                     .Add(Color.FromRgb(rB, gB, bB)),
+                Color.FromRgb(rA, gA, bA)
+                     .Subtract(Color.FromRgb(rB, gB, bB)),
+                async node =>
+                {
+                    inputA.ConnectToNodeWithColor(Color.FromRgb(rA, gA, bA));
+                    inputB.ConnectToNodeWithColor(Color.FromRgb(rB, gB, bB));
 
-            var colorA = Color.FromRgb(rA, gA, bA);
-            var colorB = Color.FromRgb(rB, gB, bB);
+                    await node.SetOperation(OperationType.Addition, interactions);
+                },
+                async node =>
+                {
+                    await node.SetOperation(OperationType.Subtraction, interactions);
+                });
 
-            var expectedBefore = colorA.Add(colorB);
-            var expectedAfter = colorA.Subtract(colorB);
+        [Theory]
+        [AutoData]
+        public async void UpdatesColor_WhenColorAChanged(byte rA1, byte gA1, byte bA1,
+                                                         byte rB1, byte gB1, byte bB1,
+                                                         byte rA2, byte gA2, byte bA2)
+            => await UpdatesColor(
+                Color.FromRgb(rA1, gA1, bA1)
+                     .Add(Color.FromRgb(rB1, gB1, bB1)),
+                Color.FromRgb(rA2, gA2, bA2)
+                     .Add(Color.FromRgb(rB1, gB1, bB1)),
+                node =>
+                {
+                    inputA.ConnectToNodeWithColor(Color.FromRgb(rA1, gA1, bA1));
+                    inputB.ConnectToNodeWithColor(Color.FromRgb(rB1, gB1, bB1));
+                },
+                node =>
+                {
+                    inputA.ConnectedTo.Node.Color = Color.FromRgb(rA2, gA2, bA2);
+                });
 
-            var node = kernel.Get<IOperationNodeViewModel>();
+        [Theory]
+        [AutoData]
+        public async void UpdatesColor_WhenColorBChanged(byte rA1, byte gA1, byte bA1,
+                                                         byte rB1, byte gB1, byte bB1,
+                                                         byte rB2, byte gB2, byte bB2)
+            => await UpdatesColor(
+                Color.FromRgb(rA1, gA1, bA1)
+                     .Add(Color.FromRgb(rB1, gB1, bB1)),
+                Color.FromRgb(rA1, gA1, bA1)
+                     .Add(Color.FromRgb(rB2, gB2, bB2)),
+                node =>
+                {
+                    inputA.ConnectToNodeWithColor(Color.FromRgb(rA1, gA1, bA1));
+                    inputB.ConnectToNodeWithColor(Color.FromRgb(rB1, gB1, bB1));
+                },
+                node =>
+                {
+                    inputB.ConnectedTo.Node.Color = Color.FromRgb(rB2, gB2, bB2);
+                });
 
-            // Act
-
-            node.Activator
-                .Activate();
-
-            inputA.ConnectToNodeWithColor(colorA);
-            inputB.ConnectToNodeWithColor(colorB);
-
-            var before = await node.WhenAnyValue(vm => vm.Color)
-                                   .FirstAsync();
-
-            await node.SetOperation(OperationType.Subtraction, interactions);
-
-            var after = await node.WhenAnyValue(vm => vm.Color)
-                                  .FirstAsync();
-            // Assert
-
-            before.Should().Be(expectedBefore);
-            after.Should().Be(expectedAfter);
-        }
+        [Theory]
+        [AutoData]
+        public async void UpdatesColor_WhenBothColorsChanged(byte rA1, byte gA1, byte bA1,
+                                                             byte rB1, byte gB1, byte bB1,
+                                                             byte rA2, byte gA2, byte bA2,
+                                                             byte rB2, byte gB2, byte bB2)
+            => await UpdatesColor(
+                Color.FromRgb(rA1, gA1, bA1)
+                     .Add(Color.FromRgb(rB1, gB1, bB1)),
+                Color.FromRgb(rA2, gA2, bA2)
+                     .Add(Color.FromRgb(rB2, gB2, bB2)),
+                node =>
+                {
+                    inputA.ConnectToNodeWithColor(Color.FromRgb(rA1, gA1, bA1));
+                    inputB.ConnectToNodeWithColor(Color.FromRgb(rB1, gB1, bB1));
+                },
+                node =>
+                {
+                    inputA.ConnectedTo.Node.Color = Color.FromRgb(rA2, gA2, bA2);
+                    inputB.ConnectedTo.Node.Color = Color.FromRgb(rB2, gB2, bB2);
+                });
 
         [Fact]
         public async void EditNodeCommand_InvokesGetNodeOperationInteraction()
@@ -330,6 +307,54 @@ namespace ViewModels
             // Assert
 
             actual.Should().Be(expected);
+        }
+
+        private async Task SetsColor(Color expected, Action<IOperationNodeViewModel> action)
+        {
+            // Arrange
+
+            var node = kernel.Get<IOperationNodeViewModel>();
+
+            // Act
+
+            node.Activator
+                .Activate();
+
+            action(node);
+
+            var actual = await node.WhenAnyValue(vm => vm.Color)
+                                   .FirstAsync();
+            // Assert
+
+            actual.Should().Be(expected);
+        }
+
+        private async Task UpdatesColor(Color expectedBefore,
+                                        Color expectedAfter,
+                                        Action<IOperationNodeViewModel> before,
+                                        Action<IOperationNodeViewModel> after)
+        {
+            // Arrange
+
+            var node = kernel.Get<IOperationNodeViewModel>();
+
+            // Act
+
+            node.Activator
+                .Activate();
+
+            before(node);
+
+            var actualBefore = await node.WhenAnyValue(vm => vm.Color)
+                                         .FirstAsync();
+            after(node);
+
+            var actualAfter = await node.WhenAnyValue(vm => vm.Color)
+                                        .FirstAsync();
+            // Assert
+
+            actualBefore.Should().Be(expectedBefore);
+            actualAfter.Should().Be(expectedAfter);
         }
     }
 }
