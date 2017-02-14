@@ -2,9 +2,12 @@
 using ColorMixer.Services;
 using ColorMixer.ViewModels;
 using FluentAssertions;
+using NSubstitute;
+using ReactiveUI;
 using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace ColorMixer.Tests
 {
@@ -53,6 +56,42 @@ namespace ColorMixer.Tests
                 await node.EditNodeCommand
                           .Execute();
             }
+        }
+
+        public static void ConnectToNode(this IInConnectorViewModel input, INode node)
+        {
+            var output = Substitute.For<IOutConnectorViewModel>();
+            output.Node.Returns(node);
+
+            input.ConnectedTo = output;
+        }
+
+        public static void ConnectToNode(this IOutConnectorViewModel input, INode node)
+        {
+            var output = Substitute.For<IInConnectorViewModel>();
+            output.Node.Returns(node);
+
+            input.ConnectedTo = output;
+        }
+
+        public static void ConnectToNodeWithColor(this IInConnectorViewModel input,
+                                                       Color color)
+            => input.ConnectToNode(CreateNode(color));
+
+        public static void ConnectToNodeWithColor(this IOutConnectorViewModel input,
+                                                       Color color)
+            => input.ConnectToNode(CreateNode(color));
+
+        private static INode CreateNode(Color color)
+        {
+            var node = Substitute.For<INode>();
+
+            node.Color = Arg.Do<Color>(
+                _ => node.RaisePropertyChanged(nameof(node.Color)));
+
+            node.Color = color;
+
+            return node;
         }
     }
 }

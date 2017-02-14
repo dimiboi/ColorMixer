@@ -9,6 +9,7 @@ using Ninject;
 using NSubstitute;
 using Ploeh.AutoFixture.Xunit2;
 using ReactiveUI;
+using System;
 using System.Reactive.Linq;
 using System.Windows.Media;
 using Xunit;
@@ -115,18 +116,6 @@ namespace ViewModels
                 expected = colorA.Subtract(colorB);
             }
 
-            var sourceA = Substitute.For<INode>();
-            sourceA.Color.Returns(colorA);
-
-            var sourceB = Substitute.For<INode>();
-            sourceB.Color.Returns(colorB);
-
-            var connectorA = Substitute.For<IOutConnectorViewModel>();
-            connectorA.Node.Returns(sourceA);
-
-            var connectorB = Substitute.For<IOutConnectorViewModel>();
-            connectorB.Node.Returns(sourceB);
-
             var node = kernel.Get<IOperationNodeViewModel>();
 
             // Act
@@ -136,8 +125,8 @@ namespace ViewModels
 
             await node.SetOperation(operation, interactions);
 
-            inputA.ConnectedTo = connectorA;
-            inputB.ConnectedTo = connectorB;
+            inputA.ConnectToNodeWithColor(colorA);
+            inputB.ConnectToNodeWithColor(colorB);
 
             var actual = await node.WhenAnyValue(vm => vm.Color)
                                    .FirstAsync();
@@ -153,19 +142,10 @@ namespace ViewModels
         {
             // Arrange
 
+            var colorA = Color.FromRgb(rA, gA, bA);
+            var colorB = Color.FromRgb(rB, gB, bB);
+
             var expected = Node.DefaultColor;
-
-            var sourceA = Substitute.For<INode>();
-            sourceA.Color.Returns(Color.FromRgb(rA, gA, bA));
-
-            var sourceB = Substitute.For<INode>();
-            sourceB.Color.Returns(Color.FromRgb(rB, gB, bB));
-
-            var connectorA = Substitute.For<IOutConnectorViewModel>();
-            connectorA.Node.Returns(sourceA);
-
-            var connectorB = Substitute.For<IOutConnectorViewModel>();
-            connectorB.Node.Returns(sourceB);
 
             var node = kernel.Get<IOperationNodeViewModel>();
 
@@ -174,8 +154,8 @@ namespace ViewModels
             node.Activator
                 .Activate();
 
-            inputA.ConnectedTo = connectorA;
-            inputB.ConnectedTo = connectorB;
+            inputA.ConnectToNodeWithColor(colorA);
+            inputB.ConnectToNodeWithColor(colorB);
             inputA.ConnectedTo = null;
 
             var actual = await node.WhenAnyValue(vm => vm.Color)
@@ -192,19 +172,10 @@ namespace ViewModels
         {
             // Arrange
 
+            var colorA = Color.FromRgb(rA, gA, bA);
+            var colorB = Color.FromRgb(rB, gB, bB);
+
             var expected = Node.DefaultColor;
-
-            var sourceA = Substitute.For<INode>();
-            sourceA.Color.Returns(Color.FromRgb(rA, gA, bA));
-
-            var sourceB = Substitute.For<INode>();
-            sourceB.Color.Returns(Color.FromRgb(rB, gB, bB));
-
-            var connectorA = Substitute.For<IOutConnectorViewModel>();
-            connectorA.Node.Returns(sourceA);
-
-            var connectorB = Substitute.For<IOutConnectorViewModel>();
-            connectorB.Node.Returns(sourceB);
 
             var node = kernel.Get<IOperationNodeViewModel>();
 
@@ -213,8 +184,8 @@ namespace ViewModels
             node.Activator
                 .Activate();
 
-            inputA.ConnectedTo = connectorA;
-            inputB.ConnectedTo = connectorB;
+            inputA.ConnectToNodeWithColor(colorA);
+            inputB.ConnectToNodeWithColor(colorB);
             inputB.ConnectedTo = null;
 
             var actual = await node.WhenAnyValue(vm => vm.Color)
@@ -231,19 +202,10 @@ namespace ViewModels
         {
             // Arrange
 
+            var colorA = Color.FromRgb(rA, gA, bA);
+            var colorB = Color.FromRgb(rB, gB, bB);
+
             var expected = Node.DefaultColor;
-
-            var sourceA = Substitute.For<INode>();
-            sourceA.Color.Returns(Color.FromRgb(rA, gA, bA));
-
-            var sourceB = Substitute.For<INode>();
-            sourceB.Color.Returns(Color.FromRgb(rB, gB, bB));
-
-            var connectorA = Substitute.For<IOutConnectorViewModel>();
-            connectorA.Node.Returns(sourceA);
-
-            var connectorB = Substitute.For<IOutConnectorViewModel>();
-            connectorB.Node.Returns(sourceB);
 
             var node = kernel.Get<IOperationNodeViewModel>();
 
@@ -252,8 +214,8 @@ namespace ViewModels
             node.Activator
                 .Activate();
 
-            inputA.ConnectedTo = connectorA;
-            inputB.ConnectedTo = connectorB;
+            inputA.ConnectToNodeWithColor(colorA);
+            inputB.ConnectToNodeWithColor(colorB);
             inputA.ConnectedTo = null;
             inputB.ConnectedTo = null;
 
@@ -278,18 +240,6 @@ namespace ViewModels
             var expectedBefore = colorA.Add(colorB);
             var expectedAfter = colorA.Subtract(colorB);
 
-            var sourceA = Substitute.For<INode>();
-            sourceA.Color.Returns(colorA);
-
-            var sourceB = Substitute.For<INode>();
-            sourceB.Color.Returns(colorB);
-
-            var connectorA = Substitute.For<IOutConnectorViewModel>();
-            connectorA.Node.Returns(sourceA);
-
-            var connectorB = Substitute.For<IOutConnectorViewModel>();
-            connectorB.Node.Returns(sourceB);
-
             var node = kernel.Get<IOperationNodeViewModel>();
 
             // Act
@@ -297,8 +247,8 @@ namespace ViewModels
             node.Activator
                 .Activate();
 
-            inputA.ConnectedTo = connectorA;
-            inputB.ConnectedTo = connectorB;
+            inputA.ConnectToNodeWithColor(colorA);
+            inputB.ConnectToNodeWithColor(colorB);
 
             var before = await node.WhenAnyValue(vm => vm.Color)
                                    .FirstAsync();
