@@ -114,17 +114,26 @@ namespace ColorMixer.ViewModels
 
         private Color Execute(Color a, Color b, OperationType operation)
         {
+            Color color;
+
             switch (operation)
             {
                 case OperationType.Addition:
-                    return a.Add(b);
+                    color = a.Add(b);
+                    break;
 
                 case OperationType.Subtraction:
-                    return a.Subtract(b);
+                    color = a.Subtract(b);
+                    break;
 
                 default:
-                    return DefaultColor;
+                    color = DefaultColor;
+                    break;
             }
+
+            color.A = 255; // transparency not supported
+
+            return color;
         }
     }
 }
