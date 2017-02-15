@@ -9,9 +9,7 @@ using Ninject;
 using NSubstitute;
 using Ploeh.AutoFixture.Xunit2;
 using ReactiveUI;
-using System;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using System.Windows.Media;
 using Xunit;
 
@@ -104,19 +102,19 @@ namespace ViewModels
             => await kernel.Get<IOperationNodeViewModel>().ShouldUpdateColor(
                 Node.DefaultColor,
                 operation == OperationType.Addition
-                ? Color.FromRgb(rA, gA, bA)
-                       .Add(Color.FromRgb(rB, gB, bB))
+                ? Color.FromArgb(byte.MaxValue, rA, gA, bA)
+                       .Add(Color.FromArgb(byte.MaxValue, rB, gB, bB))
                 : operation == OperationType.Subtraction
-                  ? Color.FromRgb(rA, gA, bA)
-                         .Subtract(Color.FromRgb(rB, gB, bB))
+                  ? Color.FromArgb(byte.MaxValue, rA, gA, bA)
+                         .Subtract(Color.FromArgb(0, rB, gB, bB))
                   : Node.DefaultColor,
                 node => { },
                 async node =>
                 {
                     await node.SetOperation(operation, interactions);
 
-                    inputA.ConnectToNodeWithColor(Color.FromRgb(rA, gA, bA));
-                    inputB.ConnectToNodeWithColor(Color.FromRgb(rB, gB, bB));
+                    inputA.ConnectToNodeWithColor(Color.FromArgb(byte.MaxValue, rA, gA, bA));
+                    inputB.ConnectToNodeWithColor(Color.FromArgb(byte.MaxValue, rB, gB, bB));
                 });
 
         [Theory]
@@ -188,14 +186,14 @@ namespace ViewModels
         public async void UpdatesColor_WhenOperartionChanged(byte rA, byte gA, byte bA,
                                                              byte rB, byte gB, byte bB)
             => await kernel.Get<IOperationNodeViewModel>().ShouldUpdateColor(
-                Color.FromRgb(rA, gA, bA)
+                Color.FromArgb(byte.MaxValue, rA, gA, bA)
                      .Add(Color.FromRgb(rB, gB, bB)),
-                Color.FromRgb(rA, gA, bA)
-                     .Subtract(Color.FromRgb(rB, gB, bB)),
+                Color.FromArgb(byte.MaxValue, rA, gA, bA)
+                     .Subtract(Color.FromArgb(0, rB, gB, bB)),
                 async node =>
                 {
-                    inputA.ConnectToNodeWithColor(Color.FromRgb(rA, gA, bA));
-                    inputB.ConnectToNodeWithColor(Color.FromRgb(rB, gB, bB));
+                    inputA.ConnectToNodeWithColor(Color.FromArgb(byte.MaxValue, rA, gA, bA));
+                    inputB.ConnectToNodeWithColor(Color.FromArgb(byte.MaxValue, rB, gB, bB));
 
                     await node.SetOperation(OperationType.Addition, interactions);
                 },
