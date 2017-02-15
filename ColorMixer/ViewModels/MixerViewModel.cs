@@ -14,37 +14,54 @@ namespace ColorMixer.ViewModels
 {
     public interface IMixerViewModel : IReactiveObject, IRoutableViewModel, ISupportsActivation
     {
-        bool IsNodeBeingAdded { get; }
-        IObservable<KeyEventArgs> MainWindowKeyDown { get; }
         IReadOnlyReactiveList<INode> Nodes { get; }
         IReadOnlyReactiveList<IConnectionViewModel> Connections { get; }
-        ReactiveCommand<Unit, Unit> AddColorNodeCommand { get; }
-        ReactiveCommand<Unit, Unit> AddOperationNodeCommand { get; }
-        ReactiveCommand<Unit, Unit> AddResultNodeCommand { get; }
+
+        bool IsNodeBeingAdded { get; }
+        IObservable<KeyEventArgs> MainWindowKeyDown { get; }
+        ReactiveCommand<Unit, IColorNodeViewModel> AddColorNodeCommand { get; }
+        ReactiveCommand<Unit, IOperationNodeViewModel> AddOperationNodeCommand { get; }
+        ReactiveCommand<Unit, IResultNodeViewModel> AddResultNodeCommand { get; }
         IConnector ConnectingConnector { get; set; }
         IConnector ConnectedConnector { get; set; }
     }
 
     public class MixerViewModel : ReactiveObject, IMixerViewModel
     {
+        internal static readonly string DefaultUrlPathSegment = "Mixer";
+
         private readonly IInteractionService interactions;
-        private readonly IMainWindowViewModel mainWindow;
+        private readonly IMainWindowViewModel window;
+        private readonly INodeFactory nodeFactory;
+        private readonly IConnectionFactory connectionFactory;
 
         private readonly ReactiveList<INode> nodes;
         private readonly ReactiveList<IConnectionViewModel> connections;
 
         private ObservableAsPropertyHelper<bool> isNodeBeingAdded;
 
+        private IObservable<KeyEventArgs> mainWindowKeyDown;
         private IConnector connectingConnector;
         private IConnector connectedConnector;
 
         public MixerViewModel(IInteractionService interactions = null,
-                              IMainWindowViewModel mainWindow = null)
+                              IMainWindowViewModel window = null,
+                              INodeFactory nodeFactory = null,
+                              IConnectionFactory connectionFactory = null)
         {
-            this.interactions = interactions ?? Locator.Current.GetService<IInteractionService>();
-            this.mainWindow = mainWindow ?? Locator.Current.GetService<IMainWindowViewModel>();
+            this.interactions = interactions ??
+                Locator.Current.GetService<IInteractionService>();
 
-            HostScreen = this.mainWindow;
+            this.window = window ??
+                Locator.Current.GetService<IMainWindowViewModel>();
+
+            this.nodeFactory = nodeFactory ??
+                Locator.Current.GetService<INodeFactory>();
+
+            this.connectionFactory = connectionFactory ??
+                Locator.Current.GetService<IConnectionFactory>();
+
+            HostScreen = this.window;
 
             nodes = new ReactiveList<INode>();
             connections = new ReactiveList<IConnectionViewModel>();
@@ -69,6 +86,11 @@ namespace ColorMixer.ViewModels
                     .RegisterHandler(i => HandleDeletionRequest(i))
                     .DisposeWith(disposables);
 
+                this
+                    .WhenAnyValue(vm => vm.window.KeyDown)
+                    .BindTo(this, vm => vm.MainWindowKeyDown)
+                    .DisposeWith(disposables);
+
                 AddColorNodeCommand = ReactiveCommand.CreateFromTask(async () =>
                 {
                     var point = await this.interactions
@@ -77,15 +99,17 @@ namespace ColorMixer.ViewModels
 
                     if (!point.HasValue) // user cancelled point selection
                     {
-                        return;
+                        return default(IColorNodeViewModel);
                     }
 
-                    var node = Locator.Current.GetService<IColorNodeViewModel>();
+                    var node = this.nodeFactory.Create<IColorNodeViewModel>();
 
                     node.X = point.Value.X;
                     node.Y = point.Value.Y;
 
                     nodes.Add(node);
+
+                    return node as IColorNodeViewModel;
                 })
                 .DisposeWith(disposables);
 
@@ -97,15 +121,17 @@ namespace ColorMixer.ViewModels
 
                     if (!point.HasValue) // user cancelled point selection
                     {
-                        return;
+                        return default(IOperationNodeViewModel);
                     }
 
-                    var node = Locator.Current.GetService<IOperationNodeViewModel>();
+                    var node = this.nodeFactory.Create<IOperationNodeViewModel>();
 
                     node.X = point.Value.X;
                     node.Y = point.Value.Y;
 
                     nodes.Add(node);
+
+                    return node as IOperationNodeViewModel;
                 })
                 .DisposeWith(disposables);
 
@@ -117,15 +143,17 @@ namespace ColorMixer.ViewModels
 
                     if (!point.HasValue) // user cancelled point selection
                     {
-                        return;
+                        return default(IResultNodeViewModel);
                     }
 
-                    var node = Locator.Current.GetService<IResultNodeViewModel>();
+                    var node = this.nodeFactory.Create<IResultNodeViewModel>();
 
                     node.X = point.Value.X;
                     node.Y = point.Value.Y;
 
                     nodes.Add(node);
+
+                    return node as IResultNodeViewModel;
                 })
                 .DisposeWith(disposables);
 
@@ -143,21 +171,31 @@ namespace ColorMixer.ViewModels
 
         public IScreen HostScreen { get; private set; }
 
-        public string UrlPathSegment => "Mixer";
+        public string UrlPathSegment => DefaultUrlPathSegment;
 
         public bool IsNodeBeingAdded => isNodeBeingAdded.Value;
-
-        public IObservable<KeyEventArgs> MainWindowKeyDown => mainWindow.KeyDown;
 
         public IReadOnlyReactiveList<INode> Nodes => nodes;
 
         public IReadOnlyReactiveList<IConnectionViewModel> Connections => connections;
 
-        public ReactiveCommand<Unit, Unit> AddColorNodeCommand { get; private set; }
+        public ReactiveCommand<Unit, IColorNodeViewModel>
+            AddColorNodeCommand
+        { get; private set; }
 
-        public ReactiveCommand<Unit, Unit> AddOperationNodeCommand { get; private set; }
+        public ReactiveCommand<Unit, IOperationNodeViewModel>
+            AddOperationNodeCommand
+        { get; private set; }
 
-        public ReactiveCommand<Unit, Unit> AddResultNodeCommand { get; private set; }
+        public ReactiveCommand<Unit, IResultNodeViewModel>
+            AddResultNodeCommand
+        { get; private set; }
+
+        public IObservable<KeyEventArgs> MainWindowKeyDown
+        {
+            get { return mainWindowKeyDown; }
+            private set { this.RaiseAndSetIfChanged(ref mainWindowKeyDown, value); }
+        }
 
         public IConnector ConnectingConnector
         {
@@ -212,7 +250,7 @@ namespace ColorMixer.ViewModels
                 ConnectedConnector = interaction.Input;
                 interaction.SetOutput(ConnectingConnector as TDst);
 
-                var connection = Locator.Current.GetService<IConnectionViewModel>();
+                var connection = connectionFactory.Create();
 
                 if (ConnectingConnector.Direction == ConnectorDirection.Input &&
                     ConnectedConnector.Direction == ConnectorDirection.Output)

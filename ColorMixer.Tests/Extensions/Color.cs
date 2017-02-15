@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Extensions
 {
-    public class ColorExtension
+    public class ColorExtensions
     {
         [Theory]
         [AutoData]

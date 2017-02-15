@@ -296,7 +296,9 @@ namespace ViewModels
             // Assert
 
             isInvoked.Should().BeTrue();
+
             input.Should().Be(OperationNodeViewModel.DefaultOperation);
+
             node.Operation.Should().Be(output);
         }
 

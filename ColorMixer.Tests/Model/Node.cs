@@ -121,6 +121,7 @@ namespace Model
             // Assert
 
             isInvoked.Should().BeTrue();
+
             input.Should().Be(node);
         }
 
@@ -160,10 +161,10 @@ namespace Model
         }
 
         [Theory]
-        [InlineAutoData(nameof(Node.X))]
-        [InlineAutoData(nameof(Node.Y))]
-        [InlineAutoData(nameof(Node.Width))]
-        [InlineAutoData(nameof(Node.Height))]
+        [InlineAutoData(nameof(INode.X))]
+        [InlineAutoData(nameof(INode.Y))]
+        [InlineAutoData(nameof(INode.Width))]
+        [InlineAutoData(nameof(INode.Height))]
         public void SetsDoubleProperties(string property, double initial, double expected)
             => kernel.Get<INode>()
                      .ShouldSetProperty(property, initial, expected);

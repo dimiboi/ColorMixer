@@ -115,7 +115,9 @@
     <Compile Include="Model\Connector.cs" />
     <Compile Include="Model\ConnectorDirection.cs" />
     <Compile Include="Model\OperationType.cs" />
+    <Compile Include="Services\ConnectionFactory.cs" />
     <Compile Include="Services\InteractionService.cs" />
+    <Compile Include="Services\NodeFactory.cs" />
     <Compile Include="ViewModels\ConnectionViewModel.cs" />
     <Compile Include="ViewModels\InConnectorViewModel.cs" />
     <Compile Include="Model\Node.cs" />

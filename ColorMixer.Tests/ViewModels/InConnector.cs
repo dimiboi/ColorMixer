@@ -189,7 +189,9 @@ namespace ViewModels
             // Assert
 
             isInvoked.Should().BeTrue();
+
             input.Should().Be(connector);
+
             connector.ConnectedTo.Should().Be(output);
         }
 

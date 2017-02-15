@@ -132,6 +132,7 @@
     <Compile Include="ViewModels\ColorNode.cs" />
     <Compile Include="ViewModels\Connection.cs" />
     <Compile Include="ViewModels\InConnector.cs" />
+    <Compile Include="ViewModels\Mixer.cs" />
     <Compile Include="ViewModels\OperationNode.cs" />
     <Compile Include="ViewModels\OutConnector.cs" />
     <Compile Include="ViewModels\ResultNode.cs" />

@@ -6,8 +6,10 @@ using NSubstitute;
 using ReactiveUI;
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 
 namespace ColorMixer.Tests
@@ -73,12 +75,82 @@ namespace ColorMixer.Tests
             actualAfter.Should().Be(expectedAfter);
         }
 
+        public static async Task ShouldAddNode<TNode>(this IMixerViewModel mixer,
+                                                           Point point,
+                                                           IInteractionService interactions,
+                                                           INodeFactory nodeFactory,
+                                                           Func<IMixerViewModel, Task> command)
+            where TNode : INode
+        {
+            // Arrange
+
+            var isInvoked = false;
+
+            interactions.GetNewNodePoint
+                        .RegisterHandler(i =>
+                        {
+                            isInvoked = true;
+                            i.SetOutput(point);
+                        });
+            // Act
+
+            mixer.Activator
+                 .Activate();
+
+            await command(mixer);
+
+            var node = mixer.Nodes.Single();
+
+            // Assert
+
+            isInvoked.Should().BeTrue();
+
+            nodeFactory.Received().Create<TNode>();
+
+            node.Should().BeAssignableTo<TNode>();
+
+            node.X.Should().Be(point.X);
+            node.Y.Should().Be(point.Y);
+        }
+
+        public static async Task ShouldNotAddNode<TNode>(this IMixerViewModel mixer,
+                                                         IInteractionService interactions,
+                                                         INodeFactory nodeFactory,
+                                                         Func<IMixerViewModel, Task> command)
+            where TNode : INode
+        {
+            // Arrange
+
+            var isInvoked = false;
+
+            interactions.GetNewNodePoint
+                        .RegisterHandler(i =>
+                        {
+                            isInvoked = true;
+                            i.SetOutput(null);
+                        });
+            // Act
+
+            mixer.Activator
+                 .Activate();
+
+            await command(mixer);
+
+            // Assert
+
+            isInvoked.Should().BeTrue();
+
+            nodeFactory.DidNotReceive().Create<TNode>();
+
+            mixer.Nodes.IsEmpty.Should().BeTrue();
+        }
+
         public static async Task SetOperation(this IOperationNodeViewModel node,
                                                    OperationType operation,
                                                    IInteractionService interactions)
         {
-            using (var handler = interactions.GetNodeOperation
-                                             .RegisterHandler(i => i.SetOutput(operation)))
+            using (interactions.GetNodeOperation
+                               .RegisterHandler(i => i.SetOutput(operation)))
             {
                 await node.EditNodeCommand
                           .Execute();

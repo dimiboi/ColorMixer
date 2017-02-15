@@ -82,7 +82,9 @@ namespace ViewModels
             // Assert
 
             isInvoked.Should().BeTrue();
+
             input.Should().Be(Node.DefaultColor);
+
             node.Color.Should().Be(output);
         }
 

@@ -42,6 +42,12 @@ namespace ColorMixer
 
             resolver.RegisterLazySingleton(() => new InteractionService(),
                                                  typeof(IInteractionService));
+
+            resolver.RegisterLazySingleton(() => new NodeFactory(),
+                                                 typeof(INodeFactory));
+
+            resolver.RegisterLazySingleton(() => new ConnectionFactory(),
+                                                 typeof(IConnectionFactory));
             // Screen
 
             resolver.RegisterConstant(this,
