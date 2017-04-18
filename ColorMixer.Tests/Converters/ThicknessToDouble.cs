@@ -1,6 +1,5 @@
 ﻿using ColorMixer.Converters;
 using FluentAssertions;
-using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.Xunit2;
 using System;
 using System.Globalization;
@@ -12,14 +11,7 @@ namespace Converters
 {
     public class ThicknessToDouble
     {
-        private static readonly IFixture fixture;
-
         private readonly IValueConverter converter;
-
-        static ThicknessToDouble()
-        {
-            fixture = new Fixture();
-        }
 
         public ThicknessToDouble()
         {
