@@ -5,7 +5,6 @@ using ColorMixer.ViewModels;
 using FluentAssertions;
 using Ninject;
 using NSubstitute;
-using Ploeh.AutoFixture.Xunit2;
 using ReactiveUI;
 using System.Reactive.Linq;
 using Xunit;
@@ -53,11 +52,10 @@ namespace ViewModels
         [InlineAutoNSubstituteData(true, ConnectorDirection.Input)]
         public async void Disabled_WhenNotConnectableTo(bool expected,
                                                         ConnectorDirection connectingDirection,
-                                                        INode connectingNode)
+                                                        INode connectingNode,
+                                                        IConnector connectingConnector)
         {
             // Arrange
-
-            var connectingConnector = Substitute.For<IConnector>();
 
             connectingConnector.Direction
                                .Returns(connectingDirection);
@@ -82,13 +80,12 @@ namespace ViewModels
         }
 
         [Theory]
-        [InlineAutoData(ConnectorDirection.Output)]
-        [InlineAutoData(ConnectorDirection.Input)]
-        public async void Disabled_WhenConnectingSource(ConnectorDirection connectingDirection)
+        [InlineAutoNSubstituteData(ConnectorDirection.Output)]
+        [InlineAutoNSubstituteData(ConnectorDirection.Input)]
+        public async void Disabled_WhenConnectingSource(ConnectorDirection connectingDirection,
+                                                        IConnector connectingConnector)
         {
             // Arrange
-
-            var connectingConnector = Substitute.For<IConnector>();
 
             connectingConnector.Direction
                                .Returns(connectingDirection);
@@ -112,12 +109,11 @@ namespace ViewModels
             isEnabled.Should().BeFalse();
         }
 
-        [Fact]
-        public async void Enabled_WhenNotConnecting()
+        [Theory]
+        [InlineAutoNSubstituteData]
+        public async void Enabled_WhenNotConnecting(IConnector connectingConnector)
         {
             // Arrange
-
-            var connectingConnector = Substitute.For<IConnector>();
 
             var connector = kernel.Get<IOutConnectorViewModel>();
 
