@@ -9,8 +9,8 @@ using Ninject;
 using NSubstitute;
 using Ploeh.AutoFixture.Xunit2;
 using System;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Reactive.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Xunit;
@@ -117,58 +117,52 @@ namespace ViewModels
                 output,
                 interactions,
                 nodeFactory,
-                node => node.AddColorNodeCommand
-                            .Execute()
-                            .ToTask());
+                async node => await node.AddColorNodeCommand
+                                        .Execute());
 
         [Fact]
         public async void AddColorNodeCommand_HandlesCancellation()
             => await kernel.Get<IMixerViewModel>().ShouldNotAddNode<IColorNodeViewModel>(
                 interactions,
                 nodeFactory,
-                node => node.AddColorNodeCommand
-                            .Execute()
-                            .ToTask());
+                async node => await node.AddColorNodeCommand
+                                        .Execute());
 
         [Theory]
         [AutoData]
-        public async void AddOperationNodeCommand_AddsColorNode(Point output)
+        public async void AddOperationNodeCommand_AddsOperationNode(Point output)
             => await kernel.Get<IMixerViewModel>().ShouldAddNode<IOperationNodeViewModel>(
                 output,
                 interactions,
                 nodeFactory,
-                node => node.AddOperationNodeCommand
-                            .Execute()
-                            .ToTask());
+                async node => await node.AddOperationNodeCommand
+                                        .Execute());
 
         [Fact]
         public async void AddOperationNodeCommand_HandlesCancellation()
             => await kernel.Get<IMixerViewModel>().ShouldNotAddNode<IOperationNodeViewModel>(
                 interactions,
                 nodeFactory,
-                node => node.AddOperationNodeCommand
-                            .Execute()
-                            .ToTask());
+                async node => await node.AddOperationNodeCommand
+                                        .Execute());
 
         [Theory]
         [AutoData]
-        public async void AddResultNodeCommand_AddsColorNode(Point output)
+        public async void AddResultNodeCommand_AddsResultNode(Point output)
             => await kernel.Get<IMixerViewModel>().ShouldAddNode<IResultNodeViewModel>(
                 output,
                 interactions,
                 nodeFactory,
-                node => node.AddResultNodeCommand
-                            .Execute()
-                            .ToTask());
+                async node => await node.AddResultNodeCommand
+                                        .Execute());
 
         [Fact]
         public async void AddResultNodeCommand_HandlesCancellation()
             => await kernel.Get<IMixerViewModel>().ShouldNotAddNode<IResultNodeViewModel>(
                 interactions,
                 nodeFactory,
-                node => node.AddResultNodeCommand
-                            .Execute()
-                            .ToTask());
+                async node => await node.AddResultNodeCommand
+                                        .Execute());
 
         [Theory]
         [InlineAutoNSubstituteData(nameof(IMixerViewModel.ConnectingConnector))]
