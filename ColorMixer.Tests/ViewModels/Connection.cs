@@ -3,6 +3,8 @@ using ColorMixer.Tests.Attributes;
 using ColorMixer.ViewModels;
 using FluentAssertions;
 using Ninject;
+using ReactiveUI;
+using System.Reactive.Concurrency;
 using Xunit;
 
 namespace ViewModels
@@ -13,6 +15,8 @@ namespace ViewModels
 
         public Connection()
         {
+            RxApp.MainThreadScheduler = Scheduler.Immediate;
+
             kernel = new StandardKernel();
 
             kernel.Bind<IConnectionViewModel>()

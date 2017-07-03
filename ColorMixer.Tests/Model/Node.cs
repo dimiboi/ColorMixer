@@ -9,6 +9,7 @@ using NSubstitute;
 using Ploeh.AutoFixture.Xunit2;
 using ReactiveUI;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Windows.Media;
 using Xunit;
@@ -33,6 +34,8 @@ namespace Model
 
         public NodeModel()
         {
+            RxApp.MainThreadScheduler = Scheduler.Immediate;
+
             kernel = new StandardKernel();
 
             interactions = new InteractionService();

@@ -6,6 +6,7 @@ using FluentAssertions;
 using Ninject;
 using NSubstitute;
 using ReactiveUI;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Windows.Media;
 using Xunit;
@@ -22,6 +23,8 @@ namespace ViewModels
 
         public ColorNode()
         {
+            RxApp.MainThreadScheduler = Scheduler.Immediate;
+
             kernel = new StandardKernel();
 
             interactions = new InteractionService();

@@ -5,6 +5,7 @@ using FluentAssertions;
 using Ninject;
 using ReactiveUI;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Windows;
 using Xunit;
 
@@ -27,6 +28,8 @@ namespace Model
 
         public ConnectorModel()
         {
+            RxApp.MainThreadScheduler = Scheduler.Immediate;
+
             kernel = new StandardKernel();
 
             kernel.Bind<IConnector>()

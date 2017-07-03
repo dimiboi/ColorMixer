@@ -6,6 +6,7 @@ using FluentAssertions;
 using Ninject;
 using NSubstitute;
 using ReactiveUI;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Xunit;
 
@@ -21,6 +22,8 @@ namespace ViewModels
 
         public OutConnector()
         {
+            RxApp.MainThreadScheduler = Scheduler.Immediate;
+
             kernel = new StandardKernel();
 
             interactions = new InteractionService();

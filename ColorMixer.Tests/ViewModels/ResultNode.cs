@@ -7,6 +7,7 @@ using Ninject;
 using NSubstitute;
 using Ploeh.AutoFixture.Xunit2;
 using ReactiveUI;
+using System.Reactive.Concurrency;
 using System.Windows.Media;
 using Xunit;
 
@@ -22,6 +23,8 @@ namespace ViewModels
 
         public ResultNode()
         {
+            RxApp.MainThreadScheduler = Scheduler.Immediate;
+
             kernel = new StandardKernel();
 
             interactions = new InteractionService();
